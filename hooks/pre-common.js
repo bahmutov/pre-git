@@ -70,15 +70,16 @@ function getTasks(root, label) {
   // If there's a `pre-commit` property in the package.json we should use that
   // array.
   //
-  if (pkg[label] && Array.isArray(pkg['pre-commit'])) run = pkg['pre-commit'];
+  if (pkg[label] && Array.isArray(pkg[label])) {
+    run = pkg[label];
+  }
 
   //
   // If we don't have any run processes to run try to see if there's a `test`
   // property which we should run instead. But we should check if it's not the
   // default value that `npm` adds when your run the `npm init` command.
   //
-  if (
-       !run.length
+  if (!run.length
     && pkg.scripts.test
     && pkg.scripts.test !== 'echo "Error: no test specified" && exit 1'
   ) {
