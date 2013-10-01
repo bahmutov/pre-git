@@ -29,22 +29,21 @@ var git = path.resolve(root, '.git')
 if (!existsSync(git) || !fs.lstatSync(git).isDirectory()) return;
 
 
-var hookScripts = ['pre-commit', 'pre-push'];
+var hookScripts = ['pre-common', 'pre-commit', 'pre-push'];
 hookScripts.forEach(installHook);
 
 function installHook(name) {
   console.log('installing hook', name);
 
   var precommit = path.resolve(hooks, name);
+  if (name === 'pre-common') {
+    precommit += '.js';
+  }
   //
   // Our own hook runner.
   //
   var hook = fs.readFileSync('./hooks/' + name + '.js');
 
-
-  //
-  // Create a hooks directory if it's missing.
-  //
   if (!existsSync(hooks)) fs.mkdirSync(hooks);
 
   //
@@ -64,5 +63,7 @@ function installHook(name) {
   // make it executable.
   //
   fs.writeFileSync(precommit, hook);
-  fs.chmodSync(precommit, '755');
+  if (name !== 'pre-common') {
+    fs.chmodSync(precommit, '755');
+  }
 }
