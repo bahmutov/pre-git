@@ -28,23 +28,31 @@ var git = path.resolve(root, '.git')
 //
 if (!existsSync(git) || !fs.lstatSync(git).isDirectory()) return;
 
+(function () {
+  if (!existsSync(hooks)) fs.mkdirSync(hooks);
+}());
 
-var hookScripts = ['pre-common', 'pre-commit', 'pre-push'];
+
+(function copyFile(name) {
+  var fullname = path.join('./hooks', name);
+  if (!existsSync(fullname)) throw new Error('cannot find ' + fullname);
+  var content = fs.readFileSync(fullname);
+  var destination = path.resolve(hooks, name);
+  fs.writeFileSync(destination, content);
+}('pre-common.js'));
+
+
+var hookScripts = ['pre-commit', 'pre-push'];
 hookScripts.forEach(installHook);
 
 function installHook(name) {
   console.log('installing hook', name);
 
   var precommit = path.resolve(hooks, name);
-  if (name === 'pre-common') {
-    precommit += '.js';
-  }
   //
   // Our own hook runner.
   //
   var hook = fs.readFileSync('./hooks/' + name + '.js');
-
-  if (!existsSync(hooks)) fs.mkdirSync(hooks);
 
   //
   // If there's an existing `pre-commit` hook we want to back it up instead of
@@ -63,7 +71,5 @@ function installHook(name) {
   // make it executable.
   //
   fs.writeFileSync(precommit, hook);
-  if (name !== 'pre-common') {
-    fs.chmodSync(precommit, '755');
-  }
+  fs.chmodSync(precommit, '755');
 }
