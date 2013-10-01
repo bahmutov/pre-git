@@ -1,27 +1,19 @@
-#!/usr/bin/env node
-
 'use strict';
 
 var child = require('child_process');
 
-//
-// Get the root of the repository.
-//
-child.exec('git status --porcelain', function chagnes(err, status) {
-  if (err) {
-    console.error('pre-commit: Failed to find git root. Cannot run the tests.');
-    return process.exit(1);
-  }
-
-  if (!status.trim().length) {
-    console.log('');
-    console.log('pre-commit: No changes detected, bailing out.');
-    console.log('');
-    return;
-  }
-
-  child.exec('git rev-parse --show-toplevel', run);
-});
+function getGitRoot(cb) {
+  child.exec('git rev-parse --show-toplevel', function onRoot(err, output) {
+    if (err) {
+      console.error('');
+      console.error('pre-commit: Failed to find git root. Cannot run the tests.');
+      console.error('');
+      return process.exit(1);
+    }
+    var root = output.trim();
+    cb(root);
+  });
+}
 
 /**
  * You've failed on some of the scripts, output how much you've sucked today.
@@ -54,38 +46,22 @@ function failure(err) {
   process.exit(1);
 }
 
-/**
- * Run the set pre-commit hooks.
- *
- * @param {Error} err The error that happend while executing the command.
- * @param {Error} output The output of rev-parse.
- * @api private
- */
-function run(err, output) {
-  if (err) {
-    console.error('');
-    console.error('pre-commit: Failed to find git root. Cannot run the tests.');
-    console.error('');
-    return process.exit(1);
-  }
+function getTasks(root, label) {
+  var pkg, run = [];
 
-  //
-  // Check if there are scripts specified that we need to run.
-  //
-  var root = output.trim()
-    , run = []
-    , pkg;
-
-  //
+   //
   // Bail-out when we failed to parse the package.json, there is probably a some
   // funcky chars in there.
   //
-  try { pkg = require(root +'/package.json'); }
-  catch (e) { return failure(e); }
+  try {
+    pkg = require(root +'/package.json'); }
+  catch (e) {
+    return failure(e);
+  }
 
   if (!pkg.scripts) {
     console.log('');
-    console.log('pre-commit: No scripts detected in the package.json, bailing out.');
+    console.log(label + ': No scripts detected in the package.json, bailing out.');
     console.log('');
     return;
   }
@@ -94,35 +70,30 @@ function run(err, output) {
   // If there's a `pre-commit` property in the package.json we should use that
   // array.
   //
-  if (pkg['pre-commit'] && Array.isArray(pkg['pre-commit'])) run = pkg['pre-commit'];
+  if (pkg[label] && Array.isArray(pkg[label])) {
+    run = pkg[label];
+  }
 
   //
   // If we don't have any run processes to run try to see if there's a `test`
   // property which we should run instead. But we should check if it's not the
   // default value that `npm` adds when your run the `npm init` command.
   //
-  if (
-       !run.length
+  if (!run.length
     && pkg.scripts.test
     && pkg.scripts.test !== 'echo "Error: no test specified" && exit 1'
   ) {
     run.push('test');
   }
 
-  //
-  // Bailout if we don't have anything to run.
-  //
-  if (!run.length) {
-    console.log('');
-    console.log('pre-commit: Nothing to run. Bailing out.');
-    console.log('');
-    return;
-  }
+  return run;
+}
 
-  //
-  // Behold, a lazy man's async flow control library;
-  //
-  (function runner(done) {
+//
+// Behold, a lazy man's async flow control library;
+//
+function runner(run) {
+  (function taskRunner(done) {
     (function next(err, task) {
       //
       // Bailout when we received an error. This will make sure that we don't
@@ -162,3 +133,10 @@ function run(err, output) {
     process.exit(0);
   });
 }
+
+module.exports = {
+  getGitRoot: getGitRoot,
+  failure: failure,
+  runner: runner,
+  getTasks: getTasks
+};
