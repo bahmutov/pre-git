@@ -2,7 +2,10 @@
 
 'use strict';
 
+var common = require('./pre-common');
 var child = require('child_process');
+
+console.log('pre-commit in', process.cwd());
 
 //
 // Get the root of the repository.
@@ -20,7 +23,8 @@ child.exec('git status --porcelain', function chagnes(err, status) {
     return;
   }
 
-  child.exec('git rev-parse --show-toplevel', run);
+  // child.exec('git rev-parse --show-toplevel', run);
+  common.getGitRoot(run);
 });
 
 /**
