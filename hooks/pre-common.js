@@ -37,6 +37,48 @@ function failure(err) {
   process.exit(1);
 }
 
+function getTasks(root, label) {
+  var pkg, run = [];
+
+   //
+  // Bail-out when we failed to parse the package.json, there is probably a some
+  // funcky chars in there.
+  //
+  try {
+    pkg = require(root +'/package.json'); }
+  catch (e) {
+    return failure(e);
+  }
+
+  if (!pkg.scripts) {
+    console.log('');
+    console.log(label + ': No scripts detected in the package.json, bailing out.');
+    console.log('');
+    return;
+  }
+
+  //
+  // If there's a `pre-commit` property in the package.json we should use that
+  // array.
+  //
+  if (pkg[label] && Array.isArray(pkg['pre-commit'])) run = pkg['pre-commit'];
+
+  //
+  // If we don't have any run processes to run try to see if there's a `test`
+  // property which we should run instead. But we should check if it's not the
+  // default value that `npm` adds when your run the `npm init` command.
+  //
+  if (
+       !run.length
+    && pkg.scripts.test
+    && pkg.scripts.test !== 'echo "Error: no test specified" && exit 1'
+  ) {
+    run.push('test');
+  }
+
+  return run;
+}
+
 //
 // Behold, a lazy man's async flow control library;
 //
@@ -85,5 +127,6 @@ function runner(run) {
 module.exports = {
   getGitRoot: getGitRoot,
   failure: failure,
-  runner: runner
+  runner: runner,
+  getTasks: getTasks
 };
