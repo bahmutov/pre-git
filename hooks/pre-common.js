@@ -3,7 +3,16 @@
 var child = require('child_process');
 
 function getGitRoot(cb) {
-  child.exec('git rev-parse --show-toplevel', cb);
+  child.exec('git rev-parse --show-toplevel', function onRoot(err, output) {
+    if (err) {
+      console.error('');
+      console.error('pre-commit: Failed to find git root. Cannot run the tests.');
+      console.error('');
+      return process.exit(1);
+    }
+    var root = output.trim();
+    cb(root);
+  });
 }
 
 /**
