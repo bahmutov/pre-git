@@ -80,11 +80,8 @@ function getTasks(root, label) {
   // property which we should run instead. But we should check if it's not the
   // default value that `npm` adds when your run the `npm init` command.
   //
-  if (!run.length
-    && pkg.scripts.test
-    && pkg.scripts.test !== 'echo "Error: no test specified" && exit 1'
-  ) {
-    run.push('npm test');
+  if (!run.length) {
+    run.push('echo Please specify tests for "' + label + '"');
   }
 
   return run;
