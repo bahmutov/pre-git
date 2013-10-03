@@ -4,21 +4,22 @@
 
 var common = require(__dirname + '/pre-common');
 var child = require('child_process');
+var label = 'pre-commit:';
 
-console.log('pre-commit in', process.cwd());
+// console.log('pre-commit in', process.cwd());
 // console.log('common', common);
 
 // exits if there are no changes
 function haveChangesToCommit(cb) {
   child.exec('git status --porcelain', function changes(err, status) {
     if (err) {
-      console.error('pre-commit: Failed to check for changes. Cannot run the tests.');
+      console.error(label, 'Failed to check for changes. Cannot run the tests.');
       return process.exit(1);
     }
 
     if (!status.trim().length) {
       console.log('');
-      console.log('pre-commit: No changes detected, bailing out.');
+      console.log(label, 'No changes detected, bailing out.');
       console.log('');
       return process.exit(0);
     }
@@ -34,7 +35,7 @@ haveChangesToCommit(function () {
 function run(root) {
   if (!root) {
     console.error('');
-    console.error('pre-commit: Failed to find git root. Cannot run the tests.');
+    console.error(label, 'Failed to find git root. Cannot run the tests.');
     console.error('');
     return process.exit(1);
   }
@@ -43,7 +44,7 @@ function run(root) {
   var tasks = common.getTasks(root, 'pre-commit');
   if (!tasks || !tasks.length) {
     console.log('');
-    console.log('pre-commit: Nothing to run. Bailing out.');
+    console.log(label, 'Nothing to run. Bailing out.');
     console.log('');
     return;
   }
