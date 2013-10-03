@@ -1,12 +1,13 @@
 'use strict';
 
 var child = require('child_process');
+var label = 'pre-commit:';
 
 function getGitRoot(cb) {
   child.exec('git rev-parse --show-toplevel', function onRoot(err, output) {
     if (err) {
       console.error('');
-      console.error('pre-commit: Failed to find git root. Cannot run the tests.');
+      console.error(label, 'Failed to find git root. Cannot run the tests.');
       console.error('');
       return process.exit(1);
     }
@@ -23,25 +24,25 @@ function getGitRoot(cb) {
  */
 function failure(err) {
   console.error('');
-  console.error('pre-commit: You\'ve failed to pass all the hooks.');
-  console.error('pre-commit:');
+  console.error(label, 'You\'ve failed to pass all the hooks.');
+  console.error(label);
 
   if (err.ran) {
-    console.error('pre-commit: The "npm run '+ err.ran +'" script failed.');
+    console.error(label, 'The "'+ err.ran +'" script failed.');
   } else {
     var stack = err.stack.split('\n')
-    console.error('pre-commit: An Error was thrown: '+ stack.shift());
-    console.error('pre-commit:');
+    console.error(label, 'An Error was thrown: '+ stack.shift());
+    console.error(label, );
     stack.forEach(function trace(line) {
-      console.error('pre-commit:   '+ line.trim());
+      console.error(label, '   '+ line.trim());
     });
   }
-  console.error('pre-commit:');
-  console.error('pre-commit: You can skip the git pre-commit hook by running:');
-  console.error('pre-commit:');
-  console.error('pre-commit:   git commit -n (--no-verify)');
-  console.error('pre-commit:');
-  console.error('pre-commit: But this is not adviced as your tests are obviously failing.');
+  console.error(label);
+  console.error(label, 'You can skip the git pre-commit hook by running:');
+  console.error(label);
+  console.error(label, '   git commit -n (--no-verify)');
+  console.error(label);
+  console.error(label, 'But this is not adviced as your tests are obviously failing.');
   console.error('');
   process.exit(1);
 }
@@ -83,7 +84,7 @@ function getTasks(root, label) {
     && pkg.scripts.test
     && pkg.scripts.test !== 'echo "Error: no test specified" && exit 1'
   ) {
-    run.push('test');
+    run.push('npm test');
   }
 
   return run;
@@ -109,18 +110,19 @@ function runner(run) {
       task = run.shift();
       if (!task) return done();
 
-      var npm = child.spawn('npm', ['run', task], {
-        cwd: root,            // Make sure that we spawn it in the root of repo.
-        env: process.env,     // Give them the same ENV variables.
-        stdio: [0, 1, 2]      // Pipe all the things.
-      });
+      console.log('executing task "' + task + '"');
 
-      //
-      // Check the close code to see if we passed or failed.
-      //
-      npm.on('close', function close(code) {
-        if (code !== 0) return next(new Error(task +' closed with code '+ code), task);
+      var options = {
+        cwd: root,
+        env: process.env,
+        stdio: [0, 1, 2]
+      };
+      child.exec(task, options, function onTaskFinished(err, stdio) {
+        console.log(stdio);
 
+        if (err) {
+          return next(new Error(task + ' closed with error ' + err), task);
+        }
         next(undefined, task);
       });
     })();
