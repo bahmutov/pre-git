@@ -32,7 +32,7 @@ function failure(err) {
   } else {
     var stack = err.stack.split('\n')
     console.error(label, 'An Error was thrown: '+ stack.shift());
-    console.error(label, );
+    console.error(label);
     stack.forEach(function trace(line) {
       console.error(label, '   '+ line.trim());
     });
