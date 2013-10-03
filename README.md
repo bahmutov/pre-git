@@ -4,7 +4,7 @@ A simple `pre-commit` and `pre-push` hook installer for `git`.
 
 ### Installation
 
-It's adviced to install this module as `devDependency` in your `package.json`
+It's advised to install this module as `devDependency` in your `package.json`
 file so it doesn't get installed on production servers. Run:
 
 ```

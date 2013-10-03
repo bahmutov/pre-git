@@ -1,3 +1,10 @@
+
+0.0.7 / 2013-10-02
+==================
+
+  * any command allowed, not just `npm <something>`
+  * pre-commit and pre-push hooks installed
+
 ## 0.0.4
 - Added a better error message when you fucked up your `package.json`.
 - Only run tests if there are changes.
