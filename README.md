@@ -1,4 +1,4 @@
-# pre-commit
+# pre-git
 
 A simple `pre-commit` and `pre-push` hook installer for `git`.
 
@@ -8,7 +8,7 @@ It's advised to install this module as `devDependency` in your `package.json`
 file so it doesn't get installed on production servers. Run:
 
 ```
-npm install pre-commit --save-dev
+npm install pre-git --save-dev
 ```
 
 ### Configuration

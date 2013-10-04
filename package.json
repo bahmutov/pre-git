@@ -1,25 +1,28 @@
 {
-  "name": "pre-commit",
+  "name": "pre-git",
   "version": "0.0.8",
-  "description": "Automatically install pre-commit hooks for your npm modules.",
+  "description": "Automatically install pre-commit / pre-git hooks for your npm modules.",
   "main": "index.js",
   "scripts": {
     "install": "node install"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/observing/pre-commit.git"
+    "url": "git://github.com/bahmutov/pre-git.git"
   },
   "keywords": [
+    "git",
     "pre-commit",
     "precommit",
+    "pre-push",
     "test",
     "npm",
-    "run"
+    "hooks"
   ],
   "author": "Arnout Kazemier <opensource@observe.it>",
-  "license": "MIT",
-  "devDependencies": {
-    "pre-commit": "git://github.com/observing/pre-commit.git"
-  }
+  "contributors": [
+    "Arnout Kazemier <opensource@observe.it>",
+    "Gleb Bahmutov <gleb.bahmutov@gmail.com>"
+  ],
+  "license": "MIT"
 }
