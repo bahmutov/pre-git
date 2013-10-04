@@ -2,6 +2,8 @@
 
 A simple `pre-commit` and `pre-push` hook installer for `git`.
 
+[![NPM][pre-git-icon]][pre-git-url]
+
 ### Installation
 
 It's advised to install this module as `devDependency` in your `package.json`
@@ -31,3 +33,6 @@ Specify commands to run on *commit* and on *push* in your package.json
 ### License
 
 MIT
+
+[pre-git-icon]: https://nodei.co/npm/pre-git.png?downloads=true
+[pre-git-url]: https://npmjs.org/package/pre-git
