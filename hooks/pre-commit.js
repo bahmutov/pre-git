@@ -6,14 +6,12 @@ var common = require(__dirname + '/pre-common');
 var child = require('child_process');
 var label = 'pre-commit:';
 
-// console.log('pre-commit in', process.cwd());
-// console.log('common', common);
-
 // exits if there are no changes
 function haveChangesToCommit(cb) {
   child.exec('git status --porcelain', function changes(err, status) {
     if (err) {
       console.error(label, 'Failed to check for changes. Cannot run the tests.');
+      console.error(err);
       return process.exit(1);
     }
 

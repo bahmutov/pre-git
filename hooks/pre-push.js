@@ -12,6 +12,7 @@ function haveCommitsToPush(cb) {
   child.exec('git log origin/master..HEAD', function (err, stdout) {
     if (err) {
       console.error(label, 'Failed to check for commits. Cannot run the tests.');
+      console.error(label, err);
       return process.exit(1);
     }
 
@@ -25,7 +26,6 @@ function haveCommitsToPush(cb) {
     cb();
   });
 }
-
 
 haveCommitsToPush(function () {
   common.getGitRoot(run);

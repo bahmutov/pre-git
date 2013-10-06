@@ -8,6 +8,7 @@ function getGitRoot(cb) {
     if (err) {
       console.error('');
       console.error(label, 'Failed to find git root. Cannot run the tests.');
+      console.error(err);
       console.error('');
       return process.exit(1);
     }
