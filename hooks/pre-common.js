@@ -62,13 +62,6 @@ function getTasks(root, label) {
     return failure(e);
   }
 
-  if (!pkg.scripts) {
-    console.log('');
-    console.log(label + ': No scripts detected in the package.json, bailing out.');
-    console.log('');
-    return;
-  }
-
   //
   // If there's a `pre-commit` property in the package.json we should use that
   // array.
