@@ -26,7 +26,9 @@ var hooks = path.resolve(git, 'hooks');
 // Check if we are in a git repository so we can bail out early when this is not
 // the case.
 //
-if (!existsSync(git) || !fs.lstatSync(git).isDirectory()) { return; }
+if (!existsSync(git) || !fs.lstatSync(git).isDirectory()) {
+  throw new Error('Could not find git repo in ' + git);
+}
 
 (function () {
   if (!existsSync(hooks)) {

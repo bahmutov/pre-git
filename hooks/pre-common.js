@@ -29,13 +29,13 @@ function failure(err) {
   console.error(label);
 
   if (err.ran) {
-    console.error(label, 'The "'+ err.ran +'" script failed.');
+    console.error(label, 'The "' + err.ran + '" script failed.');
   } else {
-    var stack = err.stack.split('\n')
-    console.error(label, 'An Error was thrown: '+ stack.shift());
+    var stack = err.stack.split('\n');
+    console.error(label, 'An Error was thrown: ' + stack.shift());
     console.error(label);
     stack.forEach(function trace(line) {
-      console.error(label, '   '+ line.trim());
+      console.error(label, '   ' + line.trim());
     });
   }
   console.error(label);
@@ -56,7 +56,8 @@ function getTasks(root, label) {
   // funcky chars in there.
   //
   try {
-    pkg = require(root +'/package.json'); }
+    pkg = require(root + '/package.json');
+  }
   catch (e) {
     return failure(e);
   }
@@ -91,7 +92,7 @@ function getTasks(root, label) {
 //
 // Behold, a lazy man's async flow control library;
 //
-function runner(run) {
+function runner(root, run) {
   (function taskRunner(done) {
     (function next(err, task) {
       //
@@ -106,7 +107,9 @@ function runner(run) {
 
       // Check if we have tasks to be executed or if we are complete.
       task = run.shift();
-      if (!task) return done();
+      if (!task) {
+        return done();
+      }
 
       console.log('executing task "' + task + '"');
 
@@ -125,13 +128,24 @@ function runner(run) {
       });
     })();
   })(function ready(err) {
-    if (err) return failure(err);
+    if (err) {
+      return failure(err);
+    }
 
     //
     // Congratulation young padawan, all hooks passed.
     //
     process.exit(0);
   });
+}
+
+function checkInputs(label, check) {
+  if (typeof label !== 'string') {
+    throw new Error('Expected string label (pre-commit, pre-push)');
+  }
+  if (typeof check !== 'function') {
+    throw new Error('Expected check changes function');
+  }
 }
 
 function runAtRoot(root, label, check) {
@@ -141,12 +155,7 @@ function runAtRoot(root, label, check) {
     console.error('');
     return process.exit(1);
   }
-  if (typeof label !== 'string') {
-    throw new Error('Expected string label (pre-commit, pre-push)');
-  }
-  if (typeof check !== 'function') {
-    throw new Error('Expected check changes function');
-  }
+  checkInputs(label, check);
 
   var tasks = getTasks(root, label);
   if (!tasks || !tasks.length) {
@@ -157,17 +166,12 @@ function runAtRoot(root, label, check) {
   }
 
   check(function () {
-    runner(tasks);
+    runner(root, tasks);
   });
 }
 
 function run(label, check) {
-  if (typeof label !== 'string') {
-    throw new Error('Expected string label (pre-commit, pre-push)');
-  }
-  if (typeof check !== 'function') {
-    throw new Error('Expected check changes function');
-  }
+  checkInputs(label, check);
 
   getGitRoot(function (root) {
     runAtRoot(root, label, check);
