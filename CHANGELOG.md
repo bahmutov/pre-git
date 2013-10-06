@@ -1,4 +1,11 @@
 
+0.0.9 / 2013-10-05
+==================
+
+  * refactored a lot, most of the code is gone
+  * printing actual errors
+  * added npm badge
+
 0.0.8 / 2013-10-04
 ==================
 
