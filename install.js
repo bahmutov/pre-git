@@ -3,8 +3,8 @@
 var pkg = require('./package');
 console.log(pkg.name, pkg.version);
 
-var path = require('path')
-  , fs = require('fs');
+var path = require('path');
+var fs = require('fs');
 
 //
 // Compatiblity with older node.js.
@@ -19,23 +19,27 @@ var root = path.resolve(__dirname, '../..');
 //
 // The location .git and it's hooks
 //
-var git = path.resolve(root, '.git')
-  , hooks = path.resolve(git, 'hooks');
+var git = path.resolve(root, '.git');
+var hooks = path.resolve(git, 'hooks');
 
 //
 // Check if we are in a git repository so we can bail out early when this is not
 // the case.
 //
-if (!existsSync(git) || !fs.lstatSync(git).isDirectory()) return;
+if (!existsSync(git) || !fs.lstatSync(git).isDirectory()) { return; }
 
 (function () {
-  if (!existsSync(hooks)) fs.mkdirSync(hooks);
+  if (!existsSync(hooks)) {
+    fs.mkdirSync(hooks);
+  }
 }());
 
 
 (function copyFile(name) {
   var fullname = path.join('./hooks', name);
-  if (!existsSync(fullname)) throw new Error('cannot find ' + fullname);
+  if (!existsSync(fullname)) {
+    throw new Error('cannot find ' + fullname);
+  }
   var content = fs.readFileSync(fullname);
   var destination = path.resolve(hooks, name);
   fs.writeFileSync(destination, content);
@@ -61,7 +65,7 @@ function installHook(name) {
   if (existsSync(precommit)) {
     console.log('');
     console.log(name + ': Detected an existing git hook');
-    fs.writeFileSync(precommit +'.old', fs.readFileSync(precommit));
+    fs.writeFileSync(precommit + '.old', fs.readFileSync(precommit));
     console.log(name + ': Old hook backuped to .old');
     console.log('');
   }
