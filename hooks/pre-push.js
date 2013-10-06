@@ -3,12 +3,11 @@
 'use strict';
 
 var child = require('child_process');
-var common = require(__dirname + '/pre-common');
-var label = 'pre-push:';
-// console.log('pre-push in', process.cwd());
+var run = require(__dirname + '/pre-common');
+var label = 'pre-push';
 
 function haveCommitsToPush(cb) {
-  // todo: find if there are commits to push
+  // todo: find if there are commits to push for any remote name / any branch
   child.exec('git log origin/master..HEAD', function (err, stdout) {
     if (err) {
       console.error(label, 'Failed to check for commits. Cannot run the tests.');
@@ -27,26 +26,4 @@ function haveCommitsToPush(cb) {
   });
 }
 
-haveCommitsToPush(function () {
-  common.getGitRoot(run);
-});
-
-function run(root) {
-  if (!root) {
-    console.error('');
-    console.error(label, 'Failed to find git root. Cannot run the tests.');
-    console.error('');
-    return process.exit(1);
-  }
-  console.log('git root', root);
-
-  var tasks = common.getTasks(root, 'pre-push');
-  if (!tasks || !tasks.length) {
-    console.log('');
-    console.log(label, 'Nothing to run. Bailing out.');
-    console.log('');
-    return;
-  }
-
-  common.runner(tasks);
-}
+run(label, haveCommitsToPush);

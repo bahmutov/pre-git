@@ -134,9 +134,44 @@ function runner(run) {
   });
 }
 
-module.exports = {
-  getGitRoot: getGitRoot,
-  failure: failure,
-  runner: runner,
-  getTasks: getTasks
-};
+function runAtRoot(root, label, check) {
+  if (!root) {
+    console.error('');
+    console.error(label, 'Failed to find git root. Cannot run the tests.');
+    console.error('');
+    return process.exit(1);
+  }
+  if (typeof label !== 'string') {
+    throw new Error('Expected string label (pre-commit, pre-push)');
+  }
+  if (typeof check !== 'function') {
+    throw new Error('Expected check changes function');
+  }
+
+  var tasks = getTasks(root, label);
+  if (!tasks || !tasks.length) {
+    console.log('');
+    console.log(label, 'Nothing to run. Bailing out.');
+    console.log('');
+    return;
+  }
+
+  check(function () {
+    runner(tasks);
+  });
+}
+
+function run(label, check) {
+  if (typeof label !== 'string') {
+    throw new Error('Expected string label (pre-commit, pre-push)');
+  }
+  if (typeof check !== 'function') {
+    throw new Error('Expected check changes function');
+  }
+
+  getGitRoot(function (root) {
+    runAtRoot(root, label, check);
+  });
+}
+
+module.exports = run;
