@@ -4,7 +4,7 @@
     "options": {
       "errorsOnly": false,
       "cyclomatic": 5,
-      "halstead": 12,
+      "halstead": 15,
       "maintainability": 100
     }
   }
