@@ -51,7 +51,7 @@ function failure(err) {
 function getTasks(root, label) {
   var pkg, run = [];
 
-   //
+  //
   // Bail-out when we failed to parse the package.json, there is probably a some
   // funcky chars in there.
   //
@@ -73,17 +73,12 @@ function getTasks(root, label) {
   // If there's a `pre-commit` property in the package.json we should use that
   // array.
   //
-  if (pkg[label] && Array.isArray(pkg[label])) {
-    run = pkg[label];
-  }
-
-  //
-  // If we don't have any run processes to run try to see if there's a `test`
-  // property which we should run instead. But we should check if it's not the
-  // default value that `npm` adds when your run the `npm init` command.
-  //
-  if (!run.length) {
-    run.push('echo Please specify tests for "' + label + '"');
+  if (pkg[label]) {
+    if (Array.isArray(pkg[label])) {
+      run = pkg[label];
+    } else if (typeof pkg[label] === 'string') {
+      run = [pkg[label]];
+    }
   }
 
   return run;
@@ -160,7 +155,7 @@ function runAtRoot(root, label, check) {
   var tasks = getTasks(root, label);
   if (!tasks || !tasks.length) {
     console.log('');
-    console.log(label, 'Nothing to run. Bailing out.');
+    console.log(label, 'Nothing to pre- test. Bailing out.');
     console.log('');
     return;
   }
