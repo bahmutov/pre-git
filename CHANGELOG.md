@@ -1,4 +1,11 @@
 
+0.0.11 / 2013-10-05
+==================
+
+  * using pre-git on itself
+  * not testing if there are scripts inside package.json
+  * better message on empty command list
+
 0.0.10 / 2013-10-05
 ==================
 
