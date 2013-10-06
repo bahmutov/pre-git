@@ -1,4 +1,10 @@
 
+n.n.n / 2013-10-05 
+==================
+
+  * fixed complexity issues
+  * added grunt, jshint, fixes #1
+
 0.0.9 / 2013-10-05
 ==================
 
