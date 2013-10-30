@@ -1,4 +1,10 @@
 
+0.0.13 / 2013-10-30
+==================
+
+  * added self-install check
+  * updated dev dependencies
+
 0.0.12 / 2013-10-30
 ==================
 
