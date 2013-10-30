@@ -27,9 +27,9 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "matchdep": "~0.1.2",
-    "grunt-contrib-jshint": "~0.6.4",
-    "grunt-deps-ok": "~0.1.5",
+    "matchdep": "~0.3.0",
+    "grunt-contrib-jshint": "~0.7.0",
+    "grunt-deps-ok": "~0.1.7",
     "grunt": "~0.4.1",
     "grunt-complexity": "~0.1.3"
   }
