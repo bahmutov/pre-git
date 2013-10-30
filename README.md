@@ -4,6 +4,11 @@ A simple `pre-commit` and `pre-push` hook installer for `git`.
 
 [![NPM][pre-git-icon]][pre-git-url]
 
+[![Build status][pre-git-ci-image]][pre-git-ci-url]
+[![dependencies][pre-git-dependencies-image]][pre-git-dependencies-url]
+[![devdependencies][pre-git-devdependencies-image]][pre-git-devdependencies-url]
+[![endorse][endorse-image]][endorse-url]
+
 ### Installation
 
 It's advised to install this module as `devDependency` in your `package.json`
@@ -36,3 +41,11 @@ MIT
 
 [pre-git-icon]: https://nodei.co/npm/pre-git.png?downloads=true
 [pre-git-url]: https://npmjs.org/package/pre-git
+[pre-git-ci-image]: https://travis-ci.org/bahmutov/pre-git.png?branch=master
+[pre-git-ci-url]: https://travis-ci.org/bahmutov/pre-git
+[pre-git-dependencies-image]: https://david-dm.org/bahmutov/pre-git.png
+[pre-git-dependencies-url]: https://david-dm.org/bahmutov/pre-git
+[pre-git-devdependencies-image]: https://david-dm.org/bahmutov/pre-git/dev-status.png
+[pre-git-devdependencies-url]: https://david-dm.org/bahmutov/pre-git#info=devDependencies
+[endorse-image]: https://api.coderwall.com/bahmutov/endorsecount.png
+[endorse-url]: https://coderwall.com/bahmutov
