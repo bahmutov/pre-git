@@ -30,6 +30,8 @@ Specify commands to run on *commit* and on *push* in your package.json
   "grunt jshint"
 ],
 "pre-push": [
+  "rm -rf node_modules",
+  "npm install",
   "grunt build",
   "grunt test"
 ]
