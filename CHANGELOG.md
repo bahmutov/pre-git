@@ -1,4 +1,10 @@
 
+0.0.14 / 2013-11-26
+==================
+
+  * exitting with code 0 if cannot find git root, fixes #8
+  * updated example pre-push command
+
 0.0.13 / 2013-10-30
 ==================
 
