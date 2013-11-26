@@ -35,7 +35,8 @@ var hooks = path.resolve(git, 'hooks');
 // the case.
 //
 if (!existsSync(git) || !fs.lstatSync(git).isDirectory()) {
-  throw new Error('Could not find git repo in ' + git);
+  console.error('Could not find git repo in ' + git);
+  process.exit(0);
 }
 
 (function () {
