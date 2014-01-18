@@ -1,6 +1,6 @@
 {
   "name": "pre-git",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Automatically install pre-commit / pre-git hooks for your npm modules.",
   "main": "index.js",
   "scripts": {
