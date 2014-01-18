@@ -3,15 +3,28 @@
 var pkg = require('./package');
 console.log(pkg.name, pkg.version);
 
+var path = require('path');
+
 (function avoidSelfInstall() {
-  var nameRegex = new RegExp('node_modules/' + pkg.name + '$');
+  // only install hook if this is executed from folder
+  // that is dependency of the current root path
+  // package A
+  //    node_modules/pre-git
+  // installs pre-git hook for package A
+  var pkgPath = 'node_modules' + path.sep + pkg.name;
+  // we are constructing RegExp using paths, that can
+  // use \ (Windows) as path separator. Need to escape \
+  // before constructing the RegExp.
+  pkgPath = pkgPath.replace('\\', '\\\\');
+  var nameRegex = new RegExp(pkgPath + '$');
   if (!nameRegex.test(process.cwd())) {
     console.log('running install inside self, no need');
+    console.log('cwd', process.cwd());
+    console.log('pkgPath', pkgPath);
     process.exit(0);
   }
 }());
 
-var path = require('path');
 var fs = require('fs');
 
 //
