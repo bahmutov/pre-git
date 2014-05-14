@@ -1,6 +1,6 @@
 {
   "all": {
-    "src": ["*.js", "hooks/pre-common.js"],
+    "src": ["*.js", "!Gruntfile.js", "hooks/pre-common.js"],
     "options": {
       "errorsOnly": false,
       "cyclomatic": 5,
