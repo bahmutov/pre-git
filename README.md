@@ -37,6 +37,9 @@ Specify commands to run on *commit* and on *push* in your package.json
 ]
 ```
 
+Related project: [post-merge-make](https://github.com/bahmutov/post-merge-make)
+runs `make post-merge` after pull or merge.
+
 ### Small print
 
 Author: Gleb Bahmutov &copy; 2014
@@ -52,9 +55,6 @@ Spread the word: tweet, star on github, etc.
 Support: if you find any problems with this module, email / tweet /
 [open issue](https://github.com/bahmutov/pre-git/issues?state=open) on Github
 
-### License
-
-MIT
 
 [pre-git-icon]: https://nodei.co/npm/pre-git.png?downloads=true
 [pre-git-url]: https://npmjs.org/package/pre-git
