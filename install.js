@@ -36,6 +36,11 @@ var existsSync = fs.existsSync || path.existsSync;
 // The root of repository.
 //
 var root = path.resolve(__dirname, '../..');
+var exec = require('shelljs').exec;
+var result = exec('git rev-parse --show-toplevel');
+if(result.code === 0){
+  root = path.resolve(result.output.trim());
+}
 
 //
 // The location .git and it's hooks
