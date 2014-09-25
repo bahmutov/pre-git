@@ -1,9 +1,10 @@
 'use strict';
 
 var child = require('child_process');
+var path = require('path');
 var label = 'pre-commit:';
 
-function getGitRoot(cb) {
+function getProjRoot(cb) {
   child.exec('git rev-parse --show-toplevel', function onRoot(err, output) {
     if (err) {
       console.error('');
@@ -12,8 +13,19 @@ function getGitRoot(cb) {
       console.error('');
       return process.exit(1);
     }
-    var root = output.trim();
-    cb(root);
+    var gitRoot = output.trim();
+    var projRoot = gitRoot;
+    var pkg;
+    try {
+      pkg = require(gitRoot + '/package.json');
+    }
+    catch (e) {
+      return cb(gitRoot);
+    }
+    if (pkg["pre-git-cwd"]) {
+      projRoot = path.resolve(path.join(gitRoot, pkg["pre-git-cwd"]))
+    }
+    cb(projRoot);
   });
 }
 
@@ -160,8 +172,7 @@ function runAtRoot(root, label, check) {
 
 function run(label, check) {
   checkInputs(label, check);
-
-  getGitRoot(function (root) {
+  getProjRoot(function (root) {
     runAtRoot(root, label, check);
   });
 }
