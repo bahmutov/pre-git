@@ -40,6 +40,12 @@ Specify commands to run on *commit* and on *push* in your package.json
 Related project: [post-merge-make](https://github.com/bahmutov/post-merge-make)
 runs `make post-merge` after pull or merge.
 
+## Details
+
+You can always skip pre-commit hook (but not pre-push hook!) by using `-n` option
+
+    git commit -m "done, don't check me" -n
+
 ### Small print
 
 Author: Gleb Bahmutov &copy; 2014
