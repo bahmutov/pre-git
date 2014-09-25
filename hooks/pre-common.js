@@ -22,8 +22,8 @@ function getProjRoot(cb) {
     catch (e) {
       return cb(gitRoot);
     }
-    if (pkg["pre-git-cwd"]) {
-      projRoot = path.resolve(path.join(gitRoot, pkg["pre-git-cwd"]))
+    if (pkg['pre-git-cwd']) {
+      projRoot = path.resolve(path.join(gitRoot, pkg['pre-git-cwd']));
     }
     cb(projRoot);
   });
