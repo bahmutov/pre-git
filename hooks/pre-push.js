@@ -10,11 +10,11 @@ function haveCommitsToPush(cb) {
   // todo: find if there are commits to push for any remote name / any branch
   // detect current branch
   child.exec('git rev-parse --abbrev-ref HEAD', function (err, stdout) {
-    var branch = 'master'
+    var branch = 'master';
     if (stdout.trim().length) {
-      branch = stdout.trim()
+      branch = stdout.trim();
     }
-    child.exec('git log origin/' + branch + '..HEAD', function (err, stdout) {
+    child.exec('git diff --name-only origin/' + branch + '..HEAD', function (err, stdout) {
       if (err) {
         console.error(label, 'Failed to check for commits. Cannot run the tests.');
         console.error(label, err);
@@ -27,11 +27,10 @@ function haveCommitsToPush(cb) {
         console.log('');
         return process.exit(0);
       }
-      console.log(label, "Detected commits:");
-      console.log(label, stdout.trim());
+      console.log(label, 'Detected files in diff:',  stdout.trim().split('\n').length);
       cb();
     });
-  })
+  });
 }
 
 run(label, haveCommitsToPush);
