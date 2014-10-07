@@ -25,6 +25,6 @@ module.exports = function (grunt) {
   var plugins = require('matchdep').filterDev('grunt-*');
   plugins.forEach(grunt.loadNpmTasks);
 
-  grunt.registerTask('default', ['jshint', 'complexity']);
+  grunt.registerTask('default', ['nice-package', 'jshint', 'complexity']);
   grunt.registerTask('release', ['bump-only:patch', 'bump-commit']);
 };
