@@ -2,7 +2,29 @@
 
 var child = require('child_process');
 var path = require('path');
+var fs = require('fs');
 var label = 'pre-commit:';
+
+function findPackage(dir) {
+  if (! dir) {
+    dir = path.join(process.cwd(), process.env.GIT_PREFIX);
+  }
+  
+  var files = fs.readdirSync(dir);
+  
+  if (files.indexOf('package.json') >= 0) {
+    return path.join(dir, 'package.json');
+  }
+  
+  if (dir === '/') {
+    throw new Error('Could not find package.json up from: ' + dir);
+  }
+  else if (!dir || dir === '.') {
+    throw new Error('Cannot find package.json from unspecified directory');
+  }
+  
+  return findPackage(path.dirname(dir));
+}
 
 function getProjRoot(cb) {
   child.exec('git rev-parse --show-toplevel', function onRoot(err, output) {
@@ -14,10 +36,11 @@ function getProjRoot(cb) {
       return process.exit(1);
     }
     var gitRoot = output.trim();
-    var projRoot = gitRoot;
+    var projRoot = path.join(gitRoot,process.env.GIT_PREFIX);
     var pkg;
     try {
-      pkg = require(gitRoot + '/package.json');
+      var file = findPackage();
+      pkg = require(file);
     }
     catch (e) {
       return cb(gitRoot);
