@@ -1,0 +1,4 @@
+{
+  "name": "foo",
+  "pre-commit": "echo pre-commit foo"
+}
