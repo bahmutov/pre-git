@@ -9,20 +9,20 @@ function findPackage(dir) {
   if (! dir) {
     dir = path.join(process.cwd(), process.env.GIT_PREFIX);
   }
-  
+
   var files = fs.readdirSync(dir);
-  
+
   if (files.indexOf('package.json') >= 0) {
     return path.join(dir, 'package.json');
   }
-  
+
   if (dir === '/') {
     throw new Error('Could not find package.json up from: ' + dir);
   }
   else if (!dir || dir === '.') {
     throw new Error('Cannot find package.json from unspecified directory');
   }
-  
+
   return findPackage(path.dirname(dir));
 }
 
@@ -91,7 +91,8 @@ function getTasks(root, label) {
   // funcky chars in there.
   //
   try {
-    pkg = require(root + '/package.json');
+    var file = findPackage();
+    pkg = require(file);
   }
   catch (e) {
     return failure(e);
