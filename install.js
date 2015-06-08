@@ -89,7 +89,7 @@ function installHook(name) {
   if (!existsSync(fullname)) {
     throw new Error('Cannot find hook to copy ' + fullname);
   }
-  var hook = fs.readFileSync();
+  var hook = fs.readFileSync(fullname);
 
   //
   // If there's an existing `pre-commit` hook we want to back it up instead of
