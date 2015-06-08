@@ -75,7 +75,7 @@ if (!existsSync(git) || !fs.lstatSync(git).isDirectory()) {
 }('pre-common.js'));
 
 
-var hookScripts = ['pre-commit', 'pre-push'];
+var hookScripts = ['pre-commit', 'pre-push', 'post-commit'];
 hookScripts.forEach(installHook);
 
 function installHook(name) {
@@ -85,7 +85,11 @@ function installHook(name) {
   //
   // Our own hook runner.
   //
-  var hook = fs.readFileSync('./hooks/' + name + '.js');
+  var fullname = './hooks/' + name + '.js';
+  if (!existsSync(fullname)) {
+    throw new Error('Cannot find hook to copy ' + fullname);
+  }
+  var hook = fs.readFileSync();
 
   //
   // If there's an existing `pre-commit` hook we want to back it up instead of
