@@ -1,6 +1,6 @@
 # pre-git
 
-A simple `pre-commit` and `pre-push` hook installer for `git`.
+> A simple `pre-commit` and `pre-push` hook installer for `git`.
 
 [![NPM][pre-git-icon]][pre-git-url]
 
@@ -8,6 +8,10 @@ A simple `pre-commit` and `pre-push` hook installer for `git`.
 [![dependencies][pre-git-dependencies-image]][pre-git-dependencies-url]
 [![devdependencies][pre-git-devdependencies-image]][pre-git-devdependencies-url]
 [![endorse][endorse-image]][endorse-url]
+
+Runs pre-commit and pre-push Git hooks to 
+[avoid breaking the local master branch](http://glebbahmutov.com/blog/never-break-master-by-accident/)
+or the [remote master](http://glebbahmutov.com/blog/never-break-remote-master-again/).
 
 ### Installation
 
@@ -45,6 +49,8 @@ runs `make post-merge` after pull or merge.
 You can always skip pre-commit hook (but not pre-push hook!) by using `-n` option
 
     git commit -m "done, don't check me" -n
+
+You can skip the pre-push hook using `--no-verify` option
 
 ### Small print
 
