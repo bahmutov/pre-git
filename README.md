@@ -26,13 +26,15 @@ npm install pre-git --save-dev
 
 Specify commands to run on *commit* and on *push* in your package.json
 
-```
+```json
 "scripts": {
   "test": "node-qunit *.js"
 },
 "pre-commit": [
-  "grunt jshint"
+  "grunt jshint",
+  "npm version"
 ],
+"post-commit": "git status",
 "pre-push": [
   "rm -rf node_modules",
   "npm install",
