@@ -75,7 +75,7 @@ if (!existsSync(git) || !fs.lstatSync(git).isDirectory()) {
 }('pre-common.js'));
 
 
-var hookScripts = ['pre-commit', 'pre-push', 'post-commit'];
+var hookScripts = ['pre-commit', 'pre-push', 'post-commit', 'post-merge'];
 hookScripts.forEach(installHook);
 
 function installHook(name) {

@@ -40,7 +40,8 @@ Specify commands to run on *commit* and on *push* in your package.json
   "npm install",
   "grunt build",
   "grunt test"
-]
+],
+"post-merge": "npm install"
 ```
 
 Related project: [post-merge-make](https://github.com/bahmutov/post-merge-make)
