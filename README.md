@@ -54,6 +54,13 @@ You can always skip pre-commit hook (but not pre-push hook!) by using `-n` optio
 
 You can skip the pre-push hook using `--no-verify` option
 
+To run just the hook (for example to test what it does), execute
+
+```bash
+.git/hooks/pre-commit
+.git/hooks/pre-push
+```
+
 ### Small print
 
 Author: Gleb Bahmutov &copy; 2014

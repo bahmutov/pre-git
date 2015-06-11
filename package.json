@@ -1,7 +1,7 @@
 {
   "name": "pre-git",
   "description": "Automatically install pre-commit / pre-git hooks for your npm modules.",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "author": "Arnout Kazemier <opensource@observe.it>",
   "bugs": {
     "url": "https://github.com/bahmutov/pre-git/issues"

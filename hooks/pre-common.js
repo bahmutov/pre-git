@@ -5,9 +5,11 @@ var path = require('path');
 var fs = require('fs');
 var label = 'pre-commit:';
 
+var gitPrefix = process.env.GIT_PREFIX || '';
+
 function findPackage(dir) {
   if (! dir) {
-    dir = path.join(process.cwd(), process.env.GIT_PREFIX);
+    dir = path.join(process.cwd(), gitPrefix);
   }
 
   var files = fs.readdirSync(dir);
@@ -36,7 +38,7 @@ function getProjRoot(cb) {
       return process.exit(1);
     }
     var gitRoot = output.trim();
-    var projRoot = path.join(gitRoot,process.env.GIT_PREFIX);
+    var projRoot = path.join(gitRoot,gitPrefix);
     var pkg;
     try {
       var file = findPackage();
