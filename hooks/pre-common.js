@@ -166,7 +166,7 @@ function runner(root, run) {
 }
 
 function checkInputs(label, check) {
-  if (typeof label !== 'string') {
+  if (typeof label !== 'string' || !label) {
     throw new Error('Expected string label (pre-commit, pre-push)');
   }
   if (typeof check !== 'function') {
@@ -198,6 +198,8 @@ function runAtRoot(root, label, check) {
 
 function run(label, check) {
   checkInputs(label, check);
+  label = label;
+
   getProjRoot(function (root) {
     runAtRoot(root, label, check);
   });
