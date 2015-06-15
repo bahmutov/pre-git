@@ -145,7 +145,7 @@ function runner(root, run) {
         stdio: [0, 1, 2]
       };
       child.exec(task, options, function onTaskFinished(err, stdio, stderr) {
-        process.stdin.write(stdio);
+        process.stdout.write(stdio);
 
         if (err) {
           process.stderr.write(stderr);
