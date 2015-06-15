@@ -197,12 +197,12 @@ function runAtRoot(root, label, check) {
   });
 }
 
-function run(label, check) {
-  checkInputs(label, check);
-  label = label;
+function run(hookLabel, check) {
+  checkInputs(hookLabel, check);
+  label = hookLabel;
 
   getProjRoot(function (root) {
-    runAtRoot(root, label, check);
+    runAtRoot(root, hookLabel, check);
   });
 }
 
