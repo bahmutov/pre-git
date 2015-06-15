@@ -144,10 +144,11 @@ function runner(root, run) {
         env: process.env,
         stdio: [0, 1, 2]
       };
-      child.exec(task, options, function onTaskFinished(err, stdio) {
-        console.log(stdio);
+      child.exec(task, options, function onTaskFinished(err, stdio, stderr) {
+        process.stdin.write(stdio);
 
         if (err) {
+          process.stderr.write(stderr);
           return next(new Error(task + ' closed with error ' + err), task);
         }
         next(undefined, task);
