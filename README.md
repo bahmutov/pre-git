@@ -62,6 +62,13 @@ To run just the hook (for example to test what it does), execute
 .git/hooks/pre-push
 ```
 
+Since there might be no changes to push, you can force the `pre-commit` hook to execute
+using `-f` or `--force` argument
+
+```bash
+.git/hooks/pre-commit -f
+```
+
 ### Small print
 
 Author: Gleb Bahmutov &copy; 2014
