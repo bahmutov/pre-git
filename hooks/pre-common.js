@@ -137,22 +137,25 @@ function runner(root, run) {
         return done();
       }
 
-      console.log('executing task "' + task + '"');
-
       var options = {
         cwd: root,
-        env: process.env,
-        stdio: [0, 1, 2]
+        env: process.env
       };
-      child.exec(task, options, function onTaskFinished(err, stdio, stderr) {
-        process.stdout.write(stdio);
 
+      var args = task.split(' ');
+      var cmd = args.shift();
+      console.log('executing task "' + cmd + '" with args "' + args + '"');
+
+      var proc = child.spawn(cmd, args, options);
+      proc.stdout.on('data', process.stdout.write.bind(process.stdout));
+      proc.stderr.on('data', process.stderr.write.bind(process.stderr));
+      proc.on('close', function onTaskFinished(code) {
         if (err) {
-          process.stderr.write(stderr);
-          return next(new Error(task + ' closed with error ' + err), task);
+          return next(new Error(task + ' closed with code ' + code), task);
         }
         next(undefined, task);
       });
+
     })();
   })(function ready(err) {
     if (err) {
