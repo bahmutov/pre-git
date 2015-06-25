@@ -150,7 +150,7 @@ function runner(root, run) {
       proc.stdout.on('data', process.stdout.write.bind(process.stdout));
       proc.stderr.on('data', process.stderr.write.bind(process.stderr));
       proc.on('close', function onTaskFinished(code) {
-        if (err) {
+        if (code > 0) {
           return next(new Error(task + ' closed with code ' + code), task);
         }
         next(undefined, task);
