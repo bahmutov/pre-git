@@ -5,6 +5,7 @@
 [![NPM][pre-git-icon]][pre-git-url]
 
 [![Build status][pre-git-ci-image]][pre-git-ci-url]
+[![Build Status][snapci-image]][snapci-url]
 [![dependencies][pre-git-dependencies-image]][pre-git-dependencies-url]
 [![devdependencies][pre-git-devdependencies-image]][pre-git-devdependencies-url]
 [![endorse][endorse-image]][endorse-url]
@@ -84,7 +85,8 @@ Spread the word: tweet, star on github, etc.
 Support: if you find any problems with this module, email / tweet /
 [open issue](https://github.com/bahmutov/pre-git/issues?state=open) on Github
 
-
+[snapci-image]: https://snap-ci.com/bahmutov/pre-git/branch/master/build_image
+[snapci-url]: https://snap-ci.com/bahmutov/pre-git/branch/master
 [pre-git-icon]: https://nodei.co/npm/pre-git.png?downloads=true
 [pre-git-url]: https://npmjs.org/package/pre-git
 [pre-git-ci-image]: https://travis-ci.org/bahmutov/pre-git.png?branch=master
