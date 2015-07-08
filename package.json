@@ -44,6 +44,7 @@
     "url": "git://github.com/bahmutov/pre-git.git"
   },
   "scripts": {
-    "install": "node install"
+    "install": "node install",
+    "test": "grunt"
   }
 }
