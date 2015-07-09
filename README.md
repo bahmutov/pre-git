@@ -87,13 +87,13 @@ Support: if you find any problems with this module, email / tweet /
 
 [snapci-image]: https://snap-ci.com/bahmutov/pre-git/branch/master/build_image
 [snapci-url]: https://snap-ci.com/bahmutov/pre-git/branch/master
-[pre-git-icon]: https://nodei.co/npm/pre-git.png?downloads=true
+[pre-git-icon]: https://nodei.co/npm/pre-git.svg?downloads=true
 [pre-git-url]: https://npmjs.org/package/pre-git
-[pre-git-ci-image]: https://travis-ci.org/bahmutov/pre-git.png?branch=master
+[pre-git-ci-image]: https://travis-ci.org/bahmutov/pre-git.svg?branch=master
 [pre-git-ci-url]: https://travis-ci.org/bahmutov/pre-git
-[pre-git-dependencies-image]: https://david-dm.org/bahmutov/pre-git.png
+[pre-git-dependencies-image]: https://david-dm.org/bahmutov/pre-git.svg
 [pre-git-dependencies-url]: https://david-dm.org/bahmutov/pre-git
-[pre-git-devdependencies-image]: https://david-dm.org/bahmutov/pre-git/dev-status.png
+[pre-git-devdependencies-image]: https://david-dm.org/bahmutov/pre-git/dev-status.svg
 [pre-git-devdependencies-url]: https://david-dm.org/bahmutov/pre-git#info=devDependencies
 [endorse-image]: https://api.coderwall.com/bahmutov/endorsecount.png
 [endorse-url]: https://coderwall.com/bahmutov
