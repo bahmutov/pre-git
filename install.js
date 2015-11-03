@@ -98,6 +98,7 @@ if (existsSync('./hooks')) {
       return;
     }
     targetPackage[hookName] = [];
+    console.log('added empty command list for hook %s', hookName);
     changedPackage = true;
   });
 
