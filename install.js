@@ -82,7 +82,7 @@ if (existsSync('./hooks')) {
 }
 
 (function addPackageSteps(hookNames) {
-  var pkgPath = join(process.cwd(), 'package.json'),
+  var pkgPath = join(root, 'package.json'),
     targetPackage;
   if (existsSync(pkgPath)) {
     targetPackage = JSON.parse(read(pkgPath));
