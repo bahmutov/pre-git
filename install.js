@@ -1,9 +1,10 @@
 'use strict';
 
 var pkg = require('./package');
-console.log(pkg.name, pkg.version);
+console.log('%s %s in %s', pkg.name, pkg.version, process.cwd());
 
 var path = require('path');
+var join = path.join;
 
 (function avoidSelfInstall() {
   // only install hook if this is executed from folder
@@ -26,6 +27,8 @@ var path = require('path');
 }());
 
 var fs = require('fs');
+var read = fs.readFileSync;
+var write = fs.writeFileSync;
 
 //
 // Compatiblity with older node.js.
@@ -63,20 +66,47 @@ if (!existsSync(git) || !fs.lstatSync(git).isDirectory()) {
   }
 }());
 
-
-(function copyFile(name) {
-  var fullname = path.join('./hooks', name);
-  if (!existsSync(fullname)) {
-    throw new Error('cannot find ' + fullname);
-  }
-  var content = fs.readFileSync(fullname);
-  var destination = path.resolve(hooks, name);
-  fs.writeFileSync(destination, content);
-}('pre-common.js'));
-
-
 var hookScripts = ['pre-commit', 'pre-push', 'post-commit', 'post-merge'];
-hookScripts.forEach(installHook);
+
+if (existsSync('./hooks')) {
+  (function copyFile(name) {
+    var fullname = join('./hooks', name);
+    if (!existsSync(fullname)) {
+      throw new Error('cannot find ' + fullname);
+    }
+    var content = read(fullname);
+    var destination = path.resolve(hooks, name);
+    write(destination, content);
+  }('pre-common.js'));
+  hookScripts.forEach(installHook);
+}
+
+(function addPackageSteps(hookNames) {
+  var pkgPath = join(process.cwd(), 'package.json'),
+    targetPackage;
+  if (existsSync(pkgPath)) {
+    targetPackage = JSON.parse(read(pkgPath));
+    console.log('read target package from %s', pkgPath);
+  } else {
+    console.log('could not find package under path %s', pkgPath);
+    return;
+  }
+
+  var changedPackage;
+  hookNames.forEach(function addProperty(hookName) {
+    if (targetPackage[hookName]) {
+      return;
+    }
+    targetPackage[hookName] = [];
+    changedPackage = true;
+  });
+
+  if (changedPackage) {
+    console.log('saving updated files %s', pkgPath);
+    write(pkgPath, JSON.stringify(targetPackage, null, 2));
+  }
+
+}(hookScripts));
 
 function installHook(name) {
   console.log('installing hook', name);
@@ -89,7 +119,7 @@ function installHook(name) {
   if (!existsSync(fullname)) {
     throw new Error('Cannot find hook to copy ' + fullname);
   }
-  var hook = fs.readFileSync(fullname);
+  var hook = read(fullname);
 
   //
   // If there's an existing `pre-commit` hook we want to back it up instead of
@@ -98,7 +128,7 @@ function installHook(name) {
   if (existsSync(precommit)) {
     console.log('');
     console.log(name + ': Detected an existing git hook');
-    fs.writeFileSync(precommit + '.old', fs.readFileSync(precommit));
+    write(precommit + '.old', read(precommit));
     console.log(name + ': Old hook backuped to .old');
     console.log('');
   }
@@ -107,6 +137,6 @@ function installHook(name) {
   // Everything is ready for the installation of the pre-commit hook. Write it and
   // make it executable.
   //
-  fs.writeFileSync(precommit, hook);
+  write(precommit, hook);
   fs.chmodSync(precommit, '755');
 }
