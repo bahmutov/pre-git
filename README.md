@@ -82,6 +82,11 @@ that comes with this module. Just set the following command for `commit-msg` hoo
 }
 ```
 
+You can easily make sure the project follows commit message rules by
+using [commitezen](https://www.npmjs.com/package/commitizen) helper.
+See how to setup the `commitezen` and a good message CLI wizard in this
+[video](https://egghead.io/lessons/javascript-how-to-write-a-javascript-library-writing-conventional-commits-with-commitizen).
+
 ## Development
 
 In order to locally test this package, from another git repo execute the install script
