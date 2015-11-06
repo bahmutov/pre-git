@@ -10,7 +10,7 @@
 [![devdependencies][pre-git-devdependencies-image]][pre-git-devdependencies-url]
 [![endorse][endorse-image]][endorse-url]
 
-Runs pre-commit and pre-push Git hooks to 
+Runs pre-commit and pre-push Git hooks to
 [avoid breaking the local master branch](http://glebbahmutov.com/blog/never-break-master-by-accident/)
 or the [remote master](http://glebbahmutov.com/blog/never-break-remote-master-again/).
 
@@ -68,6 +68,24 @@ using `-f` or `--force` argument
 
 ```bash
 .git/hooks/pre-commit -f
+```
+
+## Development
+
+In order to locally test this package, from another git repo execute the install script
+using `-f` or `--force` argument. For example
+
+```
+$ node ../pre-git/install.js -f
+pre-git 0.7.2 in /Users/kensho/git/test-git-hooks
+/Users/kensho/git/test-git-hooks
+read target package from /Users/kensho/git/test-git-hooks/package.json
+added empty command list for hook commit-msg
+added empty command list for hook pre-commit
+added empty command list for hook pre-push
+added empty command list for hook post-commit
+added empty command list for hook post-merge
+saving updated files /Users/kensho/git/test-git-hooks/package.json
 ```
 
 ### Small print
