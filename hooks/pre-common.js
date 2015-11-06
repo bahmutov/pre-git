@@ -101,8 +101,8 @@ function getTasks(root, label) {
   }
 
   //
-  // If there's a `pre-commit` property in the package.json we should use that
-  // array.
+  // If there's a `pre-commit` or other properties in the package.json
+  // we should use that array.
   //
   if (pkg[label]) {
     if (Array.isArray(pkg[label])) {
@@ -197,7 +197,7 @@ function runAtRoot(root, label, check) {
 
   check(function () {
     runner(root, tasks);
-  });
+  }, root);
 }
 
 function run(hookLabel, check) {

@@ -70,6 +70,18 @@ using `-f` or `--force` argument
 .git/hooks/pre-commit -f
 ```
 
+## Validating commit message
+
+The simplest way to validate the commit message is to use the
+check [validate-commit-msg](https://github.com/kentcdodds/validate-commit-msg)
+that comes with this module. Just set the following command for `commit-msg` hook
+
+```json
+{
+  "commit-msg": "validate-commit-msg"
+}
+```
+
 ## Development
 
 In order to locally test this package, from another git repo execute the install script

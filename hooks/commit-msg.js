@@ -4,19 +4,37 @@
 
 var run = require(__dirname + '/pre-common');
 var label = 'commit-msg';
+var read = require('fs').readFileSync;
+var join = require('path').join;
 
-// var isValid = require('validate-commit-message');
+function loadPackage(folder) {
+  var filename = join(folder, 'package.json');
+  return JSON.parse(read(filename));
+}
+var isValid = require('validate-commit-msg').validateMessage;
+if (typeof isValid !== 'function') {
+  throw new Error('something changed in validate-commit-msg API');
+}
 
-function validateCommitMessage(cb) {
-  console.log('commit-msg');
-  /*
-  if (isValid()) {
-    console.log('commit message is valid');
+function isBuiltInValidation(commands) {
+  return commands === 'validate-commit-msg' ||
+    (Array.isArray(commands) &&
+      isBuiltInValidation(commands[0]));
+}
+
+function validateCommitMessage(cb, projectRoot) {
+  console.log('commit-msg in %s', projectRoot);
+  var pkg = loadPackage(projectRoot);
+  var hookCommands;
+  if (pkg['commit-msg']) {
+    hookCommands = pkg['commit-msg'];
+  }
+  if (!hookCommands) {
+    return;
+  }
+  if (!isBuiltInValidation(hookCommands)) {
     cb();
-  } else {
-    console.log('commit message is invalid');
-  }*/
-  cb();
+  }
 }
 
 run(label, validateCommitMessage);
