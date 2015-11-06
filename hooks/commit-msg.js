@@ -11,9 +11,14 @@ function loadPackage(folder) {
   var filename = join(folder, 'package.json');
   return JSON.parse(read(filename));
 }
-var isValid = require('validate-commit-msg').validateMessage;
-if (typeof isValid !== 'function') {
-  throw new Error('something changed in validate-commit-msg API');
+
+function loadValidateCommitMessage(folder) {
+  var packagePath = join(folder,
+    'node_modules/pre-git/node_modules/validate-commit-msg');
+  var isValid = require(packagePath).validateMessage;
+  if (typeof isValid !== 'function') {
+    throw new Error('something changed in validate-commit-msg API');
+  }
 }
 
 function isBuiltInValidation(commands) {
@@ -32,7 +37,9 @@ function validateCommitMessage(cb, projectRoot) {
   if (!hookCommands) {
     return;
   }
-  if (!isBuiltInValidation(hookCommands)) {
+  if (isBuiltInValidation(hookCommands)) {
+    loadValidateCommitMessage(projectRoot);
+  } else {
     cb();
   }
 }
