@@ -6,7 +6,14 @@ console.log('%s %s in %s', pkg.name, pkg.version, process.cwd());
 var path = require('path');
 var join = path.join;
 
+var isForced = process.argv.some(function (argument) {
+  return argument === '-f' || argument === '--force';
+});
+
 (function avoidSelfInstall() {
+  if (isForced) {
+    return;
+  }
   // only install hook if this is executed from folder
   // that is dependency of the current root path
   // package A
@@ -66,7 +73,8 @@ if (!existsSync(git) || !fs.lstatSync(git).isDirectory()) {
   }
 }());
 
-var hookScripts = ['pre-commit', 'pre-push', 'post-commit', 'post-merge'];
+var hookScripts = ['commit-msg',
+  'pre-commit', 'pre-push', 'post-commit', 'post-merge'];
 
 if (existsSync('./hooks')) {
   (function copyFile(name) {
