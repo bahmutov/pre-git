@@ -12,7 +12,8 @@
     "Tauren Mills http://tauren.com"
   ],
   "dependencies": {
-    "shelljs": "0.3.0"
+    "shelljs": "0.3.0",
+    "validate-commit-msg": "1.0.0"
   },
   "devDependencies": {
     "grunt": "0.4.5",

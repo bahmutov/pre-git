@@ -48,7 +48,7 @@ var existsSync = fs.existsSync || path.existsSync;
 var root = path.resolve(__dirname, '../..');
 var exec = require('shelljs').exec;
 var result = exec('git rev-parse --show-toplevel');
-if(result.code === 0){
+if (result.code === 0) {
   root = path.resolve(result.output.trim());
 }
 
@@ -72,13 +72,16 @@ if (!existsSync(git) || !fs.lstatSync(git).isDirectory()) {
     fs.mkdirSync(hooks);
   }
 }());
+console.log('git hooks folder %s', hooks);
 
 var hookScripts = ['commit-msg',
   'pre-commit', 'pre-push', 'post-commit', 'post-merge'];
 
-if (existsSync('./hooks')) {
+var sourceHooksFolders = join(__dirname, 'hooks');
+
+if (existsSync(sourceHooksFolders)) {
   (function copyFile(name) {
-    var fullname = join('./hooks', name);
+    var fullname = join(sourceHooksFolders, name);
     if (!existsSync(fullname)) {
       throw new Error('cannot find ' + fullname);
     }
@@ -86,7 +89,10 @@ if (existsSync('./hooks')) {
     var destination = path.resolve(hooks, name);
     write(destination, content);
   }('pre-common.js'));
+
   hookScripts.forEach(installHook);
+} else {
+  console.log('cannot find hooks folder %s', sourceHooksFolders);
 }
 
 (function addPackageSteps(hookNames) {
@@ -118,15 +124,15 @@ if (existsSync('./hooks')) {
 }(hookScripts));
 
 function installHook(name) {
-  console.log('installing hook', name);
+  console.log('installing hook %s', name);
 
-  var precommit = path.resolve(hooks, name);
+  var targetHookFilename = path.resolve(hooks, name);
   //
   // Our own hook runner.
   //
-  var fullname = './hooks/' + name + '.js';
+  var fullname = join(sourceHooksFolders, name + '.js');
   if (!existsSync(fullname)) {
-    throw new Error('Cannot find hook to copy ' + fullname);
+    throw new Error('Cannot find hook file to copy ' + fullname);
   }
   var hook = read(fullname);
 
@@ -134,10 +140,10 @@ function installHook(name) {
   // If there's an existing `pre-commit` hook we want to back it up instead of
   // overriding it and losing it completely
   //
-  if (existsSync(precommit)) {
+  if (existsSync(targetHookFilename)) {
     console.log('');
     console.log(name + ': Detected an existing git hook');
-    write(precommit + '.old', read(precommit));
+    write(targetHookFilename + '.old', read(targetHookFilename));
     console.log(name + ': Old hook backuped to .old');
     console.log('');
   }
@@ -146,6 +152,6 @@ function installHook(name) {
   // Everything is ready for the installation of the pre-commit hook. Write it and
   // make it executable.
   //
-  write(precommit, hook);
-  fs.chmodSync(precommit, '755');
+  write(targetHookFilename, hook);
+  fs.chmodSync(targetHookFilename, '755');
 }
