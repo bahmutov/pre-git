@@ -106,12 +106,20 @@ if (existsSync(sourceHooksFolders)) {
     return;
   }
 
+  if (!targetPackage.config) {
+    targetPackage.config = {};
+  }
+  if (!targetPackage.config['pre-git']) {
+    targetPackage.config['pre-git'] = {};
+  }
+  var config = targetPackage.config['pre-git'];
+
   var changedPackage;
   hookNames.forEach(function addProperty(hookName) {
-    if (targetPackage[hookName]) {
+    if (config[hookName]) {
       return;
     }
-    targetPackage[hookName] = [];
+    config[hookName] = [];
     console.log('added empty command list for hook %s', hookName);
     changedPackage = true;
   });

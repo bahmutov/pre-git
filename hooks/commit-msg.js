@@ -31,10 +31,9 @@ function isBuiltInValidation(commands) {
 function validateCommitMessage(cb, projectRoot) {
   console.log('commit-msg in %s', projectRoot);
   var pkg = loadPackage(projectRoot);
-  var hookCommands;
-  if (pkg['commit-msg']) {
-    hookCommands = pkg['commit-msg'];
-  }
+  var hookCommands = (pkg.config &&
+    pkg.config['pre-git'] &&
+    pkg.config['pre-git']['commit-msg']) || pkg['commit-msg'];
   if (!hookCommands) {
     return;
   }

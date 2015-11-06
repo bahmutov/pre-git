@@ -104,14 +104,13 @@ function getTasks(root, label) {
   // If there's a `pre-commit` or other properties in the package.json
   // we should use that array.
   //
-  if (pkg[label]) {
-    if (Array.isArray(pkg[label])) {
-      run = pkg[label];
-    } else if (typeof pkg[label] === 'string') {
-      run = [pkg[label]];
-    }
+  run = pkg[label] ||
+    pkg.config &&
+    pkg.config['pre-git'] &&
+    pkg.config['pre-git'][label];
+  if (typeof run === 'string') {
+    run = [run];
   }
-
   return run;
 }
 
@@ -190,7 +189,7 @@ function runAtRoot(root, label, check) {
   var tasks = getTasks(root, label);
   if (!tasks || !tasks.length) {
     console.log('');
-    console.log(label, 'Nothing to pre- test. Bailing out.');
+    console.log(label, 'Nothing the hook needs to do. Bailing out.');
     console.log('');
     return;
   }

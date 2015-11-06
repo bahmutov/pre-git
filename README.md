@@ -25,24 +25,30 @@ npm install pre-git --save-dev
 
 ### Configuration
 
-Specify commands to run on *commit* and on *push* in your package.json
+Specify commands to run on *commit* and on *push* in your package.json under `config > pre-git`
+object.
 
 ```json
 "scripts": {
   "test": "node-qunit *.js"
 },
-"pre-commit": [
-  "grunt jshint",
-  "npm version"
-],
-"post-commit": "git status",
-"pre-push": [
-  "rm -rf node_modules",
-  "npm install",
-  "grunt build",
-  "grunt test"
-],
-"post-merge": "npm install"
+"config": {
+  "pre-git": {
+    "commit-msg": "validate-commit-msg",
+    "pre-commit": [
+      "grunt jshint",
+      "npm version"
+    ],
+    "post-commit": "git status",
+    "pre-push": [
+      "rm -rf node_modules",
+      "npm install",
+      "grunt build",
+      "grunt test"
+    ],
+    "post-merge": "npm install"
+  }
+}
 ```
 
 Related project: [post-merge-make](https://github.com/bahmutov/post-merge-make)
