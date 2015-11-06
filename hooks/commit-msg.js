@@ -6,6 +6,7 @@ var run = require(__dirname + '/pre-common');
 var label = 'commit-msg';
 var read = require('fs').readFileSync;
 var join = require('path').join;
+var includedCommitMessageValidator = 'validate-commit-msg';
 
 function loadPackage(folder) {
   var filename = join(folder, 'package.json');
@@ -14,15 +15,15 @@ function loadPackage(folder) {
 
 function loadValidateCommitMessage(folder) {
   var packagePath = join(folder,
-    'node_modules/pre-git/node_modules/validate-commit-msg');
+    'node_modules/pre-git/node_modules', includedCommitMessageValidator);
   var isValid = require(packagePath).validateMessage;
   if (typeof isValid !== 'function') {
-    throw new Error('something changed in validate-commit-msg API');
+    throw new Error('something changed in ' + includedCommitMessageValidator + ' API');
   }
 }
 
 function isBuiltInValidation(commands) {
-  return commands === 'validate-commit-msg' ||
+  return commands === includedCommitMessageValidator ||
     (Array.isArray(commands) &&
       isBuiltInValidation(commands[0]));
 }
@@ -38,6 +39,7 @@ function validateCommitMessage(cb, projectRoot) {
     return;
   }
   if (isBuiltInValidation(hookCommands)) {
+    console.log('using built-in validator %s', includedCommitMessageValidator);
     loadValidateCommitMessage(projectRoot);
   } else {
     cb();
