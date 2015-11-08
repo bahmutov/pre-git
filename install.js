@@ -178,11 +178,11 @@ function commitMessageCommandIsEmpty(pkg) {
     if (!targetPackage.scripts) {
       targetPackage.scripts = {};
     }
-    targetPackage.scripts.commit = 'git-cz';
+    targetPackage.scripts.commit = 'node node_modules/pre-git/node_modules/git-cz';
 
     if (!targetPackage.czConfig) {
       targetPackage.czConfig = {
-        path: 'node_modules/cz-conventional-changelog'
+        path: 'node_modules/pre-git/node_modules/cz-conventional-changelog'
       };
     }
 
