@@ -138,14 +138,6 @@ if (existsSync(sourceHooksFolders)) {
 
 }(hookScripts));
 
-function hasCommitMessageDependencies(pkg) {
-  if (!pkg.devDependencies) {
-    return false;
-  }
-  return pkg.devDependencies.commitizen &&
-    pkg.devDependencies['cz-conventional-changelog'];
-}
-
 function isEmpty(x) {
   return Array.isArray(x) && x.length === 0 ||
     !x;
@@ -169,8 +161,7 @@ function commitMessageCommandIsEmpty(pkg) {
   }
 
   var config = targetPackage.config['pre-git'];
-  if (hasCommitMessageDependencies(targetPackage) &&
-    commitMessageCommandIsEmpty(targetPackage)) {
+  if (commitMessageCommandIsEmpty(targetPackage)) {
     console.log('setting up commit message helpers');
 
     config[hookLabel] = 'validate-commit-msg';
