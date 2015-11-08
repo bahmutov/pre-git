@@ -81,19 +81,22 @@ using `-f` or `--force` argument
 
 ## Validating commit message
 
-The simplest way to validate the commit message is to use the
-check [validate-commit-msg](https://github.com/kentcdodds/validate-commit-msg)
-that comes with this module. Just set the following command for `commit-msg` hook
+By default, this package will install both the message validator
+and the message format helper. You can disable the validation
+by removing the below command.
 
 ```json
-{
-  "commit-msg": "validate-commit-msg"
+"config": {
+  "pre-git": {
+    "commit-msg": "validate-commit-msg"
+  }
 }
 ```
 
-You can easily make sure the project follows commit message rules by
-using [commitezen](https://www.npmjs.com/package/commitizen) helper.
-See how to setup the `commitezen` and a good message CLI wizard in this
+To always form a valid commit message, the script `npm run commit`
+has been setup automatically. See details in the documentation for
+[commitizen](https://www.npmjs.com/package/commitizen) project and
+the tutorial
 [video](https://egghead.io/lessons/javascript-how-to-write-a-javascript-library-writing-conventional-commits-with-commitizen).
 
 ## Development
