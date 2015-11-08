@@ -169,7 +169,7 @@ function commitMessageCommandIsEmpty(pkg) {
     if (!targetPackage.scripts) {
       targetPackage.scripts = {};
     }
-    targetPackage.scripts.commit = 'node node_modules/pre-git/node_modules/git-cz';
+    targetPackage.scripts.commit = './node_modules/pre-git/node_modules/commitizen/bin/git-cz';
 
     if (!targetPackage.czConfig) {
       targetPackage.czConfig = {
