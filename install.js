@@ -138,6 +138,59 @@ if (existsSync(sourceHooksFolders)) {
 
 }(hookScripts));
 
+function hasCommitMessageDependencies(pkg) {
+  if (!pkg.devDependencies) {
+    return false;
+  }
+  return pkg.devDependencies.commitizen &&
+    pkg.devDependencies['cz-conventional-changelog'];
+}
+
+function isEmpty(x) {
+  return Array.isArray(x) && x.length === 0 ||
+    !x;
+}
+
+function commitMessageCommandIsEmpty(pkg) {
+  return isEmpty(pkg.config['pre-git']['commit-msg']);
+}
+
+(function setupCommitMessageHelpers() {
+  var hookLabel = 'commit-msg';
+
+  var pkgPath = join(root, 'package.json'),
+    targetPackage;
+  if (existsSync(pkgPath)) {
+    targetPackage = readJsonFile(pkgPath);
+    console.log('read target package from %s', pkgPath);
+  } else {
+    console.log('could not find package under path %s', pkgPath);
+    return;
+  }
+
+  var config = targetPackage.config['pre-git'];
+  if (hasCommitMessageDependencies(targetPackage) &&
+    commitMessageCommandIsEmpty(targetPackage)) {
+    console.log('setting up commit message helpers');
+
+    config[hookLabel] = 'validate-commit-msg';
+
+    if (!targetPackage.scripts) {
+      targetPackage.scripts = {};
+    }
+    targetPackage.scripts.commit = 'git-cz';
+
+    if (!targetPackage.czConfig) {
+      targetPackage.czConfig = {
+        path: 'node_modules/cz-conventional-changelog'
+      };
+    }
+
+    writeJsonToFile(pkgPath, targetPackage);
+  }
+
+}());
+
 function installHook(name) {
   console.log('installing hook %s', name);
 
