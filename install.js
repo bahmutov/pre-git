@@ -147,6 +147,13 @@ function commitMessageCommandIsEmpty(pkg) {
   return isEmpty(pkg.config['pre-git']['commit-msg']);
 }
 
+var commitBinPath = './node_modules/pre-git/node_modules/commitizen/bin/git-cz';
+function missingCommitScript(pkg) {
+  return !pkg.scripts ||
+    !pkg.scripts.commit ||
+    pkg.scripts.commit !== commitBinPath;
+}
+
 (function setupCommitMessageHelpers() {
   var hookLabel = 'commit-msg';
 
@@ -160,23 +167,28 @@ function commitMessageCommandIsEmpty(pkg) {
     return;
   }
 
+  var changedPackage;
   var config = targetPackage.config['pre-git'];
   if (commitMessageCommandIsEmpty(targetPackage)) {
     console.log('setting up commit message helpers');
 
     config[hookLabel] = 'validate-commit-msg';
+    changedPackage = true;
+  }
 
+  if (missingCommitScript(targetPackage)) {
     if (!targetPackage.scripts) {
       targetPackage.scripts = {};
     }
-    targetPackage.scripts.commit = './node_modules/pre-git/node_modules/commitizen/bin/git-cz';
+    targetPackage.scripts.commit = commitBinPath;
+    targetPackage.czConfig = {
+      path: 'node_modules/pre-git/node_modules/cz-conventional-changelog'
+    };
 
-    if (!targetPackage.czConfig) {
-      targetPackage.czConfig = {
-        path: 'node_modules/pre-git/node_modules/cz-conventional-changelog'
-      };
-    }
+    changedPackage = true;
+  }
 
+  if (changedPackage) {
     writeJsonToFile(pkgPath, targetPackage);
   }
 
