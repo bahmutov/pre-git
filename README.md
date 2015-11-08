@@ -51,6 +51,9 @@ object.
 }
 ```
 
+If there are older settings like `pre-commit`, etc, you will have to move
+them to the `config > pre-git` object manually.
+
 Related project: [post-merge-make](https://github.com/bahmutov/post-merge-make)
 runs `make post-merge` after pull or merge.
 

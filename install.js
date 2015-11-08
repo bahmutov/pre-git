@@ -5,10 +5,22 @@ console.log('%s %s in %s', pkg.name, pkg.version, process.cwd());
 
 var path = require('path');
 var join = path.join;
+var fs = require('fs');
+var read = fs.readFileSync;
+var write = fs.writeFileSync;
 
 var isForced = process.argv.some(function (argument) {
   return argument === '-f' || argument === '--force';
 });
+
+function readJsonFile(filename) {
+  return JSON.parse(read(filename));
+}
+
+function writeJsonToFile(filename, object) {
+  console.log('saving updated files %s', filename);
+  write(filename, JSON.stringify(object, null, 2));
+}
 
 (function avoidSelfInstall() {
   if (isForced) {
@@ -32,10 +44,6 @@ var isForced = process.argv.some(function (argument) {
     process.exit(0);
   }
 }());
-
-var fs = require('fs');
-var read = fs.readFileSync;
-var write = fs.writeFileSync;
 
 //
 // Compatiblity with older node.js.
@@ -99,7 +107,7 @@ if (existsSync(sourceHooksFolders)) {
   var pkgPath = join(root, 'package.json'),
     targetPackage;
   if (existsSync(pkgPath)) {
-    targetPackage = JSON.parse(read(pkgPath));
+    targetPackage = readJsonFile(pkgPath);
     console.log('read target package from %s', pkgPath);
   } else {
     console.log('could not find package under path %s', pkgPath);
@@ -125,8 +133,7 @@ if (existsSync(sourceHooksFolders)) {
   });
 
   if (changedPackage) {
-    console.log('saving updated files %s', pkgPath);
-    write(pkgPath, JSON.stringify(targetPackage, null, 2));
+    writeJsonToFile(pkgPath, targetPackage);
   }
 
 }(hookScripts));
