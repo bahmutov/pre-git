@@ -54,6 +54,10 @@ var existsSync = fs.existsSync || path.existsSync;
 // The root of repository.
 //
 var root = path.resolve(__dirname, '../..');
+function getRootPackagePath() {
+  return join(root, 'package.json');
+}
+
 var exec = require('shelljs').exec;
 var result = exec('git rev-parse --show-toplevel');
 if (result.code === 0) {
@@ -104,7 +108,7 @@ if (existsSync(sourceHooksFolders)) {
 }
 
 (function addPackageSteps(hookNames) {
-  var pkgPath = join(root, 'package.json'),
+  var pkgPath = getRootPackagePath(),
     targetPackage;
   if (existsSync(pkgPath)) {
     targetPackage = readJsonFile(pkgPath);
@@ -157,7 +161,7 @@ function missingCommitScript(pkg) {
 (function setupCommitMessageHelpers() {
   var hookLabel = 'commit-msg';
 
-  var pkgPath = join(root, 'package.json'),
+  var pkgPath = getRootPackagePath(),
     targetPackage;
   if (existsSync(pkgPath)) {
     targetPackage = readJsonFile(pkgPath);

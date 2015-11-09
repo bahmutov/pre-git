@@ -7,6 +7,10 @@ var label = 'pre-commit:';
 
 var gitPrefix = process.env.GIT_PREFIX || '';
 
+function isAtRoot(dir) {
+  return dir === '/';
+}
+
 function findPackage(dir) {
   if (! dir) {
     dir = path.join(process.cwd(), gitPrefix);
@@ -18,13 +22,14 @@ function findPackage(dir) {
     return path.join(dir, 'package.json');
   }
 
-  if (dir === '/') {
-    throw new Error('Could not find package.json up from: ' + dir);
+  if (isAtRoot(dir)) {
+    throw new Error('Could not find package.json starting from ' + process.cwd());
   }
   else if (!dir || dir === '.') {
     throw new Error('Cannot find package.json from unspecified directory');
   }
 
+  // go to the parent folder and look there
   return findPackage(path.dirname(dir));
 }
 
@@ -38,7 +43,7 @@ function getProjRoot(cb) {
       return process.exit(1);
     }
     var gitRoot = output.trim();
-    var projRoot = path.join(gitRoot,gitPrefix);
+    var projRoot = path.join(gitRoot, gitPrefix);
     var pkg;
     try {
       var file = findPackage();
@@ -68,8 +73,9 @@ function failure(err) {
   if (err.ran) {
     console.error(label, 'The "' + err.ran + '" script failed.');
   } else {
+    console.error(label, 'An Error was thrown');
     var stack = err.stack.split('\n');
-    console.error(label, 'An Error was thrown: ' + stack.shift());
+    console.error(stack.shift());
     console.error(label);
     stack.forEach(function trace(line) {
       console.error(label, '   ' + line.trim());
@@ -80,7 +86,7 @@ function failure(err) {
   console.error(label);
   console.error(label, '   git commit -n (--no-verify)');
   console.error(label);
-  console.error(label, 'But this is not adviced as your tests are obviously failing.');
+  console.error(label, 'But this is not advised as your tests are obviously failing.');
   console.error('');
   process.exit(1);
 }
