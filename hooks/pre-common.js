@@ -11,26 +11,38 @@ function isAtRoot(dir) {
   return dir === '/';
 }
 
+function isPackageAmongFiles(dir) {
+  var files = fs.readdirSync(dir);
+  return files.indexOf('package.json') >= 0;
+}
+
+function verifyValidDirectory(dir) {
+  var cwd = process.cwd();
+  if (isAtRoot(dir)) {
+    throw new Error('Could not find package.json starting from ' + cwd);
+  } else if (!dir || dir === '.') {
+    throw new Error('Cannot find package.json from unspecified directory via ' + cwd);
+  }
+}
+
 function findPackage(dir) {
+  var cwd = process.cwd();
   if (! dir) {
-    dir = path.join(process.cwd(), gitPrefix);
+    dir = path.join(cwd, gitPrefix);
   }
 
-  var files = fs.readdirSync(dir);
-
-  if (files.indexOf('package.json') >= 0) {
+  if (isPackageAmongFiles(dir)) {
     return path.join(dir, 'package.json');
   }
 
-  if (isAtRoot(dir)) {
-    throw new Error('Could not find package.json starting from ' + process.cwd());
-  }
-  else if (!dir || dir === '.') {
-    throw new Error('Cannot find package.json from unspecified directory');
-  }
+  verifyValidDirectory(dir);
 
   // go to the parent folder and look there
-  return findPackage(path.dirname(dir));
+  var parentPath = path.dirname(dir);
+  if (parentPath === dir) {
+    throw new Error('Cannot got up the folder to find package.json from ' + cwd);
+  }
+  return findPackage(parentPath);
 }
 
 function getProjRoot(cb) {
