@@ -117,6 +117,9 @@ added empty command list for hook post-merge
 saving updated files /Users/kensho/git/test-git-hooks/package.json
 ```
 
+I am using a small project [test-pre-git](https://github.com/bahmutov/test-pre-git)
+as a test playground for these hooks.
+
 ### Small print
 
 Author: Gleb Bahmutov &copy; 2014
