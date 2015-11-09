@@ -158,6 +158,16 @@ function missingCommitScript(pkg) {
     pkg.scripts.commit !== commitBinPath;
 }
 
+function setupMessageValidation(pkg) {
+  if (!pkg.scripts) {
+    pkg.scripts = {};
+  }
+  pkg.scripts.commit = commitBinPath;
+  pkg.czConfig = {
+    path: 'node_modules/pre-git/node_modules/cz-conventional-changelog'
+  };
+}
+
 (function setupCommitMessageHelpers() {
   var hookLabel = 'commit-msg';
 
@@ -181,14 +191,7 @@ function missingCommitScript(pkg) {
   }
 
   if (missingCommitScript(targetPackage)) {
-    if (!targetPackage.scripts) {
-      targetPackage.scripts = {};
-    }
-    targetPackage.scripts.commit = commitBinPath;
-    targetPackage.czConfig = {
-      path: 'node_modules/pre-git/node_modules/cz-conventional-changelog'
-    };
-
+    setupMessageValidation(targetPackage);
     changedPackage = true;
   }
 
