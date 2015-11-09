@@ -93,11 +93,13 @@ by removing the below command.
 }
 ```
 
-To always form a valid commit message, the script `npm run commit`
-has been setup automatically. See details in the documentation for
-[commitizen](https://www.npmjs.com/package/commitizen) project and
-the tutorial
-[video](https://egghead.io/lessons/javascript-how-to-write-a-javascript-library-writing-conventional-commits-with-commitizen).
+When you run `git commit -m "message ..."` the hook will enforce the default style
+`type(scope): message ...`. To better form the message, there is a CLI wizard
+installed based on [commitizen](https://www.npmjs.com/package/commitizen) project,
+very well shown in the tutorial
+[video](https://egghead.io/lessons/javascript-how-to-write-a-javascript-library-writing-conventional-commits-with-commitizen). To start, stage the files first and then execute
+
+    npm run commit
 
 ## Development
 
