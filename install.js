@@ -153,7 +153,8 @@ function commitMessageCommandIsEmpty(pkg) {
 
 function missingCommitScript(pkg) {
   return !pkg.scripts ||
-    !pkg.scripts.commit;
+    !pkg.scripts.commit ||
+    /node_modules\/commitizen/.test(pkg.scripts.commit);
 }
 
 function setupMessageValidation(pkg) {
