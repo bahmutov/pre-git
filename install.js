@@ -151,18 +151,16 @@ function commitMessageCommandIsEmpty(pkg) {
   return isEmpty(pkg.config['pre-git']['commit-msg']);
 }
 
-var commitBinPath = './node_modules/pre-git/node_modules/commitizen/bin/git-cz';
 function missingCommitScript(pkg) {
   return !pkg.scripts ||
-    !pkg.scripts.commit ||
-    pkg.scripts.commit !== commitBinPath;
+    !pkg.scripts.commit;
 }
 
 function setupMessageValidation(pkg) {
   if (!pkg.scripts) {
     pkg.scripts = {};
   }
-  pkg.scripts.commit = commitBinPath;
+  pkg.scripts.commit = 'commit-wizard';
   pkg.czConfig = {
     path: 'node_modules/pre-git/node_modules/cz-conventional-changelog'
   };
