@@ -1,7 +1,7 @@
 {
   "name": "pre-git",
   "description": "Automatically install pre-commit / pre-git hooks for your npm modules.",
-  "version": "1.2.10",
+  "version": "1.2.11",
   "author": "Arnout Kazemier <opensource@observe.it>",
   "bin": {
     "commit-wizard": "./bin/commit-wizard"
