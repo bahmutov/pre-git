@@ -9,6 +9,11 @@ var fs = require('fs');
 var read = fs.readFileSync;
 var write = fs.writeFileSync;
 
+//
+// Compatiblity with older node.js.
+//
+var existsSync = fs.existsSync || path.existsSync;
+
 var isForced = process.argv.some(function (argument) {
   return argument === '-f' || argument === '--force';
 });
@@ -44,11 +49,6 @@ function writeJsonToFile(filename, object) {
     process.exit(0);
   }
 }());
-
-//
-// Compatiblity with older node.js.
-//
-var existsSync = fs.existsSync || path.existsSync;
 
 //
 // The root of repository.
@@ -157,13 +157,31 @@ function missingCommitScript(pkg) {
     /node_modules\/commitizen/.test(pkg.scripts.commit);
 }
 
+function firstExisting() {
+  var paths = Array.prototype.slice.call(arguments, 0);
+  var found;
+  paths.some(function (filePath) {
+    if (existsSync(filePath)) {
+      found = filePath;
+      return true;
+    }
+  });
+  return found;
+}
+
 function setupMessageValidation(pkg) {
   if (!pkg.scripts) {
     pkg.scripts = {};
   }
+
+  var changeLogModulePath = firstExisting(
+    'node_modules/pre-git/node_modules/cz-conventional-changelog',
+    'node_modules/cz-conventional-changelog'
+  );
+
   pkg.scripts.commit = 'commit-wizard';
   pkg.czConfig = {
-    path: 'node_modules/pre-git/node_modules/cz-conventional-changelog'
+    path: changeLogModulePath
   };
 }
 
