@@ -5,6 +5,7 @@
 var run = require(__dirname + '/pre-common');
 var label = 'commit-msg';
 var read = require('fs').readFileSync;
+var exists = require('fs').existsSync;
 var join = require('path').join;
 var includedCommitMessageValidator = 'validate-commit-msg';
 
@@ -16,6 +17,12 @@ function loadPackage(folder) {
 function loadValidateCommitMessage(folder) {
   var packagePath = join(folder,
     'node_modules/pre-git/node_modules', includedCommitMessageValidator);
+  if (!exists(packagePath)) {
+    packagePath = join(folder, 'node_modules', includedCommitMessageValidator);
+  }
+  if (!exists(packagePath)) {
+    throw new Error('Cannot find validation module ' + includedCommitMessageValidator);
+  }
   var isValid = require(packagePath).validateMessage;
   if (typeof isValid !== 'function') {
     throw new Error('something changed in ' + includedCommitMessageValidator + ' API');
