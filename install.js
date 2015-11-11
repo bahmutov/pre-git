@@ -157,12 +157,13 @@ function missingCommitScript(pkg) {
     /node_modules\/commitizen/.test(pkg.scripts.commit);
 }
 
-function firstExisting() {
-  var paths = Array.prototype.slice.call(arguments, 0);
+function firstExisting(paths) {
   var found;
   paths.some(function (filePath) {
+    console.log('checking %s', filePath);
     if (existsSync(filePath)) {
       found = filePath;
+      console.log('found existing %s', filePath);
       return true;
     }
   });
@@ -178,7 +179,7 @@ function setupMessageValidation(pkg) {
     'node_modules/pre-git/node_modules/cz-conventional-changelog',
     'node_modules/cz-conventional-changelog'
   ];
-  var changeLogModulePath = firstExisting.apply(null, possiblePaths);
+  var changeLogModulePath = firstExisting(possiblePaths);
   if (!changeLogModulePath) {
     throw new Error('Cannot find changelog module among ' +
       JSON.stringify(possiblePaths));
