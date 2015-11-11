@@ -174,10 +174,15 @@ function setupMessageValidation(pkg) {
     pkg.scripts = {};
   }
 
-  var changeLogModulePath = firstExisting(
+  var possiblePaths = [
     'node_modules/pre-git/node_modules/cz-conventional-changelog',
     'node_modules/cz-conventional-changelog'
-  );
+  ];
+  var changeLogModulePath = firstExisting.apply(null, possiblePaths);
+  if (!changeLogModulePath) {
+    throw new Error('Cannot find changelog module among ' +
+      JSON.stringify(possiblePaths));
+  }
 
   pkg.scripts.commit = 'commit-wizard';
   pkg.czConfig = {
