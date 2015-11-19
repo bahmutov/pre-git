@@ -2,11 +2,11 @@
 
 'use strict';
 
-var run = require(__dirname + '/pre-common');
 var label = 'commit-msg';
 var read = require('fs').readFileSync;
 var exists = require('fs').existsSync;
 var join = require('path').join;
+var run = require(join(__dirname, 'pre-common'));
 var includedCommitMessageValidator = 'validate-commit-msg';
 
 function loadPackage(folder) {
