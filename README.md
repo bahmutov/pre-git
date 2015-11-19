@@ -101,6 +101,18 @@ very well shown in the tutorial
 
     npm run commit
 
+You can specify your own CLI message wizard adapter module name, by default this is equivalent to
+
+```json
+"config": {
+  "pre-git": {
+    "wizard": "cz-conventional-changelog"
+  }
+}
+```
+
+The module `cz-conventional-changelog` is included as `pre-git` dependency.
+
 ## Development
 
 In order to locally test this package, from another git repo execute the install script
