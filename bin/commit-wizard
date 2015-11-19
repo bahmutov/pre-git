@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-// require('commitizen/bin/git-cz');
 console.log('running commit-wizard in folder %s', process.cwd());
 var join = require('path').join;
 var pkgPath = join(process.cwd(), 'package.json');
@@ -16,8 +15,8 @@ var wizard = require(wizardName);
 var inquirer = require('inquirer');
 
 function gotCommitMessage(commitMessage) {
-  console.log('got commit message');
-  console.log(commitMessage);
+  var gitCommit = require('ggit').commit;
+  gitCommit(commitMessage).done();
 }
 
 wizard.prompter(inquirer, gotCommitMessage);
