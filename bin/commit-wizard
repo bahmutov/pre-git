@@ -1,3 +1,24 @@
 #!/usr/bin/env node
 
-require('commitizen/bin/git-cz');
+// require('commitizen/bin/git-cz');
+console.log('running commit-wizard in folder %s', process.cwd());
+var join = require('path').join;
+var pkgPath = join(process.cwd(), 'package.json');
+var pkg = require(pkgPath);
+
+var wizardName = pkg.config &&
+  pkg.config['pre-git'] &&
+  pkg.config['pre-git'].wizard ||
+  'cz-conventional-changelog';
+console.log('using commit message wizard %s', wizardName);
+
+var wizard = require(wizardName);
+var inquirer = require('inquirer');
+
+function gotCommitMessage(commitMessage) {
+  console.log('got commit message');
+  console.log(commitMessage);
+}
+
+wizard.prompter(inquirer, gotCommitMessage);
+
