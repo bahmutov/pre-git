@@ -16,7 +16,11 @@ var inquirer = require('inquirer');
 
 function gotCommitMessage(commitMessage) {
   var gitCommit = require('ggit').commit;
-  gitCommit(commitMessage).done();
+  gitCommit(commitMessage)
+    .then(
+      console.log.bind(console),
+      console.error.bind(console))
+    .done();
 }
 
 wizard.prompter(inquirer, gotCommitMessage);
