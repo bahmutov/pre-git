@@ -60,6 +60,7 @@ function getProjRoot(cb) {
     try {
       var file = findPackage();
       pkg = require(file);
+      projRoot = path.dirname(file);
     }
     catch (e) {
       return cb(gitRoot);
