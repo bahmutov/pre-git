@@ -1,7 +1,7 @@
 {
   "name": "pre-git",
   "description": "Automatically install pre-commit / pre-git hooks for your npm modules.",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "author": "Arnout Kazemier <opensource@observe.it>",
   "bin": {
     "commit-wizard": "./bin/commit-wizard"
@@ -35,6 +35,12 @@
   "engines": {
     "node": "> 0.8.*"
   },
+  "files": [
+    "bin",
+    "install.js",
+    "hooks",
+    "CHANGELOG.md"
+  ],
   "homepage": "https://github.com/bahmutov/pre-git",
   "keywords": [
     "git",
@@ -53,8 +59,10 @@
     "url": "git://github.com/bahmutov/pre-git.git"
   },
   "scripts": {
+    "build": "grunt",
     "postinstall": "node install",
     "test": "grunt",
-    "issues": "git-issues"
+    "issues": "git-issues",
+    "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";"
   }
 }
