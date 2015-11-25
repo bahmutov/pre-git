@@ -160,11 +160,9 @@ function runner(root, run) {
         env: process.env
       };
 
-      var args = task.split(' ');
-      var cmd = args.shift();
-      console.log('executing task "' + cmd + '" with args "' + args + '"');
+      console.log('executing task "' + task + '"');
 
-      var proc = child.spawn(cmd, args, options);
+      var proc = child.exec(task, options);
       proc.stdout.on('data', process.stdout.write.bind(process.stdout));
       proc.stderr.on('data', process.stderr.write.bind(process.stderr));
       proc.on('close', function onTaskFinished(code) {
