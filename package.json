@@ -1,7 +1,7 @@
 {
   "name": "pre-git",
   "description": "Automatically install pre-commit / pre-git hooks for your npm modules.",
-  "version": "1.4.0",
+  "version": "0.0.0-semantic-release",
   "author": "Arnout Kazemier <opensource@observe.it>",
   "bin": {
     "commit-wizard": "./bin/commit-wizard"
@@ -30,7 +30,8 @@
     "grunt-contrib-jshint": "0.10.0",
     "grunt-deps-ok": "0.1.8",
     "grunt-nice-package": "0.9.2",
-    "matchdep": "0.3.0"
+    "matchdep": "0.3.0",
+    "semantic-release": "4.3.5"
   },
   "engines": {
     "node": "> 0.8.*"
@@ -56,13 +57,14 @@
   "pre-commit": "grunt",
   "repository": {
     "type": "git",
-    "url": "git://github.com/bahmutov/pre-git.git"
+    "url": "https://github.com/bahmutov/pre-git.git"
   },
   "scripts": {
     "build": "grunt",
     "postinstall": "node install",
     "test": "grunt",
     "issues": "git-issues",
-    "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";"
+    "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   }
 }

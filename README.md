@@ -9,6 +9,11 @@
 [![dependencies][pre-git-dependencies-image]][pre-git-dependencies-url]
 [![devdependencies][pre-git-devdependencies-image]][pre-git-devdependencies-url]
 [![endorse][endorse-image]][endorse-url]
+[![semantic-release][semantic-image] ][semantic-url]
+[![manpm](https://img.shields.io/badge/manpm-%E2%9C%93-3399ff.svg)](https://github.com/bahmutov/manpm)
+
+[semantic-image]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
+[semantic-url]: https://github.com/semantic-release/semantic-release
 
 Runs pre-commit and pre-push Git hooks to
 [avoid breaking the local master branch](http://glebbahmutov.com/blog/never-break-master-by-accident/)
