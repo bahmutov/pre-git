@@ -63,7 +63,14 @@
   "config": {
     "pre-git": {
       "demo": [
-        "echo this is a pre-commit command"
+        "echo this is command 1",
+        "echo this is command 2",
+        "echo this is command 3"
+      ],
+      "demo-error": [
+        "echo this is command 1",
+        "echo \"this is failing command 2\" && exit -1",
+        "echo this is command 3"
       ],
       "pre-commit": [
         "npm run build"

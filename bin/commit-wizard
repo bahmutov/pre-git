@@ -5,6 +5,7 @@ const join = require('path').join;
 const pkgPath = join(process.cwd(), 'package.json');
 const pkg = require(pkgPath);
 const check = require('check-more-types');
+const Promise = require('bluebird');
 
 const label = 'pre-commit';
 
@@ -30,28 +31,49 @@ function ok() {
   return true;
 }
 
+var start = Promise.resolve(true);
+
 if (hasPreCommitCommands(config)) {
   console.log('package %s has pre-commit commands', pkg.name);
   console.log(getPreCommitCommands(config).join(', '));
-  const runner = require('..');
-  runner(label, ok);
+  const run = require('..');
+
+  start = start
+    .then(() => run(label, ok))
+    .then(() => console.log('finished pre-commit check'));
 }
 
-const wizardName = config && config.wizard || 'cz-conventional-changelog';
-console.log('using commit message wizard %s', wizardName);
+function guideUser() {
+  const wizardName = config && config.wizard || 'cz-conventional-changelog';
+  console.log('using commit message wizard %s', wizardName);
 
-const wizard = require(wizardName);
-const inquirer = require('inquirer');
+  const wizard = require(wizardName);
+  const inquirer = require('inquirer');
 
-function gotCommitMessage(commitMessage) {
+  return new Promise(function (resolve, reject) {
+    wizard.prompter(inquirer, (message) => {
+      if (!message) {
+        return reject(new Error('No commit message'));
+      }
+      return resolve(message);
+    });
+  });
+}
+
+function commitWithMessage(commitMessage) {
   const gitCommit = require('ggit').commit;
-  gitCommit(commitMessage)
-    .then(
-      console.log.bind(console),
-      console.error.bind(console)
-    )
-    .done();
+  return gitCommit(commitMessage)
+    .then(console.log.bind(console));
 }
 
-wizard.prompter(inquirer, gotCommitMessage);
+start
+  .then(guideUser)
+  .then((message) => message.trim())
+  .tap((message) => console.log(message))
+  .then(commitWithMessage)
+  .catch((err) => {
+    console.error(err.message);
+    process.exit(-1);
+  })
+  .done();
 

@@ -146,55 +146,24 @@ function getTasks(root, label) {
   return run;
 }
 
-//
-// Behold, a lazy man's async flow control library;
-//
-function runner(root, run) {
-  (function taskRunner(done) {
-    (function next(err, task) {
-      //
-      // Bailout when we received an error. This will make sure that we don't
-      // run the rest of the tasks.
-      //
-      if (err) {
-        err = new Error(err.message);
-        err.ran = task;
-        return done(err);
+function runTask(root, task) {
+  console.log('executing task "' + task + '"');
+
+  var options = {
+    cwd: root,
+    env: process.env
+  };
+
+  return new Promise(function (resolve, reject) {
+    var proc = child.exec(task, options);
+    proc.stdout.on('data', process.stdout.write.bind(process.stdout));
+    proc.stderr.on('data', process.stderr.write.bind(process.stderr));
+    proc.on('close', function onTaskFinished(code) {
+      if (code > 0) {
+        return reject(new Error(task + ' closed with code ' + code));
       }
-
-      // Check if we have tasks to be executed or if we are complete.
-      task = run.shift();
-      if (!task) {
-        return done();
-      }
-
-      var options = {
-        cwd: root,
-        env: process.env
-      };
-
-      console.log('executing task "' + task + '"');
-
-      var proc = child.exec(task, options);
-      proc.stdout.on('data', process.stdout.write.bind(process.stdout));
-      proc.stderr.on('data', process.stderr.write.bind(process.stderr));
-      proc.on('close', function onTaskFinished(code) {
-        if (code > 0) {
-          return next(new Error(task + ' closed with code ' + code), task);
-        }
-        next(undefined, task);
-      });
-
-    })();
-  })(function ready(err) {
-    if (err) {
-      return failure(err);
-    }
-
-    //
-    // Congratulation young padawan, all hooks passed.
-    //
-    process.exit(0);
+      return resolve('task "' + task + '" passed');
+    });
   });
 }
 
@@ -230,9 +199,11 @@ function runAtRoot(root, label, check) {
       return resolve('Nothing to do for ' + label);
     }
 
-    check(function () {
-      runner(root, tasks);
-    }, root);
+    const runTaskAt = runTask.bind(null, root);
+
+    return resolve(
+      Promise.each(tasks, runTaskAt)
+    );
   });
 }
 
@@ -242,14 +213,17 @@ function run(hookLabel, check) {
   checkInputs(hookLabel, check);
   label = hookLabel;
 
+  // TODO should the failure action be outside?
   return getProjRoot()
     .tap((root) => log('running', hookLabel, 'in', root))
-    .then((root) => runAtRoot(root, hookLabel, check));
+    .then((root) => runAtRoot(root, hookLabel, check))
+    .catch(failure);
 }
 
 module.exports = run;
 
 if (!module.parent) {
-  run('demo', () => true)
+  run('demo-error', () => true)
+    .then(() => log('finished all tasks'))
     .done();
 }
