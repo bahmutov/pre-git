@@ -169,16 +169,13 @@ function runTask(root, task) {
   });
 }
 
-function checkInputs(label, check) {
+function checkInputs(label) {
   if (typeof label !== 'string' || !label) {
     throw new Error('Expected string label (pre-commit, pre-push)');
   }
-  if (typeof check !== 'function') {
-    throw new Error('Expected check changes function');
-  }
 }
 
-function runAtRoot(root, label, check) {
+function runAtRoot(root, label) {
   log('running %s at root %s', label, root);
 
   return new Promise(function (resolve, reject) {
@@ -188,8 +185,6 @@ function runAtRoot(root, label, check) {
       console.error('');
       return reject(new Error('Failed to find git root'));
     }
-
-    checkInputs(label, check);
 
     var tasks = getTasks(root, label);
     log('tasks for %s', label, tasks);
@@ -209,16 +204,16 @@ function runAtRoot(root, label, check) {
   });
 }
 
-function run(hookLabel, check) {
+function run(hookLabel) {
   log('running', hookLabel);
+  checkInputs(hookLabel);
 
-  checkInputs(hookLabel, check);
   label = hookLabel;
 
   // TODO should the failure action be outside?
   return getProjRoot()
     .tap((root) => log('running', hookLabel, 'in', root))
-    .then((root) => runAtRoot(root, hookLabel, check))
+    .then((root) => runAtRoot(root, hookLabel))
     .catch(failure);
 }
 

@@ -28,10 +28,6 @@ function hasPreCommitCommands(config) {
   return check.unemptyArray(getPreCommitCommands(config));
 }
 
-function ok() {
-  return true;
-}
-
 var start = Promise.resolve(true);
 
 if (hasPreCommitCommands(config)) {
@@ -40,7 +36,7 @@ if (hasPreCommitCommands(config)) {
   const run = require('..');
 
   start = start
-    .then(() => run(label, ok))
+    .then(() => run(label))
     .then(() => console.log('finished pre-commit check'));
 }
 
