@@ -115,6 +115,8 @@ function failure(err) {
 }
 
 function getTasks(root, label) {
+  const packageName = 'pre-git';
+
   var pkg, run = [];
 
   //
@@ -129,14 +131,15 @@ function getTasks(root, label) {
     return failure(e);
   }
 
+  log('inspecting package %s for tasks %s', file, label);
   //
   // If there's a `pre-commit` or other properties in the package.json
   // we should use that array.
   //
   run = pkg[label] ||
     pkg.config &&
-    pkg.config['pre-git'] &&
-    pkg.config['pre-git'][label];
+    pkg.config[packageName] &&
+    pkg.config[packageName][label];
   if (typeof run === 'string') {
     run = [run];
   }
@@ -205,6 +208,8 @@ function checkInputs(label, check) {
 }
 
 function runAtRoot(root, label, check) {
+  log('running %s at root %s', label, root);
+
   return new Promise(function (resolve, reject) {
     if (!root) {
       console.error('');
@@ -216,6 +221,8 @@ function runAtRoot(root, label, check) {
     checkInputs(label, check);
 
     var tasks = getTasks(root, label);
+    log('tasks for %s', label, tasks);
+
     if (!tasks || !tasks.length) {
       console.log('');
       console.log(label, 'Nothing the hook needs to do. Bailing out.');

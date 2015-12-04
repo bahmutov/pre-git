@@ -56,10 +56,19 @@
   ],
   "license": "MIT",
   "main": "hooks/pre-common.js",
-  "pre-commit": "grunt",
   "repository": {
     "type": "git",
     "url": "https://github.com/bahmutov/pre-git.git"
+  },
+  "config": {
+    "pre-git": {
+      "demo": [
+        "echo this is a pre-commit command"
+      ],
+      "pre-commit": [
+        "npm run build"
+      ]
+    }
   },
   "scripts": {
     "build": "grunt",
