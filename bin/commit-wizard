@@ -1,25 +1,47 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --harmony
 
 console.log('running commit-wizard in folder %s', process.cwd());
-var join = require('path').join;
-var pkgPath = join(process.cwd(), 'package.json');
-var pkg = require(pkgPath);
+const join = require('path').join;
+const pkgPath = join(process.cwd(), 'package.json');
+const pkg = require(pkgPath);
+const check = require('check-more-types');
 
-var wizardName = pkg.config &&
-  pkg.config['pre-git'] &&
-  pkg.config['pre-git'].wizard ||
-  'cz-conventional-changelog';
+const config = pkg.config &&
+  pkg.config['pre-git'];
+
+function getPreCommitCommands(config) {
+  if (!config) {
+    return;
+  }
+  const preCommit = config['pre-commit'];
+  if (check.unemptyString(preCommit)) {
+    return [preCommit];
+  }
+  return preCommit;
+}
+
+function hasPreCommitCommands(config) {
+  return check.unemptyArray(getPreCommitCommands(config));
+}
+
+if (hasPreCommitCommands(config)) {
+  console.log('package %s has pre-commit commands', pkg.name);
+  console.log(getPreCommitCommands(config).join(', '));
+}
+
+const wizardName = config && config.wizard || 'cz-conventional-changelog';
 console.log('using commit message wizard %s', wizardName);
 
-var wizard = require(wizardName);
-var inquirer = require('inquirer');
+const wizard = require(wizardName);
+const inquirer = require('inquirer');
 
 function gotCommitMessage(commitMessage) {
-  var gitCommit = require('ggit').commit;
+  const gitCommit = require('ggit').commit;
   gitCommit(commitMessage)
     .then(
       console.log.bind(console),
-      console.error.bind(console))
+      console.error.bind(console)
+    )
     .done();
 }
 

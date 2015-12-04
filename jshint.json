@@ -3,6 +3,6 @@
     "jshintrc": ".jshintrc"
   },
   "default": {
-    "src": [ "*.js", "hooks/*.js" ]
+    "src": [ "*.js", "hooks/*.js", "bin/commit-wizard" ]
   }
 }
