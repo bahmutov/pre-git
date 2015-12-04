@@ -66,13 +66,17 @@ function commitWithMessage(commitMessage) {
     .then(console.log.bind(console));
 }
 
+function errorMessage(err) {
+  return err instanceof Error ? err.message : err;
+}
+
 start
   .then(guideUser)
   .then((message) => message.trim())
   .tap((message) => console.log(message))
   .then(commitWithMessage)
   .catch((err) => {
-    console.error(err.message);
+    console.error(errorMessage(err));
     process.exit(-1);
   })
   .done();

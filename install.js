@@ -204,7 +204,7 @@ function installHook(name) {
   //
   // Our own hook runner.
   //
-  var fullname = join(sourceHooksFolders, name + '.js');
+  var fullname = join(sourceHooksFolders, name);
   if (!existsSync(fullname)) {
     throw new Error('Cannot find hook file to copy ' + fullname);
   }

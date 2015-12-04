@@ -1,13 +1,13 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --harmony
 
 'use strict';
 
 var run = require(__dirname + '/pre-common');
-var label = 'post-merge';
+var label = 'post-commit';
 
-function postMerge(cb) {
+function postCommit(cb) {
   console.log(label, 'hook');
   setTimeout(cb, 0);
 }
 
-run(label, postMerge);
+run(label, postCommit);
