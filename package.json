@@ -60,7 +60,7 @@
   },
   "files": [
     "bin",
-    "install.js",
+    "src",
     "hooks",
     "CHANGELOG.md"
   ],
@@ -75,7 +75,7 @@
     "hooks"
   ],
   "license": "MIT",
-  "main": "hooks/pre-common.js",
+  "main": "src/pre-git.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/bahmutov/pre-git.git"
@@ -87,6 +87,6 @@
     "issues": "git-issues",
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "demo": "DEBUG=pre-git node --harmony hooks/pre-common.js"
+    "demo": "DEBUG=pre-git node --harmony src/pre-git.js"
   }
 }
