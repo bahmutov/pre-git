@@ -2,6 +2,8 @@
 
 'use strict';
 
+const log = require('debug')('pre-git');
+
 /* jshint -W079 */
 const Promise = require('bluebird');
 
@@ -9,6 +11,7 @@ var child = require('child_process');
 var label = 'pre-commit';
 
 function isForced() {
+  log(label, 'arguments', process.argv);
   return process.argv.some(function (arg) {
     return arg === '-f' || arg === '--force';
   });

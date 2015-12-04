@@ -34,9 +34,10 @@ if (hasPreCommitCommands(config)) {
   console.log('package %s has pre-commit commands', pkg.name);
   console.log(getPreCommitCommands(config).join(', '));
   const run = require('..');
+  const runLabeled = run.bind(null, label);
 
   start = start
-    .then(() => run(label))
+    .then(runLabeled)
     .then(() => console.log('finished pre-commit check'));
 }
 
