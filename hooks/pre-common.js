@@ -3,6 +3,10 @@
 var child = require('child_process');
 var path = require('path');
 var fs = require('fs');
+var log = require('debug')('pre-git');
+/* jshint -W079 */
+var Promise = require('bluebird');
+
 var label = 'pre-commit:';
 
 var gitPrefix = process.env.GIT_PREFIX || '';
@@ -45,30 +49,36 @@ function findPackage(dir) {
   return findPackage(parentPath);
 }
 
-function getProjRoot(cb) {
-  child.exec('git rev-parse --show-toplevel', function onRoot(err, output) {
-    if (err) {
-      console.error('');
-      console.error(label, 'Failed to find git root. Cannot run the tests.');
-      console.error(err);
-      console.error('');
-      return process.exit(1);
-    }
-    var gitRoot = output.trim();
-    var projRoot = path.join(gitRoot, gitPrefix);
-    var pkg;
-    try {
-      var file = findPackage();
-      pkg = require(file);
-      projRoot = path.dirname(file);
-    }
-    catch (e) {
-      return cb(gitRoot);
-    }
-    if (pkg['pre-git-cwd']) {
-      projRoot = path.resolve(path.join(gitRoot, pkg['pre-git-cwd']));
-    }
-    cb(projRoot);
+// returns a promise
+// Can we use ggit for this?
+function getProjRoot() {
+  return new Promise(function (resolve, reject) {
+    child.exec('git rev-parse --show-toplevel', function onRoot(err, output) {
+      if (err) {
+        console.error('');
+        console.error(label, 'Failed to find git root. Cannot run the tests.');
+        console.error(err);
+        console.error('');
+        return reject(new Error('Failed to find git in the project root'));
+      }
+
+      var gitRoot = output.trim();
+      var projRoot = path.join(gitRoot, gitPrefix);
+      var pkg;
+      try {
+        var file = findPackage();
+        pkg = require(file);
+        projRoot = path.dirname(file);
+      }
+      catch (e) {
+        return resolve(gitRoot);
+      }
+
+      if (pkg['pre-git-cwd']) {
+        projRoot = path.resolve(path.join(gitRoot, pkg['pre-git-cwd']));
+      }
+      return resolve(projRoot);
+    });
   });
 }
 
@@ -195,34 +205,44 @@ function checkInputs(label, check) {
 }
 
 function runAtRoot(root, label, check) {
-  if (!root) {
-    console.error('');
-    console.error(label, 'Failed to find git root. Cannot run the tests.');
-    console.error('');
-    return process.exit(1);
-  }
-  checkInputs(label, check);
+  return new Promise(function (resolve, reject) {
+    if (!root) {
+      console.error('');
+      console.error(label, 'Failed to find git root. Cannot run the tests.');
+      console.error('');
+      return reject(new Error('Failed to find git root'));
+    }
 
-  var tasks = getTasks(root, label);
-  if (!tasks || !tasks.length) {
-    console.log('');
-    console.log(label, 'Nothing the hook needs to do. Bailing out.');
-    console.log('');
-    return;
-  }
+    checkInputs(label, check);
 
-  check(function () {
-    runner(root, tasks);
-  }, root);
-}
+    var tasks = getTasks(root, label);
+    if (!tasks || !tasks.length) {
+      console.log('');
+      console.log(label, 'Nothing the hook needs to do. Bailing out.');
+      console.log('');
+      return resolve('Nothing to do for ' + label);
+    }
 
-function run(hookLabel, check) {
-  checkInputs(hookLabel, check);
-  label = hookLabel;
-
-  getProjRoot(function (root) {
-    runAtRoot(root, hookLabel, check);
+    check(function () {
+      runner(root, tasks);
+    }, root);
   });
 }
 
+function run(hookLabel, check) {
+  log('running', hookLabel);
+
+  checkInputs(hookLabel, check);
+  label = hookLabel;
+
+  return getProjRoot()
+    .tap((root) => log('running', hookLabel, 'in', root))
+    .then((root) => runAtRoot(root, hookLabel, check));
+}
+
 module.exports = run;
+
+if (!module.parent) {
+  run('demo', () => true)
+    .done();
+}
