@@ -5,6 +5,7 @@ const join = require('path').join;
 const pkgPath = join(process.cwd(), 'package.json');
 const pkg = require(pkgPath);
 const check = require('check-more-types');
+/* jshint -W079 */
 const Promise = require('bluebird');
 
 const label = 'pre-commit';

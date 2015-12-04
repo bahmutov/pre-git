@@ -2,7 +2,9 @@
 
 'use strict';
 
-var run = require(__dirname + '/pre-common');
+/* jshint -W079 */
+const Promise = require('bluebird');
+
 var child = require('child_process');
 var label = 'pre-commit';
 
@@ -12,30 +14,49 @@ function isForced() {
   });
 }
 
-// exits if there are no changes to commit
-function haveChangesToCommit(cb) {
-  if (isForced()) {
-    console.log('forcing callback execution');
-    setTimeout(cb, 0);
-    return;
-  }
+function errorMessage(err) {
+  return err instanceof Error ? err.message : err;
+}
 
-  child.exec('git status --porcelain', function changes(err, status) {
-    if (err) {
-      console.error(label, 'Failed to check for changes. Cannot run the tests.');
-      console.error(err);
-      return process.exit(1);
+// exits if there are no changes to commit?
+
+function haveChangesToCommit() {
+  return new Promise(function (resolve, reject) {
+    if (isForced()) {
+      console.log('forcing pre-commit execution');
+      return resolve();
     }
 
-    if (!status.trim().length) {
-      console.log('');
-      console.log(label, 'No changes detected, bailing out.');
-      console.log('');
-      return process.exit(0);
-    }
+    child.exec('git status --porcelain', function changes(err, status) {
+      if (err) {
+        console.error(label, 'Failed to check for changes. Cannot run the tests.');
+        console.error(err);
+        return process.exit(1);
+      }
 
-    cb();
+      return status.trim().length ? resolve() : reject();
+    });
   });
 }
 
-run(label, haveChangesToCommit);
+// run(label, haveChangesToCommit);
+
+function printNoChanges() {
+  console.log('');
+  console.log(label, 'No changes detected, bailing out.');
+  console.log('');
+}
+
+const run = require('pre-git');
+const runTask = run.bind(null, label);
+
+haveChangesToCommit()
+  .then(runTask, (err) => {
+    if (err) {
+      console.log(errorMessage(err));
+      process.exit(-1);
+    }
+    printNoChanges();
+  })
+  .done();
+

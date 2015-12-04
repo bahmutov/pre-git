@@ -4,16 +4,8 @@ var child = require('child_process');
 var path = require('path');
 var fs = require('fs');
 
-/*
-function load(name) {
-  console.log('loading pre-git / ' + name);
-  var mainPreGit = require('pre-git');
-}
-*/
-
 var log = require('debug')('pre-git');
 /* jshint -W079 */
-// var Promise = load('bluebird');
 var Promise = require('bluebird');
 
 var label = 'pre-commit:';
@@ -132,8 +124,9 @@ function getTasks(root, label) {
   // Bail-out when we failed to parse the package.json, there is probably a some
   // funcky chars in there.
   //
+  var file;
   try {
-    var file = findPackage();
+    file = findPackage();
     pkg = require(file);
   }
   catch (e) {

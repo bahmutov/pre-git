@@ -9,7 +9,7 @@ module.exports = function (grunt) {
         reporter: require('jshint-summary')
       },
       all: {
-        src: ['*.js', 'hooks/*.js', 'bin/commit-wizard']
+        src: ['*.js', 'hooks/*.js', 'bin/*.js']
       }
     },
     complexity: grunt.file.readJSON('complexity.json')

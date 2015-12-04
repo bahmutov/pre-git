@@ -11,6 +11,23 @@
   "bugs": {
     "url": "https://github.com/bahmutov/pre-git/issues"
   },
+  "config": {
+    "pre-git": {
+      "demo": [
+        "echo this is command 1",
+        "echo this is command 2",
+        "echo this is command 3"
+      ],
+      "demo-error": [
+        "echo this is command 1",
+        "echo \"this is failing command 2\" && exit -1",
+        "echo this is command 3"
+      ],
+      "pre-commit": [
+        "npm run build"
+      ]
+    }
+  },
   "contributors": [
     "Arnout Kazemier <opensource@observe.it>",
     "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
@@ -62,23 +79,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/bahmutov/pre-git.git"
-  },
-  "config": {
-    "pre-git": {
-      "demo": [
-        "echo this is command 1",
-        "echo this is command 2",
-        "echo this is command 3"
-      ],
-      "demo-error": [
-        "echo this is command 1",
-        "echo \"this is failing command 2\" && exit -1",
-        "echo this is command 3"
-      ],
-      "pre-commit": [
-        "npm run build"
-      ]
-    }
   },
   "scripts": {
     "build": "grunt",
