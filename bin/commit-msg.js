@@ -6,7 +6,8 @@ var label = 'commit-msg';
 var read = require('fs').readFileSync;
 var exists = require('fs').existsSync;
 var join = require('path').join;
-var run = require(join(__dirname, 'pre-common'));
+// var run = require(join(__dirname, 'pre-common'));
+var run = require('pre-git');
 var includedCommitMessageValidator = 'validate-commit-msg';
 
 function loadPackage(folder) {

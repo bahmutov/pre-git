@@ -82,7 +82,7 @@
   },
   "scripts": {
     "build": "grunt",
-    "postinstall": "node install",
+    "postinstall": "node src/install.js",
     "test": "grunt",
     "issues": "git-issues",
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",

@@ -1,6 +1,6 @@
 'use strict';
 
-var pkg = require('./package');
+var pkg = require('../package');
 console.log('%s %s in %s', pkg.name, pkg.version, process.cwd());
 
 var path = require('path');
@@ -89,19 +89,9 @@ console.log('git hooks folder %s', hooks);
 var hookScripts = ['commit-msg',
   'pre-commit', 'pre-push', 'post-commit', 'post-merge'];
 
-var sourceHooksFolders = join(__dirname, 'hooks');
+var sourceHooksFolders = join(__dirname, '../hooks');
 
 if (existsSync(sourceHooksFolders)) {
-  (function copyFile(name) {
-    var fullname = join(sourceHooksFolders, name);
-    if (!existsSync(fullname)) {
-      throw new Error('cannot find ' + fullname);
-    }
-    var content = read(fullname);
-    var destination = path.resolve(hooks, name);
-    write(destination, content);
-  }('pre-common.js'));
-
   hookScripts.forEach(installHook);
 } else {
   console.log('cannot find hooks folder %s', sourceHooksFolders);
