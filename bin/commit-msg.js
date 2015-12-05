@@ -7,6 +7,7 @@ const read = require('fs').readFileSync;
 const exists = require('fs').existsSync;
 const join = require('path').join;
 const log = require('debug')('pre-git');
+const ggit = require('ggit');
 const preGit = require('pre-git');
 const la = require('lazy-ass');
 const check = require('check-more-types');
@@ -22,7 +23,7 @@ function loadValidate(packageName) {
 
 function decideValidator(validators) {
   if (validators === true || validators[0] === included) {
-    console.log('using built-in commit message validation');
+    log('using built-in commit message validation');
     return preGit.validateMessage;
   }
 
@@ -30,8 +31,8 @@ function decideValidator(validators) {
   return loadValidate(validators[0]);
 }
 
-function validateCommitMessage(projectRoot) {
-  log('commit-msg in %s', projectRoot);
+function validateCommitMessage(message) {
+  log('validating git message\n' + message);
 
   const validators = preGit.getTasks(label);
   if (!validators) {
@@ -46,10 +47,10 @@ function validateCommitMessage(projectRoot) {
   const validate = decideValidator(validators);
   la(check.fn(validate), 'missing validate function', validate);
 
-  return validate();
+  return validate(message);
 }
 
-preGit.getProjRoot()
+ggit.commitMessage()
   .then(validateCommitMessage)
   .catch(preGit.printError)
   .done();
