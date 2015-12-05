@@ -76,7 +76,7 @@ module.exports = {
       }
     ], function(answers) {
 
-      var maxLineWidth = 85;
+      var maxLineWidth = 100;
 
       var wrapOptions = {
         trim: true,
@@ -85,13 +85,13 @@ module.exports = {
         width: maxLineWidth
       };
 
-      var breakingChange = answers.breaking ? 'BREAKING CHANGE ' : '';
+      var breakingChange = answers.breaking ? 'BREAKING CHANGE: ' : '';
       // Hard limit this line
       var head = (answers.type + '(' + answers.scope.trim() + '): ' +
         breakingChange + answers.subject.trim()).slice(0, maxLineWidth);
 
       // Wrap these lines at 100 characters
-      var body = wrap(answers.body, wrapOptions);
+      var body = wrap(breakingChange + answers.body, wrapOptions);
       var issues = wrap(answers.issues, wrapOptions);
 
       cb(head + '\n\n' + body + '\n\n' + issues);
