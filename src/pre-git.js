@@ -4,7 +4,7 @@ var child = require('child_process');
 var path = require('path');
 var fs = require('fs');
 
-var log = require('debug')('pre-git');
+const log = require('debug')('pre-git');
 /* jshint -W079 */
 var Promise = require('bluebird');
 
@@ -115,7 +115,7 @@ function failure(err) {
   process.exit(1);
 }
 
-function getTasks(root, label) {
+function getTasks(label) {
   const packageName = 'pre-git';
 
   var pkg, run = [];
@@ -186,7 +186,7 @@ function runAtRoot(root, label) {
       return reject(new Error('Failed to find git root'));
     }
 
-    var tasks = getTasks(root, label);
+    var tasks = getTasks(label);
     log('tasks for %s', label, tasks);
 
     if (!tasks || !tasks.length) {
@@ -217,7 +217,20 @@ function run(hookLabel) {
     .catch(failure);
 }
 
-module.exports = run;
+function errorMessage(err) {
+  return err instanceof Error ? err.message : err;
+}
+
+function printError(x) {
+  console.error(errorMessage(x) || 'Unknown erro');
+}
+
+module.exports = {
+  run: run,
+  getTasks: getTasks,
+  getProjRoot: getProjRoot,
+  printError: printError
+};
 
 if (!module.parent) {
   run('demo-error', () => true)

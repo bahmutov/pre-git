@@ -21,8 +21,11 @@ function errorMessage(err) {
   return err instanceof Error ? err.message : err;
 }
 
-// exits if there are no changes to commit?
+// should we exit if there are no changes to commit?
 
+// resolved => there are changes to commit
+// rejected => might be an Error or nothing.
+//   if nothing => not changes to commit
 function haveChangesToCommit() {
   return new Promise(function (resolve, reject) {
     if (isForced()) {
@@ -41,8 +44,6 @@ function haveChangesToCommit() {
     });
   });
 }
-
-// run(label, haveChangesToCommit);
 
 function printNoChanges() {
   console.log('');

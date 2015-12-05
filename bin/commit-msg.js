@@ -2,55 +2,42 @@
 
 'use strict';
 
-var label = 'commit-msg';
-var read = require('fs').readFileSync;
-var exists = require('fs').existsSync;
-var join = require('path').join;
-// var run = require(join(__dirname, 'pre-common'));
-var run = require('pre-git');
-var includedCommitMessageValidator = 'validate-commit-msg';
+const label = 'commit-msg';
+const read = require('fs').readFileSync;
+const exists = require('fs').existsSync;
+const join = require('path').join;
+const log = require('debug')('pre-git');
+const preGit = require('pre-git');
+const la = require('lazy-ass');
+const check = require('check-more-types');
 
-function loadPackage(folder) {
-  var filename = join(folder, 'package.json');
-  return JSON.parse(read(filename));
+const includedCommitMessageValidator = 'validate-commit-msg';
+
+function loadValidate(packageName) {
+  const validator = require(packageName);
+  const isValid = check.fn(validator) ? validator : validator.validateMessage;
+  la(check.fn(isValid), 'validator is not a function', isValid);
+  return isValid;
 }
 
-function loadValidateCommitMessage(folder) {
-  var packagePath = join(folder,
-    'node_modules/pre-git/node_modules', includedCommitMessageValidator);
-  if (!exists(packagePath)) {
-    packagePath = join(folder, 'node_modules', includedCommitMessageValidator);
-  }
-  if (!exists(packagePath)) {
-    throw new Error('Cannot find validation module ' + includedCommitMessageValidator);
-  }
-  var isValid = require(packagePath).validateMessage;
-  if (typeof isValid !== 'function') {
-    throw new Error('something changed in ' + includedCommitMessageValidator + ' API');
-  }
-}
+function validateCommitMessage(projectRoot) {
+  log('commit-msg in %s', projectRoot);
 
-function isBuiltInValidation(commands) {
-  return commands === includedCommitMessageValidator ||
-    (Array.isArray(commands) &&
-      isBuiltInValidation(commands[0]));
-}
+  const validators = preGit.getTasks(label);
+  la(check.array(validators), 'expected list of validators', validators);
 
-function validateCommitMessage(cb, projectRoot) {
-  console.log('commit-msg in %s', projectRoot);
-  var pkg = loadPackage(projectRoot);
-  var hookCommands = (pkg.config &&
-    pkg.config['pre-git'] &&
-    pkg.config['pre-git']['commit-msg']) || pkg['commit-msg'];
-  if (!hookCommands) {
+  if (check.empty(validators)) {
     return;
   }
-  if (isBuiltInValidation(hookCommands)) {
-    console.log('using built-in validator %s', includedCommitMessageValidator);
-    loadValidateCommitMessage(projectRoot);
-  } else {
-    cb();
-  }
+
+  // TODO go through each?
+  const first = validators[0];
+  const validate = loadValidate(first);
+  console.log('using message validator "%s"', first);
+  return validate();
 }
 
-run(label, validateCommitMessage);
+preGit.getProjRoot()
+  .then(validateCommitMessage)
+  .catch(preGit.printError)
+  .done();
