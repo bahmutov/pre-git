@@ -234,7 +234,10 @@ module.exports = {
   getTasks: getTasks,
   getProjRoot: getProjRoot,
   printError: printError,
-  validateMessage: require('./valid-message').validateMessage
+  validateCommitMessage: function () {
+    const fn = require('./validate-commit-message');
+    return fn.apply(null, arguments);
+  }
 };
 
 if (!module.parent) {

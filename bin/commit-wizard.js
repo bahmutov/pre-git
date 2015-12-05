@@ -5,6 +5,8 @@ const join = require('path').join;
 const pkgPath = join(process.cwd(), 'package.json');
 const pkg = require(pkgPath);
 const check = require('check-more-types');
+const preGit = require('pre-git');
+
 /* jshint -W079 */
 const Promise = require('bluebird');
 
@@ -72,6 +74,7 @@ start
   .then(guideUser)
   .then((message) => message.trim())
   .tap((message) => console.log(message))
+  .then(preGit.validateCommitMessage)
   .then(commitWithMessage)
   .catch((err) => {
     console.error(errorMessage(err));
