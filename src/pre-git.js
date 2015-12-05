@@ -25,6 +25,8 @@ function isPackageAmongFiles(dir) {
 }
 
 function verifyValidDirectory(dir) {
+  la(check.unemptyString(dir), 'missing dir');
+
   var cwd = process.cwd();
   if (isAtRoot(dir)) {
     throw new Error('Could not find package.json starting from ' + cwd);
@@ -237,7 +239,8 @@ module.exports = {
   validateCommitMessage: function () {
     const fn = require('./validate-commit-message');
     return fn.apply(null, arguments);
-  }
+  },
+  wizard: require('./message-wizard')
 };
 
 if (!module.parent) {

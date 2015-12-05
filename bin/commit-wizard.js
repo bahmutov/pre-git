@@ -34,7 +34,7 @@ function hasPreCommitCommands(config) {
   return check.unemptyArray(getPreCommitCommands(config));
 }
 
-var start = git.hasChanges()
+var start = Promise.resolve(git.hasChanges())
   .then(function (hasSomethingToCommit) {
     if (!hasSomethingToCommit) {
       console.log('Nothing to commit');
@@ -54,15 +54,17 @@ if (hasPreCommitCommands(config)) {
     .then(() => console.log('finished pre-commit check'));
 }
 
+/* jshint -W098 */
 function guideUserMock() {
   return Promise.resolve('fix(git): fixing commit wizard');
 }
 
 function guideUser() {
   const wizardName = config && config.wizard || 'cz-conventional-changelog';
-  console.log('using commit message wizard %s', wizardName);
+  log('using commit message wizard %s', wizardName);
 
-  const wizard = require(wizardName);
+  const wizard = wizardName === 'cz-conventional-changelog' ?
+    preGit.wizard : require(wizardName);
   const inquirer = require('inquirer');
 
   return new Promise(function (resolve, reject) {
@@ -77,8 +79,6 @@ function guideUser() {
 
 function commitWithMessage(commitMessage) {
   la(check.unemptyString(commitMessage), 'missing commit message', commitMessage);
-  console.log('commiting with message', commitMessage);
-
   const gitCommit = git.commit;
   return gitCommit(commitMessage)
     .then(console.log.bind(console));
@@ -94,38 +94,27 @@ function firstLine(str) {
 }
 
 function isValidMessage(message) {
-  console.log('validating log message', message);
   la(check.unemptyString(message), 'missing message');
 
   const first = firstLine(message);
-  console.log('first line', first);
 
   if (!check.unemptyString(first)) {
     return Promise.reject(new Error('missing first line'));
   }
-
   la(check.fn(preGit.validateCommitMessage), 'missing preGit.validateCommitMessage');
 
-  console.log('start validation');
   if (!preGit.validateCommitMessage(message)) {
     return Promise.reject(new Error('Invalid commit message\n' + message));
   }
-  console.log('message is all good');
   return message;
 }
 
 start
   .then(guideUser)
   .then((message) => message.trim())
-  .then((message) => {
-    console.log(message);
-    return message;
-  })
+  .tap((message) => console.log(message))
   .then(isValidMessage)
   .then(commitWithMessage)
-  .then((result) => {
-    console.log('finished commit with result', result);
-  })
   .catch((err) => {
     console.error(errorMessage(err));
     process.exit(-1);

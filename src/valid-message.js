@@ -78,7 +78,7 @@ function validateMessage(message, log) {
   // - store incorrect messages, so that we can learn
 
   return true;
-};
+}
 
 module.exports = {
   validateMessage: validateMessage,

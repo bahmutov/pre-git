@@ -1,9 +1,4 @@
-const log = require('debug')('pre-git');
-
 const label = 'commit-msg';
-const read = require('fs').readFileSync;
-const exists = require('fs').existsSync;
-const join = require('path').join;
 const preGit = require('./pre-git');
 const la = require('lazy-ass');
 const check = require('check-more-types');
@@ -35,14 +30,10 @@ function decideValidator(validators) {
 }
 
 function validateCommitMessage(message) {
-  console.log('pre-git: validating git message\n' + message);
-
   la(check.fn(preGit.getTasks), 'missing preGit.getTasks',
     Object.keys(preGit));
 
   const validators = preGit.getTasks(label);
-  console.log('validators', validators);
-
   if (!validators) {
     return true;
   }
