@@ -1,5 +1,8 @@
 'use strict';
 
+const la = require('lazy-ass');
+const check = require('check-more-types');
+
 var child = require('child_process');
 var path = require('path');
 var fs = require('fs');
@@ -142,7 +145,8 @@ function getTasks(label) {
     pkg.config &&
     pkg.config[packageName] &&
     pkg.config[packageName][label];
-  if (typeof run === 'string') {
+
+  if (check.string(run)) {
     run = [run];
   }
   return run;
@@ -229,7 +233,8 @@ module.exports = {
   run: run,
   getTasks: getTasks,
   getProjRoot: getProjRoot,
-  printError: printError
+  printError: printError,
+  validateMessage: require('./valid-message').validateMessage
 };
 
 if (!module.parent) {

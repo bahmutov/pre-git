@@ -22,8 +22,7 @@ function parseMessage(str) {
   var match = PATTERN.exec(str);
 
   if (!match) {
-    error('does not match "<type>(<scope>): <subject>" ! was: ' + str);
-    return false;
+    return;
   }
 
   return {
@@ -34,15 +33,18 @@ function parseMessage(str) {
   };
 }
 
-var error = function() {
-  // gitx does not display it
-  // http://gitx.lighthouseapp.com/projects/17830/tickets/294-feature-display-hook-error-message-when-hook-fails
-  // https://groups.google.com/group/gitx/browse_thread/thread/a03bcab60844b812
-  console.error('INVALID COMMIT MSG: ' + util.format.apply(null, arguments));
-};
+function validateMessage(message, log) {
+  if (!log) {
+    log = console.error.bind(console);
+  }
 
-function validateMessage(message) {
-  var isValid = true;
+  function failedMessage() {
+    // gitx does not display it
+    // http://gitx.lighthouseapp.com/projects/17830/tickets/294-feature-display-hook-error-message-when-hook-fails
+    // https://groups.google.com/group/gitx/browse_thread/thread/a03bcab60844b812
+    log('INVALID COMMIT MSG: ' + util.format.apply(null, arguments));
+  }
+
 
   if (IGNORED.test(message)) {
     console.log('Commit message validation ignored.');
@@ -51,17 +53,17 @@ function validateMessage(message) {
 
   var parsed = parseMessage(message);
   if (!parsed) {
-    error('does not match "<type>(<scope>): <subject>" ! was: ' + message);
+    failedMessage('does not match "<type>(<scope>): <subject>" ! was: ' + message);
     return false;
   }
 
   if (parsed.firstLine.length > MAX_LENGTH) {
-    error('is longer than %d characters !', MAX_LENGTH);
-    isValid = false;
+    failedMessage('is longer than %d characters !', MAX_LENGTH);
+    return false;
   }
 
   if (!TYPES.hasOwnProperty(parsed.type)) {
-    error('"%s" is not allowed type !', parsed.type);
+    failedMessage('"%s" is not allowed type !', parsed.type);
     return false;
   }
 
@@ -75,7 +77,7 @@ function validateMessage(message) {
   // - auto correct typos in type ?
   // - store incorrect messages, so that we can learn
 
-  return isValid;
+  return true;
 };
 
 module.exports = {

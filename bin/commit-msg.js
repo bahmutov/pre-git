@@ -11,7 +11,7 @@ const preGit = require('pre-git');
 const la = require('lazy-ass');
 const check = require('check-more-types');
 
-const includedCommitMessageValidator = 'validate-commit-msg';
+const included = 'validate-commit-msg';
 
 function loadValidate(packageName) {
   const validator = require(packageName);
@@ -20,20 +20,32 @@ function loadValidate(packageName) {
   return isValid;
 }
 
+function decideValidator(validators) {
+  if (validators === true || validators[0] === included) {
+    console.log('using built-in commit message validation');
+    return preGit.validateMessage;
+  }
+
+  console.log('loading message validator "%s"', validators[0]);
+  return loadValidate(validators[0]);
+}
+
 function validateCommitMessage(projectRoot) {
   log('commit-msg in %s', projectRoot);
 
   const validators = preGit.getTasks(label);
-  la(check.array(validators), 'expected list of validators', validators);
+  if (!validators) {
+    return;
+  }
 
-  if (check.empty(validators)) {
+  if (check.array(validators) && check.empty(validators)) {
     return;
   }
 
   // TODO go through each?
-  const first = validators[0];
-  const validate = loadValidate(first);
-  console.log('using message validator "%s"', first);
+  const validate = decideValidator(validators);
+  la(check.fn(validate), 'missing validate function', validate);
+
   return validate();
 }
 

@@ -24,3 +24,21 @@ describe('parse message', () => {
     la(!parsed);
   });
 });
+
+describe('validate message', () => {
+  const validate = require('./valid-message').validateMessage;
+
+  it('is a function', () => {
+    la(check.fn(validate));
+  });
+
+  it('valid message', () => {
+    const message = 'feat(foo): new feature';
+    var called;
+    function log() {
+      called = true;
+    }
+    la(validate(message, log), 'message is valid');
+    la(!called, 'error log not called');
+  });
+});
