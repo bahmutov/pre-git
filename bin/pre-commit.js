@@ -51,7 +51,7 @@ function printNoChanges() {
   console.log('');
 }
 
-const run = require('pre-git');
+const run = require('pre-git').run;
 const runTask = run.bind(null, label);
 
 haveChangesToCommit()

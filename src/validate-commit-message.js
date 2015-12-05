@@ -1,8 +1,9 @@
+const log = require('debug')('pre-git');
+
 const label = 'commit-msg';
 const read = require('fs').readFileSync;
 const exists = require('fs').existsSync;
 const join = require('path').join;
-const log = require('debug')('pre-git');
 const preGit = require('./pre-git');
 const la = require('lazy-ass');
 const check = require('check-more-types');
@@ -25,27 +26,29 @@ function pickFunction(validator) {
 
 function decideValidator(validators) {
   if (validators === true || validators[0] === included) {
-    log('using built-in commit message validation');
+    console.log('using built-in commit message validation');
     return pickFunction(validateMessage);
   }
 
   console.log('loading message validator "%s"', validators[0]);
-  return decideValidator(loadValidate(validators[0]));
+  return pickFunction(loadValidate(validators[0]));
 }
 
 function validateCommitMessage(message) {
-  log('validating git message\n' + message);
+  console.log('pre-git: validating git message\n' + message);
 
   la(check.fn(preGit.getTasks), 'missing preGit.getTasks',
     Object.keys(preGit));
+
   const validators = preGit.getTasks(label);
-  log('validators', validators);
+  console.log('validators', validators);
+
   if (!validators) {
-    return;
+    return true;
   }
 
   if (check.array(validators) && check.empty(validators)) {
-    return;
+    return true;
   }
 
   // TODO go through each?
