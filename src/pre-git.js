@@ -99,23 +99,32 @@ function failure(label, err) {
   console.error(label, 'You\'ve failed to pass all the hooks.');
   console.error(label);
 
-  if (err.ran) {
-    console.error(label, 'The "' + err.ran + '" script failed.');
-  } else {
-    console.error(label, 'An Error was thrown');
-    var stack = err.stack.split('\n');
-    console.error(stack.shift());
+  const chalk = require('chalk');
+  if (err instanceof Error) {
+    console.error(label, 'An Error was thrown from command');
+    if (err.ran) {
+      console.error(chalk.supportsColor ? chalk.bold.yellow(err.ran) : err.ran);
+    }
+
+    const stack = err.stack.split('\n');
+    const firstLine = stack.shift();
+    console.error(chalk.supportsColor ? chalk.red(firstLine) : firstLine);
     console.error(label);
     stack.forEach(function trace(line) {
       console.error(label, '   ' + line.trim());
     });
+  } else {
+    console.error(label, chalk.supportsColor ? chalk.red(err) : err);
   }
+
   const skipOption = label === 'pre-push' ? '--no-verify' : '-n (--no-verify)';
+  const skipOptionText = chalk.supportsColor ? chalk.bold(skipOption) : skipOption;
   console.error(label);
-  console.error(label, 'You can skip the git hook by running with', skipOption);
+  console.error(label, 'You can skip the git hook by running with', skipOptionText);
   console.error(label);
   console.error(label, 'But this is not advised as your tests are obviously failing.');
   console.error('');
+
   process.exit(1);
 }
 
@@ -156,18 +165,20 @@ function getTasks(label) {
 function runTask(root, task) {
   console.log('executing task "' + task + '"');
 
-  var options = {
+  const options = {
     cwd: root,
     env: process.env
   };
 
   return new Promise(function (resolve, reject) {
-    var proc = child.exec(task, options);
+    const proc = child.exec(task, options);
     proc.stdout.on('data', process.stdout.write.bind(process.stdout));
     proc.stderr.on('data', process.stderr.write.bind(process.stderr));
     proc.on('close', function onTaskFinished(code) {
       if (code > 0) {
-        return reject(new Error(task + ' closed with code ' + code));
+        let err = new Error(task + ' closed with code ' + code);
+        err.ran = task;
+        return reject(err);
       }
       return resolve('task "' + task + '" passed');
     });
