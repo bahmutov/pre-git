@@ -238,7 +238,7 @@ function errorMessage(err) {
 }
 
 function printError(x) {
-  console.error(errorMessage(x) || 'Unknown erro');
+  console.error(errorMessage(x) || 'Unknown error');
 }
 
 module.exports = {
