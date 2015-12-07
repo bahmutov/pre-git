@@ -2,12 +2,9 @@
 
 'use strict';
 
-var run = require(__dirname + '/pre-common');
-var label = 'post-commit';
+const label = 'post-commit';
+const run = require('pre-git').run;
+const runTask = run.bind(null, label);
 
-function postCommit(cb) {
-  console.log(label, 'hook');
-  setTimeout(cb, 0);
-}
-
-run(label, postCommit);
+runTask()
+  .done();
