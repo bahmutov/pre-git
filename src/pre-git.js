@@ -94,7 +94,7 @@ function getProjRoot() {
  * @param {Error} err The actual error.
  * @api private
  */
-function failure(err) {
+function failure(label, err) {
   console.error('');
   console.error(label, 'You\'ve failed to pass all the hooks.');
   console.error(label);
@@ -110,10 +110,9 @@ function failure(err) {
       console.error(label, '   ' + line.trim());
     });
   }
+  const skipOption = label === 'pre-push' ? '--no-verify' : '-n (--no-verify)';
   console.error(label);
-  console.error(label, 'You can skip the git pre-commit hook by running:');
-  console.error(label);
-  console.error(label, '   git commit -n (--no-verify)');
+  console.error(label, 'You can skip the git hook by running with', skipOption);
   console.error(label);
   console.error(label, 'But this is not advised as your tests are obviously failing.');
   console.error('');
@@ -135,7 +134,7 @@ function getTasks(label) {
     pkg = require(file);
   }
   catch (e) {
-    return failure(e);
+    return failure(label, e);
   }
 
   log('inspecting package %s for tasks %s', file, label);
@@ -220,7 +219,7 @@ function run(hookLabel) {
   return getProjRoot()
     .tap((root) => log('running', hookLabel, 'in', root))
     .then((root) => runAtRoot(root, hookLabel))
-    .catch(failure);
+    .catch((err) => failure(hookLabel, err));
 }
 
 function errorMessage(err) {

@@ -45,7 +45,7 @@ function haveChangesToCommit() {
   });
 }
 
-function printNoChanges() {
+function printNothingToDo() {
   console.log('');
   console.log(label, 'No changes detected, bailing out.');
   console.log('');
@@ -61,7 +61,7 @@ haveChangesToCommit()
       console.log(errorMessage(err));
       process.exit(-1);
     }
-    printNoChanges();
+    printNothingToDo();
   })
   .done();
 
