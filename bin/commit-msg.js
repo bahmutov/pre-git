@@ -14,7 +14,7 @@ la(check.fn(preGit.printError),
 
 ggit.commitMessage()
   .then(preGit.validateCommitMessage)
-  .catch((err) => {
+  .catch(() => {
     // assuming each validator printed the errors
     process.exit(-1);
   })

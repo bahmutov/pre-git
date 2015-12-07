@@ -21,6 +21,7 @@ function failed(err) {
 function haveCommitsToPush() {
   return new Promise(function (resolve, reject) {
     child.exec('git rev-parse --abbrev-ref HEAD', function (err, stdout) {
+      log('rev-parse results', err, stdout);
       if (err) {
         return failed(err);
       }
@@ -30,6 +31,7 @@ function haveCommitsToPush() {
         branch = stdout.trim();
       }
       child.exec('git ls-remote --heads origin ' + branch, function (err, stdout) {
+        log('ls-remote results', err, stdout);
         if (err) {
           return failed(err);
         }
@@ -40,6 +42,7 @@ function haveCommitsToPush() {
         }
 
         child.exec('git diff --name-only origin/' + branch + '..HEAD', function (err, stdout) {
+          log('diff --names-only results', err, stdout);
           if (err) {
             return failed(err);
           }
