@@ -23,6 +23,7 @@ function haveCommitsToPush() {
     child.exec('git rev-parse --abbrev-ref HEAD', function (err, stdout) {
       log('rev-parse results', err, stdout);
       if (err) {
+        console.error('git rev-parse failed');
         return failed(err);
       }
 
@@ -33,6 +34,7 @@ function haveCommitsToPush() {
       child.exec('git ls-remote --heads origin ' + branch, function (err, stdout) {
         log('ls-remote results', err, stdout);
         if (err) {
+          console.error('git ls-remote failed');
           return failed(err);
         }
 
@@ -44,6 +46,7 @@ function haveCommitsToPush() {
         child.exec('git diff --name-only origin/' + branch + '..HEAD', function (err, stdout) {
           log('diff --names-only results', err, stdout);
           if (err) {
+            console.error('git diff failed');
             return failed(err);
           }
 
@@ -70,10 +73,9 @@ const runTask = run.bind(null, label);
 haveCommitsToPush()
   .then(runTask, (err) => {
     if (err) {
-      failed(err);
+      return failed(err);
     }
     printNothingToDo();
     process.exit(0);
   })
-  .finally(() => process.exit(-1))
   .done();
