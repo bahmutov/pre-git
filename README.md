@@ -1,6 +1,6 @@
 # pre-git
 
-> A simple `pre-commit` and `pre-push` hook installer for `git`.
+> Important git hooks implemented using Nodejs for your project.
 
 [![NPM][pre-git-icon]][pre-git-url]
 
@@ -15,7 +15,9 @@
 [semantic-image]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
 [semantic-url]: https://github.com/semantic-release/semantic-release
 
-Runs pre-commit and pre-push Git hooks to
+## Why?
+
+You can easily run the `pre-commit` and `pre-push` Git hooks to
 [avoid breaking the local master branch](http://glebbahmutov.com/blog/never-break-master-by-accident/)
 or the [remote master](http://glebbahmutov.com/blog/never-break-remote-master-again/).
 
@@ -41,8 +43,7 @@ object.
   "pre-git": {
     "commit-msg": "validate-commit-msg",
     "pre-commit": [
-      "grunt jshint",
-      "npm version"
+      "grunt jshint"
     ],
     "post-commit": "git status",
     "pre-push": [
