@@ -2,12 +2,9 @@
 
 'use strict';
 
-var run = require(__dirname + '/pre-common');
-var label = 'post-merge';
+const label = 'post-merge';
+const run = require('pre-git').run;
+const runTask = run.bind(null, label);
 
-function postMerge(cb) {
-  console.log(label, 'hook');
-  setTimeout(cb, 0);
-}
-
-run(label, postMerge);
+runTask()
+  .done();
