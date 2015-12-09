@@ -41,7 +41,7 @@ object.
 },
 "config": {
   "pre-git": {
-    "commit-msg": "validate-commit-msg",
+    "commit-msg": "simple",
     "pre-commit": [
       "grunt jshint"
     ],
@@ -94,7 +94,7 @@ by removing the below command.
 ```json
 "config": {
   "pre-git": {
-    "commit-msg": "validate-commit-msg"
+    "commit-msg": "conventional"
   }
 }
 ```
@@ -103,21 +103,41 @@ When you run `git commit -m "message ..."` the hook will enforce the default sty
 `type(scope): message ...`. To better form the message, there is a CLI wizard
 installed based on [commitizen](https://www.npmjs.com/package/commitizen) project,
 very well shown in the tutorial
-[video](https://egghead.io/lessons/javascript-how-to-write-a-javascript-library-writing-conventional-commits-with-commitizen). To start, stage the files first and then execute
+[video](https://egghead.io/lessons/javascript-how-to-write-a-javascript-library-writing-conventional-commits-with-commitizen). The commit wizard is available under "node_modules/.bin/commit-wizard" link
+and can be started from command line
 
-    npm run commit
+    node --harmony node_modules/.bin/commit-wizard
 
-You can specify your own CLI message wizard adapter module name, by default this is equivalent to
+or via a script
 
 ```json
-"config": {
-  "pre-git": {
-    "wizard": "cz-conventional-changelog"
-  }
+"scripts": {
+  "commit": "commit-wizard"
 }
 ```
 
-The module `cz-conventional-changelog` is included as `pre-git` dependency.
+Then run
+
+    npm run commit
+
+The wizard will look something like this
+
+```
+? Select the type of change that you're committing:
+  feat:     A new feature
+❯ fix:      A bug fix
+  chore:    Changes to the build process or auxiliary tools
+            and libraries such as documentation generation
+```
+
+There are 2 plugins included with `pre-git`:
+
+* "conventional" follows AngularJS log convention,
+  see [simple-commit-message](https://github.com/bahmutov/simple-commit-message)
+* "simple" only allows "feat", "fix" and "chore" commit types,
+  see [conventional-commit-message](https://github.com/bahmutov/conventional-commit-message)
+
+I recommend sticking with "simple" unless you need more release types.
 
 ## Development
 

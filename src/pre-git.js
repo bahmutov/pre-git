@@ -234,19 +234,26 @@ function printError(x) {
 
 function isBuiltInWizardName(name) {
   la(check.unemptyString(name), 'invalid name', name);
-  return name === 'cz-conventional-changelog' ||
-    name === 'simple';
+  const builtIn = {
+    simple: true,
+    conventional: true,
+    'cz-conventional-changelog': true
+  };
+  return builtIn[name];
 }
 
 function loadWizard(name) {
   la(check.unemptyString(name), 'missing commit wizard name', name);
-  if (name === 'simple') {
-    return require('simple-commit-message');
-  }
-  if (name === 'cz-conventional-changelog') {
-    return require('cz-conventional-changelog');
-  }
-  failure('wizard', 'Unknown commit message wizard name ' + name);
+  const moduleNames = {
+    simple: 'simple-commit-message',
+    conventional: 'conventional-commit-message',
+    'cz-conventional-changelog': 'conventional-commit-message'
+  };
+  const loadName = moduleNames[name];
+  la(check.unemptyString(loadName),
+    'Unknown commit message wizard name', name);
+  log('loading wizard', loadName, 'for name', name);
+  return require(loadName);
 }
 
 function getWizardName() {

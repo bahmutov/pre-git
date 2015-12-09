@@ -172,7 +172,7 @@ function setupMessageValidation(pkg) {
   if (commitMessageCommandIsEmpty(targetPackage)) {
     console.log('setting up commit message helpers');
 
-    config[hookLabel] = 'validate-commit-msg';
+    config[hookLabel] = 'simple';
     changedPackage = true;
   }
 
