@@ -67,7 +67,8 @@
   },
   "files": [
     "bin",
-    "src",
+    "src/*.js",
+    "!src/*-spec.js",
     "hooks",
     "CHANGELOG.md"
   ],
