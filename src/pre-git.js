@@ -42,6 +42,7 @@ function findPackage(dir) {
   }
 
   if (isPackageAmongFiles(dir)) {
+    log('found package in folder', dir);
     return path.join(dir, 'package.json');
   }
 
@@ -53,6 +54,13 @@ function findPackage(dir) {
     throw new Error('Cannot got up the folder to find package.json from ' + cwd);
   }
   return findPackage(parentPath);
+}
+
+function getPackage() {
+  var filename = findPackage();
+  la(check.unemptyString(filename), 'could not find package');
+  var pkg = require(filename);
+  return pkg;
 }
 
 // returns a promise
@@ -130,28 +138,10 @@ function failure(label, err) {
 
 function getTasks(label) {
   const packageName = 'pre-git';
+  var pkg = getPackage();
+  la(check.object(pkg), 'missing package', pkg);
 
-  var pkg, run = [];
-
-  //
-  // Bail-out when we failed to parse the package.json, there is probably a some
-  // funcky chars in there.
-  //
-  var file;
-  try {
-    file = findPackage();
-    pkg = require(file);
-  }
-  catch (e) {
-    return failure(label, e);
-  }
-
-  log('inspecting package %s for tasks %s', file, label);
-  //
-  // If there's a `pre-commit` or other properties in the package.json
-  // we should use that array.
-  //
-  run = pkg[label] ||
+  var run = pkg[label] ||
     pkg.config &&
     pkg.config[packageName] &&
     pkg.config[packageName][label];
@@ -159,6 +149,7 @@ function getTasks(label) {
   if (check.string(run)) {
     run = [run];
   }
+  log('tasks for label "%s" are', label, run);
   return run;
 }
 
@@ -241,26 +232,57 @@ function printError(x) {
   console.error(errorMessage(x) || 'Unknown error');
 }
 
+function isBuiltInWizardName(name) {
+  la(check.unemptyString(name), 'invalid name', name);
+  return name === 'cz-conventional-changelog' ||
+    name === 'simple';
+}
+
+function loadWizard(name) {
+  la(check.unemptyString(name), 'missing commit wizard name', name);
+  if (name === 'simple') {
+    return require('simple-commit-message');
+  }
+  if (name === 'cz-conventional-changelog') {
+    return require('cz-conventional-changelog');
+  }
+  failure('wizard', 'Unknown commit message wizard name ' + name);
+}
+
+function getWizardName() {
+  const pkg = getPackage();
+  const config = pkg.config && pkg.config['pre-git'];
+  const defaultName = 'simple';
+  log('commit message wizard name from', config);
+  if (!config) {
+    return defaultName;
+  }
+  if (config.wizard) {
+    la(check.unemptyString(config.wizard), 'expected wizard name', config.wizard);
+    return config.wizard;
+  }
+  if (check.unemptyString(config['commit-msg'])) {
+    return config['commit-msg'];
+  }
+  return defaultName;
+}
+
+function pickWizard() {
+  const wizardName = getWizardName();
+  log('using commit message wizard %s', wizardName);
+
+  const wiz = isBuiltInWizardName(wizardName) ?
+    loadWizard(wizardName) : require(wizardName);
+  la(check.fn(wiz.prompter), 'missing wizard prompter', wizardName, wiz);
+  return wiz;
+}
+
 module.exports = {
   run: run,
   getTasks: getTasks,
   getProjRoot: getProjRoot,
   printError: printError,
-  validateCommitMessage: function () {
-    log('pre-git validate commit message');
-    const fn = require('./validate-commit-message');
-    return fn.apply(null, arguments);
-  },
-  wizard: function (name) {
-    la(check.unemptyString(name), 'missing commit wizard name', name);
-    if (name === 'simple') {
-      return require('simple-commit-message');
-    }
-    if (name === 'cz-conventional-changelog') {
-      return require('cz-conventional-changelog');
-    }
-    failure('wizard', 'Unknown commit message wizard name ' + name);
-  }
+  wizard: pickWizard
 };
 
 if (!module.parent) {

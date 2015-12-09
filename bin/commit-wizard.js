@@ -19,14 +19,8 @@ const label = 'pre-commit';
 const config = pkg.config &&
   pkg.config['pre-git'];
 
-const wizard = (function pickWizard() {
-  const wizardName = config && config.wizard || 'cz-conventional-changelog';
-    log('using commit message wizard %s', wizardName);
-  const wiz = isBuiltInWizardName(wizardName) ?
-    preGit.wizard(wizardName) : require(wizardName);
-  la(check.fn(wiz.prompter), 'missing wizard prompter', wizardName, wiz);
-  return wiz;
-}());
+const wizard = preGit.wizard();
+la(check.object(wizard), 'could not get commit message wizard', wizard);
 
 function getPreCommitCommands(config) {
   if (!config) {
@@ -66,12 +60,6 @@ if (hasPreCommitCommands(config)) {
 /* jshint -W098 */
 function guideUserMock() {
   return Promise.resolve('fix(git): fixing commit wizard');
-}
-
-function isBuiltInWizardName(name) {
-  la(check.unemptyString(name), 'invalid name', name);
-  return name === 'cz-conventional-changelog' ||
-    name === 'simple';
 }
 
 function guideUser() {

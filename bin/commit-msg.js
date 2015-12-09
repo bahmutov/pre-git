@@ -6,14 +6,25 @@ const ggit = require('ggit');
 const preGit = require('pre-git');
 const la = require('lazy-ass');
 const check = require('check-more-types');
+const log = require('debug')('pre-git');
 
-la(check.fn(preGit.validateCommitMessage),
-  'missing preGit.validateCommitMessage', Object.keys(preGit));
+const wizard = preGit.wizard();
+log('found commit message wizard with name', wizard.name);
+
+la(check.fn(wizard.validate),
+  'missing wizard validate method,', Object.keys(wizard));
 la(check.fn(preGit.printError),
-  'missing preGit.printError', Object.keys(preGit));
+  'missing preGit.printError,', Object.keys(preGit));
+
+function checkMessage(msg) {
+  const isValid = wizard.validate(msg);
+  if (!isValid) {
+    process.exit(-1);
+  }
+}
 
 ggit.commitMessage()
-  .then(preGit.validateCommitMessage)
+  .then(checkMessage)
   .catch((err) => {
     // assuming each validator printed the errors?
     console.error(err);
