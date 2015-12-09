@@ -19,6 +19,15 @@ const label = 'pre-commit';
 const config = pkg.config &&
   pkg.config['pre-git'];
 
+const wizard = (function pickWizard() {
+  const wizardName = config && config.wizard || 'cz-conventional-changelog';
+    log('using commit message wizard %s', wizardName);
+  const wiz = isBuiltInWizardName(wizardName) ?
+    preGit.wizard(wizardName) : require(wizardName);
+  la(check.fn(wiz.prompter), 'missing wizard prompter', wizardName, wiz);
+  return wiz;
+}());
+
 function getPreCommitCommands(config) {
   if (!config) {
     return;
@@ -59,12 +68,13 @@ function guideUserMock() {
   return Promise.resolve('fix(git): fixing commit wizard');
 }
 
-function guideUser() {
-  const wizardName = config && config.wizard || 'cz-conventional-changelog';
-  log('using commit message wizard %s', wizardName);
+function isBuiltInWizardName(name) {
+  la(check.unemptyString(name), 'invalid name', name);
+  return name === 'cz-conventional-changelog' ||
+    name === 'simple';
+}
 
-  const wizard = wizardName === 'cz-conventional-changelog' ?
-    preGit.wizard : require(wizardName);
+function guideUser() {
   const inquirer = require('inquirer');
 
   return new Promise(function (resolve, reject) {
@@ -101,12 +111,16 @@ function isValidMessage(message) {
   if (!check.unemptyString(first)) {
     return Promise.reject(new Error('missing first line'));
   }
-  la(check.fn(preGit.validateCommitMessage), 'missing preGit.validateCommitMessage');
-
-  if (!preGit.validateCommitMessage(message)) {
-    return Promise.reject(new Error('Invalid commit message\n' + message));
+  if (check.fn(wizard.validate)) {
+    if (!wizard.validate(message)) {
+      return Promise.reject(new Error('Invalid commit message\n' + message));
+    }
   }
   return message;
+}
+
+function success() {
+  console.log('commit wizard has finished');
 }
 
 start
@@ -115,6 +129,7 @@ start
   .tap((message) => console.log(message))
   .then(isValidMessage)
   .then(commitWithMessage)
+  .then(success)
   .catch((err) => {
     console.error(errorMessage(err));
     process.exit(-1);

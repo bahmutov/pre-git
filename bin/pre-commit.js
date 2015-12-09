@@ -58,10 +58,15 @@ console.log('running pre-commit script');
 haveChangesToCommit()
   .then(runTask, (err) => {
     if (err) {
-      console.log(errorMessage(err));
+      console.error(errorMessage(err));
       process.exit(-1);
     }
     printNothingToDo();
+  })
+  .catch((err) => {
+    console.error(label, 'A problem');
+    console.error(errorMessage(err));
+    process.exit(-1);
   })
   .done();
 

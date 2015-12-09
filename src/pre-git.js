@@ -247,10 +247,20 @@ module.exports = {
   getProjRoot: getProjRoot,
   printError: printError,
   validateCommitMessage: function () {
+    log('pre-git validate commit message');
     const fn = require('./validate-commit-message');
     return fn.apply(null, arguments);
   },
-  wizard: require('./message-wizard')
+  wizard: function (name) {
+    la(check.unemptyString(name), 'missing commit wizard name', name);
+    if (name === 'simple') {
+      return require('simple-commit-message');
+    }
+    if (name === 'cz-conventional-changelog') {
+      return require('cz-conventional-changelog');
+    }
+    failure('wizard', 'Unknown commit message wizard name ' + name);
+  }
 };
 
 if (!module.parent) {
