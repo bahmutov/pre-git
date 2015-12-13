@@ -169,7 +169,7 @@ function setupMessageValidation(pkg) {
 
   var changedPackage;
   var config = targetPackage.config['pre-git'];
-  if (commitMessageCommandIsEmpty(targetPackage)) {
+  if (!config && commitMessageCommandIsEmpty(targetPackage)) {
     console.log('setting up commit message helpers');
 
     config[hookLabel] = 'simple';

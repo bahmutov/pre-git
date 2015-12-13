@@ -8,6 +8,7 @@ const pkgPath = join(process.cwd(), 'package.json');
 const pkg = require(pkgPath);
 const preGit = require('pre-git');
 const git = require('ggit');
+const chalk = require('chalk');
 const log = require('debug')('pre-git');
 la(check.fn(log), 'missing debug log', log);
 
@@ -20,7 +21,8 @@ const config = pkg.config &&
   pkg.config['pre-git'];
 
 const wizard = preGit.wizard();
-la(check.object(wizard), 'could not get commit message wizard', wizard);
+la(check.maybe.object(wizard),
+  'could not get commit message wizard', wizard);
 
 function getPreCommitCommands(config) {
   if (!config) {
@@ -63,6 +65,15 @@ function guideUserMock() {
 }
 
 function guideUser() {
+  if (!wizard) {
+    console.error(chalk.yellow('You have not set the commit message format'));
+    console.error('This wizard does not know what to ask you');
+    console.error('Maybe try setting up "simple" commit message format');
+    console.error('See',
+      chalk.underline('https://github.com/bahmutov/pre-git#validating-commit-message'));
+    return Promise.reject(new Error('Missing commit format name'));
+  }
+
   const inquirer = require('inquirer');
 
   return new Promise(function (resolve, reject) {
@@ -92,6 +103,10 @@ function firstLine(str) {
 }
 
 function isValidMessage(message) {
+  if (!wizard) {
+    return message;
+  }
+
   la(check.unemptyString(message), 'missing message');
 
   const first = firstLine(message);
