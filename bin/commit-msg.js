@@ -9,6 +9,11 @@ const check = require('check-more-types');
 const log = require('debug')('pre-git');
 
 const wizard = preGit.wizard();
+if (!wizard) {
+  log('no commit message wizard defined');
+  process.exit(0);
+}
+
 log('found commit message wizard with name', wizard.name);
 
 la(check.fn(wizard.validate),

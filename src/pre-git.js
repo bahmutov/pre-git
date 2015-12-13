@@ -262,20 +262,26 @@ function getWizardName() {
   const defaultName = 'simple';
   log('commit message wizard name from', config);
   if (!config) {
+    log('no config, using default name', defaultName);
     return defaultName;
   }
   if (config.wizard) {
     la(check.unemptyString(config.wizard), 'expected wizard name', config.wizard);
+    log('using wizard name', config.wizard);
     return config.wizard;
   }
   if (check.unemptyString(config['commit-msg'])) {
+    log('using config commit-msg property', config['commit-msg']);
     return config['commit-msg'];
   }
-  return defaultName;
 }
 
 function pickWizard() {
   const wizardName = getWizardName();
+  if (!wizardName) {
+    log('no wizard name set');
+    return;
+  }
   log('using commit message wizard %s', wizardName);
 
   const wiz = isBuiltInWizardName(wizardName) ?
