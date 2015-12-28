@@ -270,9 +270,15 @@ function getWizardName() {
     log('using wizard name', config.wizard);
     return config.wizard;
   }
-  if (check.unemptyString(config['commit-msg'])) {
-    log('using config commit-msg property', config['commit-msg']);
-    return config['commit-msg'];
+
+  const value = config['commit-msg'];
+  if (check.unemptyString(value)) {
+    log('using config commit-msg property', value);
+    return value;
+  }
+  if (check.array(value) && value.length === 1) {
+    log('using config commit-msg single value', value);
+    return value[0];
   }
 }
 
