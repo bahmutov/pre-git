@@ -160,6 +160,23 @@ saving updated files /Users/kensho/git/test-git-hooks/package.json
 I am using a small project [test-pre-git](https://github.com/bahmutov/test-pre-git)
 as a test playground for these hooks.
 
+## Debugging
+
+If a hook does not behave as expected, you can see verbose log messages by setting
+the environment variable `DEBUG=pre-git` when running a git command. For example, to
+see the messages when committing
+
+    DEBUG=pre-git git commit -m "a message"
+    running pre-commit script
+    pre-git pre-commit +0ms arguments [ 'node',
+      '/instant-vdom-todo/node_modules/.bin/pre-commit' ]
+    pre-commit No changes detected, bailing out.
+    pre-git found package in folder +0ms /instant-vdom-todo
+    pre-git commit message wizard name from +5ms
+    ...
+
+This should provide plenty of information to debug the hooks
+
 ### Small print
 
 Author: Gleb Bahmutov &copy; 2014
