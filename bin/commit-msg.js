@@ -1,5 +1,3 @@
-#!/usr/bin/env node --harmony
-
 'use strict';
 
 const ggit = require('ggit');
