@@ -145,7 +145,7 @@ In order to locally test this package, from another git repo execute the install
 using `-f` or `--force` argument. For example
 
 ```
-$ node ../pre-git/install.js -f
+$ node ../pre-git/src/install.js -f
 pre-git 0.7.2 in /Users/kensho/git/test-git-hooks
 /Users/kensho/git/test-git-hooks
 read target package from /Users/kensho/git/test-git-hooks/package.json
