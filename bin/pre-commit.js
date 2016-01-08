@@ -1,5 +1,3 @@
-#!/usr/bin/env node --harmony
-
 'use strict';
 
 const log = require('debug')('pre-git');

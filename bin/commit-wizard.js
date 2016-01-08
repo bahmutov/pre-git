@@ -1,5 +1,3 @@
-#!/usr/bin/env node --harmony
-
 console.log('running commit-wizard in folder %s', process.cwd());
 const la = require('lazy-ass');
 const check = require('check-more-types');

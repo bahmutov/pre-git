@@ -1,3 +1,3 @@
 #!/bin/sh
 
-./node_modules/.bin/commit-msg "$@"
+/usr/bin/env node --harmony ./node_modules/.bin/commit-msg "$@"
