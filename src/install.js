@@ -108,8 +108,10 @@ if (existsSync(sourceHooksFolders)) {
     return;
   }
 
+  var firstInstall;
   if (!targetPackage.config) {
     targetPackage.config = {};
+    firstInstall = true;
   }
   if (!targetPackage.config['pre-git']) {
     targetPackage.config['pre-git'] = {};
@@ -121,8 +123,13 @@ if (existsSync(sourceHooksFolders)) {
     if (config[hookName]) {
       return;
     }
-    config[hookName] = [];
-    console.log('added empty command list for hook %s', hookName);
+    if (firstInstall && hookName === 'commit-msg') {
+      config[hookName] = 'simple';
+      console.log('set simple %s format', hookName);
+    } else {
+      config[hookName] = [];
+      console.log('added empty command list for hook %s', hookName);
+    }
     changedPackage = true;
   });
 
