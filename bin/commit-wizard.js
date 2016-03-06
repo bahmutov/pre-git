@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 console.log('running commit-wizard in folder %s', process.cwd());
 const la = require('lazy-ass');
 const check = require('check-more-types');
