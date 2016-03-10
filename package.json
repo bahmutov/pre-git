@@ -16,6 +16,7 @@
   },
   "config": {
     "pre-git": {
+      "commit-msg": "simple",
       "demo": [
         "echo this is command 1",
         "echo this is command 2",
@@ -48,7 +49,7 @@
     "lazy-ass": "1.3.0",
     "require-relative": "0.8.7",
     "shelljs": "0.5.3",
-    "simple-commit-message": "1.1.0",
+    "simple-commit-message": "2.1.0",
     "validate-commit-msg": "1.0.0",
     "word-wrap": "1.1.0"
   },
@@ -98,6 +99,8 @@
     "issues": "git-issues",
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "demo": "DEBUG=pre-git node --harmony src/pre-git.js"
+    "demo": "DEBUG=pre-git node --harmony src/pre-git.js",
+    "demo-commit-message": "TEST_GIT_MESSAGE='chore(test): test message' DEBUG=pre-git NODE_PATH=.. node bin/commit-msg.js",
+    "demo-commit-wizard": "DEBUG=pre-git NODE_PATH=.. node bin/commit-wizard.js"
   }
 }

@@ -177,6 +177,11 @@ see the messages when committing
 
 This should provide plenty of information to debug the hooks
 
+## Local development
+
+To execute commit message validation, run `npm run demo-commit-message` and vary the
+test message to see how the hook validates it.
+
 ### Small print
 
 Author: Gleb Bahmutov &copy; 2014
