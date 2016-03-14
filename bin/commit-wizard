@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-
-exec /usr/bin/env node --harmony "$(readlink -e $0).js" "$@"
