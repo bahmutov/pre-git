@@ -184,6 +184,7 @@ function checkInputs(label) {
 
 function runAtRoot(root, label) {
   log('running %s at root %s', label, root);
+  log('cli arguments', process.argv);
 
   return new Promise(function (resolve, reject) {
     if (!root) {
