@@ -188,8 +188,8 @@ function skipPrecommit() {
 
 function getSkipTest(label) {
   const skipConditions = {
-    'pre-push': skipConditions
-  }
+    'pre-push': skipPrecommit
+  };
   function dontSkip() {
     return false;
   }
