@@ -182,9 +182,30 @@ function checkInputs(label) {
   }
 }
 
+function skipPrecommit() {
+  return process.argv[2] !== 'origin';
+}
+
+function getSkipTest(label) {
+  const skipConditions = {
+    'pre-push': skipConditions
+  }
+  function dontSkip() {
+    return false;
+  }
+  const skip = skipConditions[label] || dontSkip;
+  return skip;
+}
+
 function runAtRoot(root, label) {
   log('running %s at root %s', label, root);
   log('cli arguments', process.argv);
+  la(check.unemptyString(label), 'missing label', label);
+  const skip = getSkipTest(label);
+  if (skip()) {
+    log('skipping tasks for', label);
+    return Promise.resolve();
+  }
 
   return new Promise(function (resolve, reject) {
     if (!root) {
