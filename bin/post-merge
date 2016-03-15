@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+. "$(dirname "$0")/_pre-git-helpers"
+exec /usr/bin/env node --harmony "$(_readlink_f $0).js" "$@"

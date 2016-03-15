@@ -4,12 +4,13 @@
   "version": "0.0.0-semantic-release",
   "author": "Arnout Kazemier <opensource@observe.it>",
   "bin": {
-    "commit-msg": "bin/commit-msg.js",
-    "commit-wizard": "bin/commit-wizard.js",
-    "post-commit": "bin/post-commit.js",
-    "post-merge": "bin/post-merge.js",
-    "pre-commit": "bin/pre-commit.js",
-    "pre-push": "bin/pre-push.js"
+    "_pre-git-helpers": "bin/_pre-git-helpers",
+    "commit-msg": "bin/commit-msg",
+    "commit-wizard": "bin/commit-wizard",
+    "post-commit": "bin/post-commit",
+    "post-merge": "bin/post-merge",
+    "pre-commit": "bin/pre-commit",
+    "pre-push": "bin/pre-push"
   },
   "bugs": {
     "url": "https://github.com/bahmutov/pre-git/issues"

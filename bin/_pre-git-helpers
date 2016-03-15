@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+
+# cross-platform `readlink -f`
+# borrow from http://stackoverflow.com/questions/1055671/how-can-i-get-the-behavior-of-gnus-readlink-f-on-a-mac
+_readlink_f() {
+  TARGET_FILE=$1
+  cd `dirname $TARGET_FILE`
+  TARGET_FILE=`basename $TARGET_FILE`
+
+  while [ -L "$TARGET_FILE" ]
+  do
+    TARGET_FILE=`readlink $TARGET_FILE`
+    cd `dirname $TARGET_FILE`
+    TARGET_FILE=`basename $TARGET_FILE`
+  done
+
+  echo `pwd -P`/$TARGET_FILE
+}
