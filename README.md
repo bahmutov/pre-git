@@ -63,6 +63,14 @@ them to the `config > pre-git` object manually.
 Related project: [post-merge-make](https://github.com/bahmutov/post-merge-make)
 runs `make post-merge` after pull or merge.
 
+## Windows
+
+Thanks to [ybiquitous](https://github.com/ybiquitous) for 
+[adding support](https://github.com/bahmutov/pre-git/pull/72) for Windows.
+
+* Git Bash (Git for Windows): work fine!
+* Command prompt: work if sh.exe in PATH (e.g. `set PATH=C:\Program Files\Git\bin;%PATH%`)
+
 ## Details
 
 You can always skip pre-commit hook (but not pre-push hook!) by using `-n` option
