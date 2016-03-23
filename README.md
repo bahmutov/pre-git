@@ -141,9 +141,10 @@ The wizard will look something like this
 There are 2 plugins included with `pre-git`:
 
 * "conventional" follows AngularJS log convention,
-  see [simple-commit-message](https://github.com/bahmutov/simple-commit-message)
-* "simple" only allows "feat", "fix" and "chore" commit types,
   see [conventional-commit-message](https://github.com/bahmutov/conventional-commit-message)
+* "simple" only allows "feat", "fix" and "chore" commit types,
+  see [simple-commit-message](https://github.com/bahmutov/simple-commit-message)
+
 
 I recommend sticking with "simple" unless you need more release types.
 
