@@ -8,6 +8,7 @@
     "commit-msg": "bin/commit-msg",
     "commit-wizard": "bin/commit-wizard",
     "post-commit": "bin/post-commit",
+    "post-checkout": "bin/post-checkout",
     "post-merge": "bin/post-merge",
     "pre-commit": "bin/pre-commit",
     "pre-push": "bin/pre-push"

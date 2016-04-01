@@ -52,6 +52,7 @@ object.
       "grunt build",
       "grunt test"
     ],
+    "post-checkout": "npm install",
     "post-merge": "npm install"
   }
 }
@@ -65,7 +66,7 @@ runs `make post-merge` after pull or merge.
 
 ## Windows
 
-Thanks to [ybiquitous](https://github.com/ybiquitous) for 
+Thanks to [ybiquitous](https://github.com/ybiquitous) for
 [adding support](https://github.com/bahmutov/pre-git/pull/72) for Windows.
 
 * Git Bash (Git for Windows): work fine!
