@@ -97,57 +97,6 @@ if (existsSync(sourceHooksFolders)) {
   console.log('cannot find hooks folder %s', sourceHooksFolders);
 }
 
-(function addPackageSteps(hookNames) {
-  var pkgPath = getRootPackagePath(),
-    targetPackage;
-  if (existsSync(pkgPath)) {
-    targetPackage = readJsonFile(pkgPath);
-    console.log('read target package from %s', pkgPath);
-  } else {
-    console.log('could not find package under path %s', pkgPath);
-    return;
-  }
-
-  var firstInstall;
-  if (!targetPackage.config) {
-    targetPackage.config = {};
-    firstInstall = true;
-  }
-  if (!targetPackage.config['pre-git']) {
-    targetPackage.config['pre-git'] = {};
-  }
-  var config = targetPackage.config['pre-git'];
-
-  var changedPackage;
-  hookNames.forEach(function addProperty(hookName) {
-    if (config[hookName]) {
-      return;
-    }
-    if (firstInstall && hookName === 'commit-msg') {
-      config[hookName] = 'simple';
-      console.log('set simple %s format', hookName);
-    } else {
-      config[hookName] = [];
-      console.log('added empty command list for hook %s', hookName);
-    }
-    changedPackage = true;
-  });
-
-  if (changedPackage) {
-    writeJsonToFile(pkgPath, targetPackage);
-  }
-
-}(hookScripts));
-
-function isEmpty(x) {
-  return Array.isArray(x) && x.length === 0 ||
-    !x;
-}
-
-function commitMessageCommandIsEmpty(pkg) {
-  return isEmpty(pkg.config['pre-git']['commit-msg']);
-}
-
 function missingCommitScript(pkg) {
   return !pkg.scripts ||
     !pkg.scripts.commit ||
@@ -161,9 +110,7 @@ function setupMessageValidation(pkg) {
   pkg.scripts.commit = 'commit-wizard';
 }
 
-(function setupCommitMessageHelpers() {
-  var hookLabel = 'commit-msg';
-
+(function addToPackage(hookNames) {
   var pkgPath = getRootPackagePath(),
     targetPackage;
   if (existsSync(pkgPath)) {
@@ -174,25 +121,32 @@ function setupMessageValidation(pkg) {
     return;
   }
 
-  var changedPackage;
-  var config = targetPackage.config['pre-git'];
-  if (!config && commitMessageCommandIsEmpty(targetPackage)) {
-    console.log('setting up commit message helpers');
-
-    config[hookLabel] = 'simple';
-    changedPackage = true;
+  if (!targetPackage.config) {
+    targetPackage.config = {};
   }
 
-  if (missingCommitScript(targetPackage)) {
-    setupMessageValidation(targetPackage);
-    changedPackage = true;
-  }
+  if (!targetPackage.config['pre-git']) {
+    targetPackage.config['pre-git'] = {};
+    var config = targetPackage.config['pre-git'];
 
-  if (changedPackage) {
+    hookNames.forEach(function addProperty(hookName) {
+      if (hookName === 'commit-msg') {
+        config[hookName] = 'simple';
+        console.log('set simple %s format', hookName);
+      } else {
+        config[hookName] = [];
+        console.log('added empty command list for hook %s', hookName);
+      }
+    });
+
+    if (missingCommitScript(targetPackage)) {
+      setupMessageValidation(targetPackage);
+    }
+
     writeJsonToFile(pkgPath, targetPackage);
   }
 
-}());
+}(hookScripts));
 
 function installHook(name) {
   console.log('installing hook %s', name);
