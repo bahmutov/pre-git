@@ -192,6 +192,11 @@ This should provide plenty of information to debug the hooks
 To execute commit message validation, run `npm run demo-commit-message` and vary the
 test message to see how the hook validates it.
 
+## Recent contributors
+
+* [ybiquitous](https://github.com/ybiquitous)
+* [Marko Schulz](https://github.com/datenreisender)
+
 ### Small print
 
 Author: Gleb Bahmutov &copy; 2014
