@@ -87,7 +87,7 @@ if (!existsSync(git) || !fs.lstatSync(git).isDirectory()) {
 console.log('git hooks folder %s', hooks);
 
 var hookScripts = ['commit-msg',
-  'pre-commit', 'pre-push', 'post-commit', 'post-merge'];
+  'pre-commit', 'pre-push', 'post-commit', 'post-checkout', 'post-merge'];
 
 var sourceHooksFolders = join(__dirname, '../hooks');
 
