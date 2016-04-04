@@ -1,3 +1,9 @@
 #!/bin/sh
 
+DIRECTORY="./node_modules"
+if [ ! -d "$DIRECTORY" ]; then
+  echo "Cannot find node_modules folder, please run 'npm install' first"
+  exit -1
+fi
+
 ./node_modules/.bin/pre-commit "$@"

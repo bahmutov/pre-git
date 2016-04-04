@@ -20,6 +20,8 @@ npm install --save-dev pre-git
 echo "Package.json after installing pre-git"
 cat package.json
 git add package.json
+# echo "deleting node_modules folder just for testing"
+# rm -rf node_modules
 git commit -m "chore(test): this is a test commit"
 
 ls -la
