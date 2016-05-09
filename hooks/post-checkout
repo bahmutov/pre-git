@@ -2,8 +2,9 @@
 
 DIRECTORY="./node_modules"
 if [ ! -d "$DIRECTORY" ]; then
-  echo "Cannot find node_modules folder, please run 'npm install' first"
-  exit -1
+  echo "WARNING: Cannot find node_modules folder, please run 'npm install' first"
 fi
 
-./node_modules/.bin/post-checkout "$@"
+if [ -d "$DIRECTORY" ]; then
+  ./node_modules/.bin/post-checkout "$@"
+fi
