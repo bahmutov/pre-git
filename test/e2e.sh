@@ -33,7 +33,7 @@ git add package.json
 
 # see how the check handles untracked files
 # touch something
-git ignore node_modules/
+echo node_modules/ >> .gitignore
 git add .gitignore
 git commit -m "chore(test): this is a test commit"
 
