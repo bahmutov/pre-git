@@ -51,11 +51,20 @@ function printNothingToDo() {
   console.log('');
 }
 
+const hasUntrackedFiles = require('pre-git').hasUntrackedFiles;
 const run = require('pre-git').run;
 const runTask = run.bind(null, label);
 
-console.log('running pre-commit script');
+console.log('running bin/pre-commit.js script');
 haveChangesToCommit()
+  .then(hasUntrackedFiles)
+  .then((has) => {
+    if (has) {
+      const message = 'Has untracked files in folder.\n' +
+        'Please delete or ignore them.';
+      return Promise.reject(new Error(message));
+    }
+  })
   .then(runTask, (err) => {
     if (err) {
       console.error(errorMessage(err));

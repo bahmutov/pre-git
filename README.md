@@ -72,6 +72,12 @@ Thanks to [ybiquitous](https://github.com/ybiquitous) for
 * Git Bash (Git for Windows): work fine!
 * Command prompt: work if sh.exe in PATH (e.g. `set PATH=C:\Program Files\Git\bin;%PATH%`)
 
+## Untracked files
+
+Before the commit, we check if there are any untracked files. A commit does
+not continue if there are any. Please `git ignore` or delete unnecessary
+files before `git commit` to ensure clean tests.
+
 ## Details
 
 You can always skip pre-commit hook (but not pre-push hook!) by using `-n` option

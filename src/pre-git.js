@@ -2,6 +2,7 @@
 
 const la = require('lazy-ass');
 const check = require('check-more-types');
+const ggit = require('ggit');
 
 var child = require('child_process');
 var path = require('path');
@@ -153,6 +154,13 @@ function getTasks(label) {
   return run;
 }
 
+function hasUntrackedFiles() {
+  return ggit.untrackedFiles()
+    .then(function (names) {
+      return check.unempty(names);
+    });
+}
+
 function runTask(root, task) {
   console.log('executing task "' + task + '"');
 
@@ -207,29 +215,48 @@ function runAtRoot(root, label) {
     return Promise.resolve();
   }
 
-  return new Promise(function (resolve, reject) {
+  function showError(message) {
+    console.error('');
+    console.error(label, message);
+    console.error('');
+    return Promise.reject(new Error(message));
+  }
+
+  return new Promise(function () {
     if (!root) {
-      console.error('');
-      console.error(label, 'Failed to find git root. Cannot run the tests.');
-      console.error('');
-      return reject(new Error('Failed to find git root'));
+      return showError('Failed to find git root. Cannot run the tests.');
     }
 
-    var tasks = getTasks(label);
-    log('tasks for %s', label, tasks);
+    function runTasksForLabel() {
+      var tasks = getTasks(label);
+      log('tasks for %s', label, tasks);
 
-    if (!tasks || !tasks.length) {
-      console.log('');
-      console.log(label, 'Nothing the hook needs to do. Bailing out.');
-      console.log('');
-      return resolve('Nothing to do for ' + label);
+      if (!tasks || !tasks.length) {
+        console.log('');
+        console.log(label, 'Nothing the hook needs to do. Bailing out.');
+        console.log('');
+        return Promise.resolve('Nothing to do for ' + label);
+      }
+
+      const runTaskAt = runTask.bind(null, root);
+
+      return Promise.resolve(
+        Promise.each(tasks, runTaskAt)
+      );
     }
 
-    const runTaskAt = runTask.bind(null, root);
+    if (label === 'pre-commit') {
+      hasUntrackedFiles()
+        .then(function (has) {
+          if (has) {
+            return showError('Cannot commit with untracked files present.');
+          }
+          return runTasksForLabel();
+        });
+    } else {
+      return runTasksForLabel();
+    }
 
-    return resolve(
-      Promise.each(tasks, runTaskAt)
-    );
   });
 }
 
@@ -323,7 +350,8 @@ module.exports = {
   getTasks: getTasks,
   getProjRoot: getProjRoot,
   printError: printError,
-  wizard: pickWizard
+  wizard: pickWizard,
+  hasUntrackedFiles: hasUntrackedFiles
 };
 
 if (!module.parent) {

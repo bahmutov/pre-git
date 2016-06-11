@@ -1,5 +1,7 @@
-echo "Linking current pre-git"
-npm link
+set -e
+
+preGitFolder=$PWD
+echo Current folder $preGitFolder
 
 echo "Creating test folder"
 folder=/tmp/test-pre-git
@@ -16,12 +18,23 @@ npm init --yes
 echo "started package"
 
 echo "Installing git hooks"
-npm install --save-dev pre-git
+# we can install latest from NPM
+# npm install --save-dev pre-git
+# or we can install current dev source
+npm install $preGitFolder
 echo "Package.json after installing pre-git"
 cat package.json
+
+# let us commit the code
 git add package.json
+
 # echo "deleting node_modules folder just for testing"
 # rm -rf node_modules
+
+# see how the check handles untracked files
+# touch something
+git ignore node_modules/
+git add .gitignore
 git commit -m "chore(test): this is a test commit"
 
 ls -la
