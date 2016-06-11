@@ -76,7 +76,9 @@ Thanks to [ybiquitous](https://github.com/ybiquitous) for
 
 Before the commit, we check if there are any untracked files. A commit does
 not continue if there are any. Please `git ignore` or delete unnecessary
-files before `git commit` to ensure clean tests.
+files before running the `git commit` commanf to ensure clean tests.
+I every case where I forgot to add files to the repo, this was by accident
+and caused breaking tests.
 
 ## Details
 
