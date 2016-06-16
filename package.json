@@ -104,6 +104,7 @@
     "postinstall": "node src/install.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
-    "test": "grunt"
+    "test": "grunt",
+    "test-no-commit-on-test-fail": "./test/e2e-test-fails.sh"
   }
 }

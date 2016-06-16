@@ -205,6 +205,7 @@ function getSkipTest(label) {
   return skip;
 }
 
+// returns a promise
 function runAtRoot(root, label) {
   log('running %s at root %s', label, root);
   log('cli arguments', process.argv);
@@ -222,42 +223,37 @@ function runAtRoot(root, label) {
     return Promise.reject(new Error(message));
   }
 
-  return new Promise(function () {
-    if (!root) {
-      return showError('Failed to find git root. Cannot run the tests.');
+  function noUntrackedFiles(foundUntrackedFiles) {
+    if (foundUntrackedFiles) {
+      return showError('Cannot commit with untracked files present.');
+    }
+  }
+
+  if (!root) {
+    return showError('Failed to find git root. Cannot run the tests.');
+  }
+
+  function runTasksForLabel() {
+    var tasks = getTasks(label);
+    log('tasks for %s', label, tasks);
+
+    if (!tasks || !tasks.length) {
+      console.log('');
+      console.log(label, 'Nothing the hook needs to do. Bailing out.');
+      console.log('');
+      return Promise.resolve('Nothing to do for ' + label);
     }
 
-    function runTasksForLabel() {
-      var tasks = getTasks(label);
-      log('tasks for %s', label, tasks);
+    const runTaskAt = runTask.bind(null, root);
+    return Promise.each(tasks, runTaskAt);
+  }
 
-      if (!tasks || !tasks.length) {
-        console.log('');
-        console.log(label, 'Nothing the hook needs to do. Bailing out.');
-        console.log('');
-        return Promise.resolve('Nothing to do for ' + label);
-      }
-
-      const runTaskAt = runTask.bind(null, root);
-
-      return Promise.resolve(
-        Promise.each(tasks, runTaskAt)
-      );
-    }
-
-    if (label === 'pre-commit') {
-      hasUntrackedFiles()
-        .then(function (has) {
-          if (has) {
-            return showError('Cannot commit with untracked files present.');
-          }
-          return runTasksForLabel();
-        });
-    } else {
-      return runTasksForLabel();
-    }
-
-  });
+  if (label === 'pre-commit') {
+    return hasUntrackedFiles()
+      .then(noUntrackedFiles)
+      .then(runTasksForLabel);
+  }
+  return runTasksForLabel();
 }
 
 function run(hookLabel) {
