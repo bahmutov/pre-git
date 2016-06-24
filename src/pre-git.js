@@ -341,13 +341,27 @@ function pickWizard() {
   return wiz;
 }
 
+function customCommitMsgPattern() {
+
+  const pkg = getPackage();
+  const msgPattern = pkg.config && pkg.config['pre-git'] && pkg.config['pre-git']['msg-pattern'];
+
+  if (!msgPattern) {
+    return false;
+  }
+  
+  return msgPattern;
+
+}
+
 module.exports = {
   run: run,
   getTasks: getTasks,
   getProjRoot: getProjRoot,
   printError: printError,
   wizard: pickWizard,
-  hasUntrackedFiles: hasUntrackedFiles
+  hasUntrackedFiles: hasUntrackedFiles,
+  customMsgPattern: customCommitMsgPattern
 };
 
 if (!module.parent) {

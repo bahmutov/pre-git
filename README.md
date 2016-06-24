@@ -41,6 +41,7 @@ object.
 },
 "config": {
   "pre-git": {
+    "msg-pattern": "^(US|DE)\\d+ - .+",
     "commit-msg": "simple",
     "pre-commit": [
       "grunt jshint"
@@ -174,6 +175,20 @@ added empty command list for hook post-commit
 added empty command list for hook post-merge
 saving updated files /Users/kensho/git/test-git-hooks/package.json
 ```
+
+
+```json
+"config": {
+  "pre-git": {
+    "msg-pattern": "whatever-regex-without-delimiters"
+  }
+}
+```
+
+When using msg-pattern, the pre-git will match the commit message against the given pattern,
+if the test fails, then it will stop the execution and will exit the commit, this feature is optional and can be used along with any of the commit wizards, however
+those can be omitted using only the pattern, this is a useful manner of checking a custom message, as some commit may require custom codes as user story prefixes and so on.
+
 
 I am using a small project [test-pre-git](https://github.com/bahmutov/test-pre-git)
 as a test playground for these hooks.
