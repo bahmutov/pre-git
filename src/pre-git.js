@@ -137,15 +137,20 @@ function failure(label, err) {
   process.exit(1);
 }
 
-function getTasks(label) {
+function getConfig() {
   const packageName = 'pre-git';
+  const pkg = getPackage();
+  return pkg.config && pkg.config[packageName];
+}
+
+function getTasks(label) {
   var pkg = getPackage();
   la(check.object(pkg), 'missing package', pkg);
 
+  const config = getConfig();
   var run = pkg[label] ||
-    pkg.config &&
-    pkg.config[packageName] &&
-    pkg.config[packageName][label];
+    config &&
+    config[label];
 
   if (check.string(run)) {
     run = [run];
@@ -302,8 +307,7 @@ function loadWizard(name) {
 }
 
 function getWizardName() {
-  const pkg = getPackage();
-  const config = pkg.config && pkg.config['pre-git'];
+  const config = getConfig();
   const defaultName = 'simple';
   log('commit message wizard name from', config);
   if (!config) {
@@ -342,16 +346,14 @@ function pickWizard() {
 }
 
 function customCommitMsgPattern() {
-
-  const pkg = getPackage();
-  const msgPattern = pkg.config && pkg.config['pre-git'] && pkg.config['pre-git']['msg-pattern'];
+  const config = getConfig();
+  const msgPattern = config['msg-pattern'];
 
   if (!msgPattern) {
     return false;
   }
-  
-  return msgPattern;
 
+  return msgPattern;
 }
 
 module.exports = {

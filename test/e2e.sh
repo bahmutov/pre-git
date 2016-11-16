@@ -39,5 +39,5 @@ git commit -m "chore(test): this is a test commit"
 
 ls -la
 git log --oneline
-git show
+git show --name-status
 echo "All done testing pre-git"

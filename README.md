@@ -8,7 +8,6 @@
 [![Build Status][snapci-image]][snapci-url]
 [![dependencies][pre-git-dependencies-image]][pre-git-dependencies-url]
 [![devdependencies][pre-git-devdependencies-image]][pre-git-devdependencies-url]
-[![endorse][endorse-image]][endorse-url]
 [![semantic-release][semantic-image] ][semantic-url]
 [![manpm](https://img.shields.io/badge/manpm-%E2%9C%93-3399ff.svg)](https://github.com/bahmutov/manpm)
 
@@ -41,6 +40,7 @@ object.
 },
 "config": {
   "pre-git": {
+    "enabled": true,
     "msg-pattern": "^(US|DE)\\d+ - .+",
     "commit-msg": "simple",
     "pre-commit": [
@@ -82,6 +82,18 @@ In every case where I forgot to add files to the repo, this was by accident
 and caused breaking tests.
 
 ## Details
+
+You can disable all `pre-git` hooks by setting the configuration option to
+false
+
+```json
+{
+"config": {
+  "pre-git": {
+     "enabled": false
+  }
+}
+```
 
 You can always skip pre-commit hook (but not pre-push hook!) by using `-n` option
 
@@ -176,7 +188,6 @@ added empty command list for hook post-merge
 saving updated files /Users/kensho/git/test-git-hooks/package.json
 ```
 
-
 ```json
 "config": {
   "pre-git": {
@@ -186,12 +197,25 @@ saving updated files /Users/kensho/git/test-git-hooks/package.json
 ```
 
 When using msg-pattern, the pre-git will match the commit message against the given pattern,
-if the test fails, then it will stop the execution and will exit the commit, this feature is optional and can be used along with any of the commit wizards, however
-those can be omitted using only the pattern, this is a useful manner of checking a custom message, as some commit may require custom codes as user story prefixes and so on.
-
+if the test fails, then it will stop the execution and will exit the commit,
+this feature is optional and can be used along with any of the commit wizards, however
+those can be omitted using only the pattern, this is a useful manner of checking
+a custom message, as some commit may require custom codes as user story prefixes and so on.
 
 I am using a small project [test-pre-git](https://github.com/bahmutov/test-pre-git)
 as a test playground for these hooks.
+
+### End to end testing
+
+To create a sample project and test the hooks, just run the included script
+`npm run e2e` which should finish with status zero.
+
+To see how `pre-git` stops a commit when a hook fails, run
+`npm run test-no-commit-on-test-fail` command, which should exit with status 1.
+
+You can verify the git hooks are not running when the `pre-git` is disabled
+via a config option by running `npm run e2e-pre-git-disabled` which allows
+the commit to go through.
 
 ## Debugging
 
@@ -245,5 +269,3 @@ Support: if you find any problems with this module, email / tweet /
 [pre-git-dependencies-url]: https://david-dm.org/bahmutov/pre-git
 [pre-git-devdependencies-image]: https://david-dm.org/bahmutov/pre-git/dev-status.svg
 [pre-git-devdependencies-url]: https://david-dm.org/bahmutov/pre-git#info=devDependencies
-[endorse-image]: https://api.coderwall.com/bahmutov/endorsecount.png
-[endorse-url]: https://coderwall.com/bahmutov

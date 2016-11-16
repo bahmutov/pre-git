@@ -99,6 +99,7 @@
     "demo-commit-message": "TEST_GIT_MESSAGE='chore(test): test message' DEBUG=pre-git NODE_PATH=.. node bin/commit-msg.js",
     "demo-commit-wizard": "DEBUG=pre-git NODE_PATH=.. node bin/commit-wizard.js",
     "e2e": "./test/e2e.sh",
+    "e2e-pre-git-disabled": "./test/e2e-pre-git-disabled.sh",
     "issues": "git-issues",
     "mocha": "mocha --harmony src/*-spec.js",
     "postinstall": "node src/install.js",

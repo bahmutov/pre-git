@@ -4,7 +4,7 @@ preGitFolder=$PWD
 echo Current folder $preGitFolder
 
 echo "Creating test folder"
-folder=/tmp/test-pre-git-test-fails
+folder=/tmp/test-pre-git-disabled
 rm -rf $folder
 mkdir $folder
 cd $folder
@@ -15,7 +15,7 @@ git init
 
 # echo "Running npm init -y"
 # npm init --yes
-echo "Writing package.json"
+echo "Writing package.json with pre-git disabled"
 cat > package.json <<EOF
 {
   "name": "test",
@@ -25,6 +25,7 @@ cat > package.json <<EOF
   },
   "config": {
     "pre-git": {
+      "enabled": false,
       "commit-msg": "simple",
       "pre-commit": ["npm test"],
       "pre-push": [],
@@ -60,4 +61,4 @@ git commit -m "chore(test): this is a test commit"
 ls -la
 git log --oneline
 git show --name-status
-echo "All done testing pre-git"
+echo "Could commit with failing test because pre-git is disabled"

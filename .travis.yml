@@ -15,7 +15,10 @@ before_script:
   - npm prune
 script:
   - npm test
+  - echo Testing default end to end behavior
   - npm run e2e
+  - echo Testing disabled pre-git end to end
+  - npm run e2e-pre-git-disabled
 after_success:
   - npm run semantic-release
 branches:
