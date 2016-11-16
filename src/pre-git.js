@@ -148,6 +148,10 @@ function getTasks(label) {
   la(check.object(pkg), 'missing package', pkg);
 
   const config = getConfig();
+  if (!config.enabled) {
+    return;
+  }
+
   var run = pkg[label] ||
     config &&
     config[label];
