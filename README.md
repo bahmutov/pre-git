@@ -95,6 +95,9 @@ false
 }
 ```
 
+If the 'config.pre-git' object has the option 'enabled' missing, it is
+assumed to be "true" and the hooks are executed.
+
 You can always skip pre-commit hook (but not pre-push hook!) by using `-n` option
 
     git commit -m "done, don't check me" -n

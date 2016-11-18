@@ -143,12 +143,20 @@ function getConfig() {
   return pkg.config && pkg.config[packageName];
 }
 
+function hasEnabledOption(config) {
+  return 'enabled' in config;
+}
+
 function getTasks(label) {
   var pkg = getPackage();
   la(check.object(pkg), 'missing package', pkg);
 
   const config = getConfig();
-  if (!config.enabled) {
+  if (!config) {
+    return;
+  }
+
+  if (hasEnabledOption(config) && !config.enabled) {
     return;
   }
 
