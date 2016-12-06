@@ -51,7 +51,7 @@
     "lazy-ass": "1.4.0",
     "require-relative": "0.8.7",
     "shelljs": "0.6.0",
-    "simple-commit-message": "2.1.1",
+    "simple-commit-message": "2.2.1",
     "validate-commit-msg": "2.5.0",
     "word-wrap": "1.1.0"
   },
