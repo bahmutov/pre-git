@@ -4,11 +4,10 @@ cache:
   directories:
     - node_modules
 notifications:
-  email: false
+  email: true
 node_js:
-  - '4.2.2'
+  - '6'
 before_install:
-  - npm i -g npm@^2.0.0
   - git config --global user.email "test@test.com"
   - git config --global user.name "Test Tester"
 before_script:
