@@ -359,6 +359,9 @@ function pickWizard() {
 
 function customCommitMsgPattern() {
   const config = getConfig();
+  if (!config) {
+    return false;
+  }
   const msgPattern = config['msg-pattern'];
 
   if (!msgPattern) {
