@@ -106,6 +106,7 @@
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
     "test": "grunt",
-    "test-no-commit-on-test-fail": "./test/e2e-test-fails.sh"
+    "test-no-commit-on-test-fail": "./test/e2e-test-fails.sh",
+    "test-allow-untracked-files": "./test/e2e-allow-untracked-files.sh"
   }
 }
