@@ -81,6 +81,17 @@ files before running the `git commit` command to ensure clean tests.
 In every case where I forgot to add files to the repo, this was by accident
 and caused breaking tests.
 
+This can be disabled by setting the `allow-untracked-files` option to true
+
+```json
+{
+"config": {
+  "pre-git": {
+     "allow-untracked-files": true
+  }
+}
+```
+
 ## Details
 
 You can disable all `pre-git` hooks by setting the configuration option to
@@ -219,6 +230,9 @@ To see how `pre-git` stops a commit when a hook fails, run
 You can verify the git hooks are not running when the `pre-git` is disabled
 via a config option by running `npm run e2e-pre-git-disabled` which allows
 the commit to go through.
+
+To see how `allow-untracked-files` option lets the commit go through, 
+run `npm run test-allow-untracked-files`
 
 ## Debugging
 
