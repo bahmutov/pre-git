@@ -172,6 +172,10 @@ function getTasks(label) {
 }
 
 function hasUntrackedFiles() {
+  const config = getConfig();
+  if(config['allow-untracked-files']) {
+    return Promise.resolve(false);
+  }
   return ggit.untrackedFiles()
     .then(function (names) {
       return check.unempty(names);
