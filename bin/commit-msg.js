@@ -13,6 +13,14 @@ function checkMessageAgainstPattern(msg, pattern) {
   var regex = new RegExp(pattern);
   
   if (!regex.test(msg)) {
+
+    var msgError = preGit.customMsgPatternError();
+
+    if(msgError) {
+      console.error(msgError);
+      console.error('');
+    }
+
     log('invalid commit message, must match the following pattern: ' + pattern, msg);
     process.exit(-1);
   }
