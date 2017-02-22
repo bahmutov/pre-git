@@ -216,6 +216,18 @@ this feature is optional and can be used along with any of the commit wizards, h
 those can be omitted using only the pattern, this is a useful manner of checking
 a custom message, as some commit may require custom codes as user story prefixes and so on.
 
+It is also possible to customize your own msg-pattern-error along with msg-pattern to be more descriptive
+as to why the pattern fails.
+
+```json
+"config": {
+  "pre-git": {
+    "msg-pattern": "whatever-regex-without-delimiters",
+    "msg-pattern-error": "whatever error message that will be thrown when the pattern fails"
+  }
+}
+```
+
 I am using a small project [test-pre-git](https://github.com/bahmutov/test-pre-git)
 as a test playground for these hooks.
 
