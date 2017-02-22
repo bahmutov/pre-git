@@ -143,6 +143,20 @@ function getConfig() {
   return pkg.config && pkg.config[packageName];
 }
 
+function getConfigProperty(propertyName) {
+  const config = getConfig();
+  if (!config) {
+    return false;
+  }
+  const property = config[propertyName];
+
+  if (!property) {
+    return false;
+  }
+
+  return property;
+}
+
 function hasEnabledOption(config) {
   return 'enabled' in config;
 }
@@ -362,17 +376,12 @@ function pickWizard() {
 }
 
 function customCommitMsgPattern() {
-  const config = getConfig();
-  if (!config) {
-    return false;
-  }
-  const msgPattern = config['msg-pattern'];
+  return getConfigProperty('msg-pattern');
 
-  if (!msgPattern) {
-    return false;
-  }
+}
 
-  return msgPattern;
+function customCommitMsgPatternError() {
+  return getConfigProperty('msg-pattern-error');
 }
 
 module.exports = {
@@ -382,7 +391,8 @@ module.exports = {
   printError: printError,
   wizard: pickWizard,
   hasUntrackedFiles: hasUntrackedFiles,
-  customMsgPattern: customCommitMsgPattern
+  customMsgPattern: customCommitMsgPattern,
+  customMsgPatternError: customCommitMsgPatternError
 };
 
 if (!module.parent) {
