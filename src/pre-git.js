@@ -187,6 +187,9 @@ function getTasks(label) {
 
 function hasUntrackedFiles() {
   const config = getConfig();
+  if (!config) {
+    return Promise.resolve(false);
+  }
   if(config['allow-untracked-files']) {
     return Promise.resolve(false);
   }
