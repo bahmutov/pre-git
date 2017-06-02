@@ -16,6 +16,7 @@ var Promise = require('bluebird');
 var label = 'pre-commit:';
 
 var gitPrefix = process.env.GIT_PREFIX || '';
+log('git prefix env', process.env.GIT_PREFIX);
 
 function isAtRoot(dir) {
   return dir === '/';
@@ -37,15 +38,21 @@ function verifyValidDirectory(dir) {
   }
 }
 
+// finds package.json with config by going up the folder chain
 function findPackage(dir) {
   var cwd = process.cwd();
   if (! dir) {
     dir = path.join(cwd, gitPrefix);
+    log('set dir to %s for cwd %s and git prefix %s', dir, cwd, gitPrefix);
   }
 
   if (isPackageAmongFiles(dir)) {
-    log('found package in folder', dir);
-    return path.join(dir, 'package.json');
+    const filename = path.join(dir, 'package.json');
+    log('found package file %s', filename);
+    if (hasConfigInFile(filename)) {
+      log('file %s has %s config', filename, packageName);
+      return filename;
+    }
   }
 
   verifyValidDirectory(dir);
@@ -160,6 +167,11 @@ function getConfig() {
 
 function hasConfig(pkg) {
   return Boolean(pkg && pkg.config && pkg.config[packageName]);
+}
+
+function hasConfigInFile(filename) {
+  const pkg = require(filename);
+  return hasConfig(pkg);
 }
 
 function getConfigProperty(propertyName) {
@@ -305,11 +317,19 @@ function runAtRoot(root, label) {
     return Promise.each(tasks, runTaskAt);
   }
 
+  if (root !== process.cwd()) {
+    log('switching current folder from %s to %s',
+      process.cwd(), root);
+  } else {
+    log('cwd %s', process.cwd());
+  }
+
   if (label === 'pre-commit') {
     return hasUntrackedFiles()
       .then(noUntrackedFiles)
       .then(runTasksForLabel);
   }
+
   return runTasksForLabel();
 }
 

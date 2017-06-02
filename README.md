@@ -65,6 +65,13 @@ them to the `config > pre-git` object manually.
 Related project: [post-merge-make](https://github.com/bahmutov/post-merge-make)
 runs `make post-merge` after pull or merge.
 
+### Subprojects
+
+If you have large repo, it is possible that there might be nested files with
+different `package.json` files. In this case, the search will proceed up
+from the current working directory until it finds `package.json` with valis
+`config.pre-git` object inside.
+
 ## Windows
 
 Thanks to [ybiquitous](https://github.com/ybiquitous) for
@@ -243,7 +250,7 @@ You can verify the git hooks are not running when the `pre-git` is disabled
 via a config option by running `npm run e2e-pre-git-disabled` which allows
 the commit to go through.
 
-To see how `allow-untracked-files` option lets the commit go through, 
+To see how `allow-untracked-files` option lets the commit go through,
 run `npm run test-allow-untracked-files`
 
 ## Debugging
