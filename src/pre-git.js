@@ -8,7 +8,8 @@ var child = require('child_process');
 var path = require('path');
 var fs = require('fs');
 
-const log = require('debug')('pre-git');
+const packageName = 'pre-git';
+const log = require('debug')(packageName);
 /* jshint -W079 */
 var Promise = require('bluebird');
 
@@ -78,7 +79,8 @@ function getProjRoot() {
       }
 
       var gitRoot = output.trim();
-      var projRoot = path.join(gitRoot, gitPrefix);
+      log('git root folder %s', gitRoot);
+      var projRoot = gitRoot;
       var pkg;
       try {
         var file = findPackage();
@@ -86,7 +88,21 @@ function getProjRoot() {
         projRoot = path.dirname(file);
       }
       catch (e) {
+        log('could not find package in the git root folder');
         return resolve(gitRoot);
+      }
+
+      if (!hasConfig(pkg)) {
+        log('package in %s does not have config', projRoot);
+        const rootPackageFile = findPackage(gitRoot);
+        if (rootPackageFile) {
+          const rootPackage = require(rootPackageFile);
+          if (hasConfig(rootPackage)) {
+            projRoot = path.dirname(rootPackageFile);
+            log('found %s config in git root folder %s', packageName, projRoot);
+            return resolve(projRoot);
+          }
+        }
       }
 
       if (pkg['pre-git-cwd']) {
@@ -138,9 +154,12 @@ function failure(label, err) {
 }
 
 function getConfig() {
-  const packageName = 'pre-git';
   const pkg = getPackage();
   return pkg.config && pkg.config[packageName];
+}
+
+function hasConfig(pkg) {
+  return Boolean(pkg && pkg.config && pkg.config[packageName]);
 }
 
 function getConfigProperty(propertyName) {
