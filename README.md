@@ -273,6 +273,9 @@ This should provide plenty of information to debug the hooks
 ## Desktop Git clients
 
 The Git hooks should work in desktop clients, like [GitHub Desktop app](https://desktop.github.com/).
+If something does not work, it is usually because the desktop App cannot find `node`.
+See what [Git Tower application suggests](https://www.git-tower.com/help/mac/faq-and-tips/faq/hook-scripts)
+you do in that case.
 
 ## Local development
 
