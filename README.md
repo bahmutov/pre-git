@@ -263,6 +263,10 @@ see the messages when committing
 
 This should provide plenty of information to debug the hooks
 
+## Desktop Git clients
+
+The Git hooks should work in desktop clients, like [GitHub Desktop app](https://desktop.github.com/).
+
 ## Local development
 
 To execute commit message validation, run `npm run demo-commit-message` and vary the
