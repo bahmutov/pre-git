@@ -1,5 +1,6 @@
 'use strict';
 
+var debug = require('debug')('pre-git');
 var pkg = require('../package');
 console.log('%s %s in %s', pkg.name, pkg.version, process.cwd());
 
@@ -59,9 +60,13 @@ function getRootPackagePath() {
 }
 
 var exec = require('shelljs').exec;
-var result = exec('git rev-parse --show-toplevel');
+var cmd = 'git rev-parse --show-toplevel';
+debug(cmd);
+var result = exec(cmd);
 if (result.code === 0) {
-  root = path.resolve(result.output.trim());
+  debug('result object');
+  debug(result);
+  root = path.resolve(result.stdout.trim());
 }
 
 //
