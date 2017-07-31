@@ -13,6 +13,7 @@ before_install:
 before_script:
   - npm prune
 script:
+  - ./next-update-travis.sh
   - npm test
   - echo Testing default end to end behavior
   - npm run e2e

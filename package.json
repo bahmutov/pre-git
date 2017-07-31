@@ -72,6 +72,7 @@
     "jshint-summary": "0.4.0",
     "matchdep": "1.0.1",
     "mocha": "3.4.2",
+    "next-update-travis": "1.7.0",
     "semantic-release": "6.3.6"
   },
   "engines": {
