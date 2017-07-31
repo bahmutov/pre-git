@@ -17,6 +17,12 @@
     "url": "https://github.com/bahmutov/pre-git/issues"
   },
   "config": {
+    "next-update": {
+      "skip": [
+        "grunt",
+        "grunt-cli"
+      ]
+    },
     "pre-git": {
       "commit-msg": "simple",
       "demo": [
@@ -41,22 +47,23 @@
   ],
   "dependencies": {
     "bluebird": "3.5.0",
-    "chalk": "1.1.3",
+    "chalk": "2.0.1",
     "check-more-types": "2.24.0",
     "conventional-commit-message": "1.1.0",
-    "cz-conventional-changelog": "1.2.0",
+    "cz-conventional-changelog": "2.0.0",
     "debug": "2.6.8",
-    "ggit": "1.15.1",
-    "inquirer": "0.12.0",
+    "ggit": "2.0.0",
+    "inquirer": "3.2.1",
     "lazy-ass": "1.6.0",
     "require-relative": "0.8.7",
-    "shelljs": "0.6.0",
-    "simple-commit-message": "2.2.1",
-    "validate-commit-msg": "2.11.1",
-    "word-wrap": "1.2.1"
+    "shelljs": "0.7.8",
+    "simple-commit-message": "3.3.1",
+    "validate-commit-msg": "2.14.0",
+    "word-wrap": "1.2.3"
   },
   "devDependencies": {
     "git-issues": "1.3.1",
+    "github-post-release": "1.12.2",
     "grunt": "0.4.5",
     "grunt-cli": "0.1.13",
     "grunt-contrib-jshint": "1.1.0",
@@ -89,6 +96,10 @@
   ],
   "license": "MIT",
   "main": "src/pre-git.js",
+  "release": {
+    "analyzeCommits": "simple-commit-message",
+    "generateNotes": "github-post-release"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/bahmutov/pre-git.git"
