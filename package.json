@@ -1,7 +1,7 @@
 {
   "name": "pre-git",
   "description": "Automatically install pre-commit / pre-git hooks for your npm modules.",
-  "version": "0.0.0-semantic-release",
+  "version": "0.0.0-development",
   "author": "Arnout Kazemier <opensource@observe.it>",
   "bin": {
     "_pre-git-helpers": "bin/_pre-git-helpers",
