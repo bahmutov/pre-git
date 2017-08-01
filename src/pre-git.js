@@ -14,6 +14,8 @@ const log = require('debug')(packageName);
 var Promise = require('bluebird');
 
 var label = 'pre-commit:';
+// magic value, meaning we found package.json but it has no "config" object
+const MISSING_GIT_CONFIG = 'MISSING_GIT_CONFIG';
 
 var gitPrefix = process.env.GIT_PREFIX || '';
 log('git prefix env', process.env.GIT_PREFIX);
@@ -67,7 +69,7 @@ function findPackage(dir) {
     if (hasPreGitInFile(filename)) {
       log('found pre-git dependency in %s', filename);
       log('but no pre-git config');
-      return;
+      return MISSING_GIT_CONFIG;
     }
   }
 
@@ -84,6 +86,9 @@ function findPackage(dir) {
 function getPackage() {
   var filename = findPackage();
   la(check.unemptyString(filename), 'could not find package');
+  if (filename === MISSING_GIT_CONFIG) {
+    return MISSING_GIT_CONFIG;
+  }
   var pkg = require(filename);
   return pkg;
 }
@@ -180,6 +185,9 @@ function failure(label, err) {
 
 function getConfig() {
   const pkg = getPackage();
+  if (pkg === MISSING_GIT_CONFIG) {
+    return;
+  }
   return pkg.config && pkg.config[packageName];
 }
 
@@ -212,13 +220,13 @@ function hasEnabledOption(config) {
 
 function getTasks(label) {
   log('getting tasks with label "%s"', label);
-  var pkg = getPackage();
-  la(check.object(pkg), 'missing package', pkg);
-
   const config = getConfig();
   if (!config) {
     return;
   }
+
+  var pkg = getPackage();
+  la(check.object(pkg), 'missing package', pkg);
 
   if (hasEnabledOption(config) && !config.enabled) {
     return;

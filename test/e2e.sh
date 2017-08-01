@@ -23,6 +23,10 @@ echo "Installing git hooks"
 # or we can install current dev source
 npm install $preGitFolder
 echo "Package.json after installing pre-git"
+
+# add pre-commit sample command
+sed 's/"pre-commit": \[\]/"pre-commit": \["DEBUG=pre-git echo pre-commit testing..."\]/g' package.json > package.out
+mv package.out package.json
 cat package.json
 
 # let us commit the code
