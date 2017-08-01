@@ -25,7 +25,7 @@ npm install $preGitFolder
 echo "Package.json after installing pre-git"
 
 # add pre-commit sample command
-sed 's/"pre-commit": \[\]/"pre-commit": \["DEBUG=pre-git echo pre-commit testing..."\]/g' package.json > package.out
+sed 's/"pre-commit": \[\]/"pre-commit": \["echo pre-commit testing..."\]/g' package.json > package.out
 mv package.out package.json
 cat package.json
 
@@ -39,7 +39,7 @@ git add package.json
 # touch something
 echo node_modules/ >> .gitignore
 git add .gitignore
-git commit -m "chore(test): this is a test commit"
+DEBUG=pre-git git commit -m "chore(test): this is a test commit"
 
 ls -la
 git log --oneline
