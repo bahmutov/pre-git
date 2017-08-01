@@ -27,6 +27,17 @@ function isPackageAmongFiles(dir) {
   return files.indexOf('package.json') >= 0;
 }
 
+function hasPreGitInFile (packageFilename) {
+  var pkg = require(packageFilename);
+  if (pkg.dependencies && pkg.dependencies[packageName]) {
+    return true;
+  }
+  if (pkg.devDependencies && pkg.devDependencies[packageName]) {
+    return true;
+  }
+  return false;
+}
+
 function verifyValidDirectory(dir) {
   la(check.unemptyString(dir), 'missing dir');
 
@@ -52,6 +63,11 @@ function findPackage(dir) {
     if (hasConfigInFile(filename)) {
       log('file %s has %s config', filename, packageName);
       return filename;
+    }
+    if (hasPreGitInFile(filename)) {
+      log('found pre-git dependency in %s', filename);
+      log('but no pre-git config');
+      return;
     }
   }
 
@@ -109,6 +125,8 @@ function getProjRoot() {
             log('found %s config in git root folder %s', packageName, projRoot);
             return resolve(projRoot);
           }
+        } else {
+          log('missing config and root package file');
         }
       }
 
@@ -193,6 +211,7 @@ function hasEnabledOption(config) {
 }
 
 function getTasks(label) {
+  log('getting tasks with label "%s"', label);
   var pkg = getPackage();
   la(check.object(pkg), 'missing package', pkg);
 
@@ -217,17 +236,24 @@ function getTasks(label) {
 }
 
 function hasUntrackedFiles() {
-  const config = getConfig();
-  if (!config) {
-    return Promise.resolve(false);
-  }
-  if(config['allow-untracked-files']) {
-    return Promise.resolve(false);
-  }
-  return ggit.untrackedFiles()
-    .then(function (names) {
-      return check.unempty(names);
-    });
+  return new Promise((resolve) => {
+    try {
+      const config = getConfig();
+      if (!config) {
+        return resolve(false);
+      }
+      if(config['allow-untracked-files']) {
+        return resolve(false);
+      }
+    } catch (err) {
+      return resolve(false);
+    }
+    var p = ggit.untrackedFiles()
+      .then(function (names) {
+        return check.unempty(names);
+      });
+    resolve(p);
+  });
 }
 
 function runTask(root, task) {
