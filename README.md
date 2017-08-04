@@ -312,5 +312,5 @@ Support: if you find any problems with this module, email / tweet /
 [pre-git-devdependencies-url]: https://david-dm.org/bahmutov/pre-git#info=devDependencies
 [semantic-image]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
 [semantic-url]: https://github.com/semantic-release/semantic-release
-[nut-badge]: https://img.shields.io/badge/next--update--travis-ok-green.svg
+[nut-badge]: https://img.shields.io/badge/next--update--travis-weekly-green.svg
 [nut-readme]: https://github.com/bahmutov/next-update-travis#readme
