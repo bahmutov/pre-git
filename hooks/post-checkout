@@ -6,7 +6,7 @@ if [ ! -d "$DIRECTORY" ]; then
 fi
 
 if [ ! -x "$(command -v node)" ]; then
-  echo "WARNING: Node binary not found, please ensure it's properly setup"
+  echo "WARNING: Node binary not found, please ensure it has been properly installed"
 fi
 
 if [ -d "$DIRECTORY" ] && [ -x "$(command -v node)" ]; then
