@@ -6,4 +6,9 @@ if [ ! -d "$DIRECTORY" ]; then
   exit -1
 fi
 
+if [ ! -x "$(command -v node)" ]; then
+  echo "Node binary not found, please ensure it has been properly installed"
+  exit -1
+fi
+
 ./node_modules/.bin/pre-push "$@"
