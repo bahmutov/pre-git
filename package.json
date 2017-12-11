@@ -52,7 +52,7 @@
     "conventional-commit-message": "1.1.0",
     "cz-conventional-changelog": "2.1.0",
     "debug": "2.6.9",
-    "ggit": "2.4.0",
+    "ggit": "2.4.2",
     "inquirer": "3.3.0",
     "lazy-ass": "1.6.0",
     "require-relative": "0.8.7",
