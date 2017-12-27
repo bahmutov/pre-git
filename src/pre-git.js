@@ -269,7 +269,8 @@ function runTask(root, task) {
 
   const options = {
     cwd: root,
-    env: process.env
+    env: process.env,
+    stdio: 'inherit'
   };
 
   return new Promise(function (resolve, reject) {
