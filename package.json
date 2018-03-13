@@ -63,7 +63,6 @@
   },
   "devDependencies": {
     "git-issues": "1.3.1",
-    "github-post-release": "1.13.1",
     "grunt": "0.4.5",
     "grunt-cli": "0.1.13",
     "grunt-contrib-jshint": "1.1.0",
@@ -73,7 +72,8 @@
     "matchdep": "1.0.1",
     "mocha": "5.0.4",
     "next-update-travis": "1.7.1",
-    "semantic-release": "6.3.6"
+    "semantic-release": "^15.0.3",
+    "travis-deploy-once": "^4.4.0"
   },
   "engines": {
     "node": "> 0.8.*"
@@ -98,8 +98,7 @@
   "license": "MIT",
   "main": "src/pre-git.js",
   "release": {
-    "analyzeCommits": "simple-commit-message",
-    "generateNotes": "github-post-release"
+    "analyzeCommits": "simple-commit-message"
   },
   "repository": {
     "type": "git",
@@ -115,10 +114,11 @@
     "issues": "git-issues",
     "mocha": "mocha --harmony src/*-spec.js",
     "postinstall": "node src/install.js",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "semantic-release": "semantic-release",
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
     "test": "grunt",
     "test-allow-untracked-files": "./test/e2e-allow-untracked-files.sh",
-    "test-no-commit-on-test-fail": "./test/e2e-test-fails.sh"
+    "test-no-commit-on-test-fail": "./test/e2e-test-fails.sh",
+    "travis-deploy-once": "travis-deploy-once"
   }
 }

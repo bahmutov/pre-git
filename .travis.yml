@@ -6,7 +6,7 @@ cache:
 notifications:
   email: true
 node_js:
-  - '6'
+  - '8'
 before_install:
   - git config --global user.email "test@test.com"
   - git config --global user.name "Test Tester"
