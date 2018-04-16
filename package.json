@@ -70,9 +70,9 @@
     "grunt-nice-package": "0.10.4",
     "jshint-summary": "0.4.0",
     "matchdep": "1.0.1",
-    "mocha": "5.0.5",
+    "mocha": "5.1.0",
     "next-update-travis": "1.7.1",
-    "semantic-release": "15.1.5",
+    "semantic-release": "15.1.7",
     "travis-deploy-once": "4.4.1"
   },
   "engines": {
