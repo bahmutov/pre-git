@@ -60,20 +60,19 @@ function getRootPackagePath() {
 }
 
 var exec = require('shelljs').exec;
-var cmd = 'git rev-parse --show-toplevel';
+var cmd = 'git rev-parse --git-dir';
+//
+// The location .git and it's hooks
+//
+
+var git;
 debug(cmd);
 var result = exec(cmd);
 if (result.code === 0) {
   debug('result object');
   debug(result);
-  root = path.resolve(result.stdout.trim());
+  git = path.resolve(result.stdout.trim());
 }
-
-//
-// The location .git and it's hooks
-//
-var git = path.resolve(root, '.git');
-var hooks = path.resolve(git, 'hooks');
 
 //
 // Check if we are in a git repository so we can bail out early when this is not
@@ -83,6 +82,8 @@ if (!existsSync(git) || !fs.lstatSync(git).isDirectory()) {
   console.error('Could not find git repo in ' + git);
   process.exit(0);
 }
+
+var hooks = path.resolve(git, 'hooks');
 
 (function () {
   if (!existsSync(hooks)) {
