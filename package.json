@@ -47,7 +47,7 @@
   ],
   "dependencies": {
     "bluebird": "3.5.1",
-    "chalk": "2.3.2",
+    "chalk": "2.4.0",
     "check-more-types": "2.24.0",
     "conventional-commit-message": "1.1.0",
     "cz-conventional-changelog": "2.1.0",
@@ -70,7 +70,7 @@
     "grunt-nice-package": "0.10.4",
     "jshint-summary": "0.4.0",
     "matchdep": "1.0.1",
-    "mocha": "5.1.0",
+    "mocha": "5.1.1",
     "next-update-travis": "1.7.1",
     "semantic-release": "15.1.7",
     "travis-deploy-once": "4.4.1"
