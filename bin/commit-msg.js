@@ -11,7 +11,7 @@ const log = require('debug')('pre-git');
 function checkMessageAgainstPattern(msg, pattern) {
 
   var regex = new RegExp(pattern);
-  
+
   if (!regex.test(msg)) {
 
     var msgError = preGit.customMsgPatternError();
@@ -30,9 +30,12 @@ function checkMessageAgainstPattern(msg, pattern) {
 }
 
 function checkMessage(msg) {
-
+  if (preGit.noPackageJson()) {
+    console.warn("Project has no package.json, bailing out of git-pre hooks");
+    return;
+  }
   const msgPattern = preGit.customMsgPattern();
-  
+
   if (msgPattern) {
     checkMessageAgainstPattern(msg, msgPattern);
   }
