@@ -337,7 +337,23 @@ function runAtRoot(root, label) {
     return showError('Failed to find git root. Cannot run the tests.');
   }
 
+  function noPackageJson() {
+    try {
+      findPackage();
+      return false;
+    } catch (e) {
+      if ((e.message || "").indexOf("package.json") > 0) {
+        return true;
+      }
+    }
+  }
+
   function runTasksForLabel() {
+    if (noPackageJson()) {
+      console.warn("No package.json found for repository. Bailing out of pre-git hooks.");
+      return Promise.resolve();
+    }
+
     var tasks = getTasks(label);
     log('tasks for %s', label, tasks);
 
