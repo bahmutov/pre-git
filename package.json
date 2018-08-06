@@ -72,7 +72,7 @@
     "matchdep": "1.0.1",
     "mocha": "5.2.0",
     "next-update-travis": "1.7.1",
-    "semantic-release": "15.9.1",
+    "semantic-release": "15.9.5",
     "travis-deploy-once": "4.4.1"
   },
   "engines": {
