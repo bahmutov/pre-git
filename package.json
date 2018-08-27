@@ -52,7 +52,7 @@
     "conventional-commit-message": "1.1.0",
     "cz-conventional-changelog": "2.1.0",
     "debug": "3.1.0",
-    "ggit": "2.4.2",
+    "ggit": "2.4.3",
     "inquirer": "3.3.0",
     "lazy-ass": "1.6.0",
     "require-relative": "0.8.7",
@@ -72,7 +72,7 @@
     "matchdep": "1.0.1",
     "mocha": "5.2.0",
     "next-update-travis": "1.7.1",
-    "semantic-release": "15.9.9",
+    "semantic-release": "15.9.11",
     "travis-deploy-once": "4.4.1"
   },
   "engines": {
