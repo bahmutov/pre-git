@@ -6,14 +6,13 @@ cache:
 notifications:
   email: true
 node_js:
-  - '8'
+  - '10'
 before_install:
   - git config --global user.email "test@test.com"
   - git config --global user.name "Test Tester"
 before_script:
   - npm prune
 script:
-  - ./next-update-travis.sh
   - npm test
   - echo Testing default end to end behavior
   - npm run e2e
