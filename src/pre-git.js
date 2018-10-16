@@ -187,9 +187,7 @@ function failure(label, err) {
   }
 
   const skipOption = label === 'pre-push' ? '--no-verify' : '-n (--no-verify)';
-  const skipOptionText = chalk.supportsColor
-    ? chalk.bold(skipOption)
-    : skipOption;
+  const skipOptionText = chalk.supportsColor ? chalk.bold(skipOption) : skipOption;
   console.error(label);
   console.error(
     label,
@@ -475,9 +473,7 @@ function pickWizard() {
   }
   log('using commit message wizard %s', wizardName);
 
-  const wiz = isBuiltInWizardName(wizardName)
-    ? loadWizard(wizardName)
-    : require(wizardName);
+  const wiz = isBuiltInWizardName(wizardName) ? loadWizard(wizardName) : require(wizardName);
   la(check.fn(wiz.prompter), 'missing wizard prompter', wizardName, wiz);
   return wiz;
 }

@@ -31,7 +31,7 @@ function checkMessageAgainstPattern(msg, pattern) {
 
 function checkMessage(msg) {
   if (preGit.noPackageJson()) {
-    console.warn("Project has no package.json, bailing out of git-pre hooks");
+    console.warn('Project has no package.json, bailing out of git-pre hooks');
     return;
   }
   const msgPattern = preGit.customMsgPattern();
