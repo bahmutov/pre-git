@@ -50,7 +50,7 @@
     "chalk": "2.4.2",
     "check-more-types": "2.24.0",
     "conventional-commit-message": "1.1.0",
-    "cz-conventional-changelog": "2.1.0",
+    "cz-conventional-changelog": "3.3.0",
     "debug": "3.2.7",
     "ggit": "2.4.12",
     "inquirer": "3.3.0",
