@@ -69,7 +69,7 @@
     "grunt-deps-ok": "0.9.0",
     "grunt-nice-package": "0.10.4",
     "jshint-summary": "0.4.0",
-    "matchdep": "1.0.1",
+    "matchdep": "2.0.0",
     "mocha": "5.2.0",
     "semantic-release": "15.14.0",
     "travis-deploy-once": "4.4.1"
