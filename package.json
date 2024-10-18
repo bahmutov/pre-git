@@ -71,8 +71,8 @@
     "jshint-summary": "0.4.0",
     "matchdep": "1.0.1",
     "mocha": "5.2.0",
-    "semantic-release": "15.14.0",
-    "travis-deploy-once": "4.4.1"
+    "semantic-release": "24.1.3",
+    "travis-deploy-once": "5.0.11"
   },
   "engines": {
     "node": "> 0.8.*"
